@@ -1,16 +1,23 @@
+#pragma comment(lib, "lib/freeglut.lib")
+#pragma comment(lib, "lib/Freeimage.lib")
+#pragma comment(lib, "OpenGL32.lib")
+#pragma comment(lib, "lib/glew32.lib")
+#pragma comment(lib, "lib/glfw3.lib")
+
 #include <iostream>
-#include <gl/glew.h> // 필요한 헤더파일 include
-#include <gl/freeglut.h>
-#include <gl/freeglut_ext.h>
-#include <gl/glut.h>
+#include "include/GL/glew.h" // 필요한 헤더파일 include
+#include "include/GL/freeglut.h"
+#include "include/GL/freeglut_ext.h"
+#include "include/GL/glut.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "include/glm/glm.hpp"
+#include "include/glm/ext.hpp"
+#include "include/glm/gtc/matrix_transform.hpp"
 #include <random>
-#include <FreeImage.h>
+#include "include/FreeImage.h"
 #include <time.h>
+
 
 using namespace std;
 
