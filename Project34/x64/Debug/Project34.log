@@ -1,23 +1,21 @@
-﻿  소스.cpp
+﻿  CPlayer.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(26,49): warning C4244: '=': 'double'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(26,49): warning C4244:         with
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(26,49): warning C4244:         [
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(26,49): warning C4244:             T=float
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(26,49): warning C4244:         ]
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(27,49): warning C4244: '=': 'double'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(27,49): warning C4244:         with
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(27,49): warning C4244:         [
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(27,49): warning C4244:             T=float
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\CPlayer.cpp(27,49): warning C4244:         ]
+  소스.cpp
 C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\include\FreeImage.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
   (소스 파일 '소스.cpp'을(를) 컴파일하는 중)
   
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(46,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Item' 왼쪽은 무시됩니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(228,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(425,9): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(660,26): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(666,23): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(688,55): warning C4244: '=': 'double'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(688,55): warning C4244:         with
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(688,55): warning C4244:         [
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(688,55): warning C4244:             T=float
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(688,55): warning C4244:         ]
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(689,55): warning C4244: '=': 'double'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(689,55): warning C4244:         with
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(689,55): warning C4244:         [
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(689,55): warning C4244:             T=float
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(689,55): warning C4244:         ]
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(1238,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(1300,25): warning C4244: '=': 'time_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(1306,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(47,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Item' 왼쪽은 무시됩니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(205,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(402,9): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Project34\소스.cpp(1211,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
   Project34.vcxproj -> C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\x64\Debug\Project34.exe
