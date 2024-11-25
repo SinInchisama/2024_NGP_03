@@ -1,0 +1,240 @@
+#include "FrameWork.h"
+
+FrameWork::FrameWork()
+{
+	glewInit();
+	Init_Shader();
+	init_Buffer();
+
+}
+
+void FrameWork::Make_VertexShader()
+{
+
+	vertexsource = filetobuf("vertex.glsl");//--- 버텍스 세이더 객체 만들기
+	vertexshader = glCreateShader(GL_VERTEX_SHADER);
+	//--- 세이더 코드를 세이더 객체에 넣기
+	glShaderSource(vertexshader, 1, (const GLchar**)&vertexsource, 0);
+	//--- 버텍스 세이더 컴파일하기
+	glCompileShader(vertexshader);
+	//--- 컴파일이 제대로 되지 않은 경우: 에러 체크
+	GLchar errorLog[512];
+	glGetShaderiv(vertexshader, GL_COMPILE_STATUS, &result);
+	if (!result)
+	{
+		glGetShaderInfoLog(vertexshader, 512, NULL, errorLog);
+		std::cerr << "ERROR: vertex shader 컴파일 실패\n" << errorLog << std::endl;
+		return;
+	}
+
+	const GLchar* vertexShaderSource =
+		"#version 330 core\n"
+		"in vec3 positionAttribute;"
+		"uniform mat4 modelTransform;"
+		"uniform mat4 viewTransform;"
+		"uniform mat4 projectionTransform;"
+		//"in vec3 colorAttribute;"
+		"in vec2 textureCoordinateAttribute;"
+		//"out vec3 passColorAttribute;"
+		"out vec2 passTextureCoordinateAttribute;"
+		"void main()"
+		"{"
+		"gl_Position = projectionTransform * viewTransform * modelTransform * vec4(positionAttribute, 1.0);"
+		//"passColorAttribute = colorAttribute;"
+		"passTextureCoordinateAttribute = textureCoordinateAttribute;"
+		"}";
+	Text_vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(Text_vertexShader, 1, &vertexShaderSource, NULL);
+	glCompileShader(Text_vertexShader);
+
+}
+
+void FrameWork::Make_FragmentShader()
+{
+	fragmentsource = filetobuf("fragment.glsl");
+	//--- 프래그먼트 세이더 객체 만들기
+	fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
+	//--- 세이더 코드를 세이더 객체에 넣기
+	glShaderSource(fragmentshader, 1, (const GLchar**)&fragmentsource, 0);
+	//--- 프래그먼트 세이더 컴파일
+	glCompileShader(fragmentshader);
+	//--- 컴파일이 제대로 되지 않은 경우: 컴파일 에러 체크
+	GLchar errorLog[512];
+	glGetShaderiv(fragmentshader, GL_COMPILE_STATUS, &result);
+	if (!result)
+	{
+		glGetShaderInfoLog(fragmentshader, 512, NULL, errorLog);
+		std::cerr << "ERROR: fragment shader 컴파일 실패\n" << errorLog << std::endl;
+		return;
+	}
+
+	const GLchar* fragmentShaderSource =
+		"#version 330 core\n"
+		"in vec3 passColorAttribute;"
+		"in vec2 passTextureCoordinateAttribute;"
+		"out vec4 fragmentColor;"
+		"uniform sampler2D tex;"
+		"void main()"
+		"{"
+		//컬러만 출력
+		//"fragmentColor = vec4(passColorAttribute, 1.0);"
+		//텍스처만 출력
+		"fragmentColor = texture(tex, passTextureCoordinateAttribute);"
+		//텍스처와 컬러 같이 출력
+		//"fragmentColor = texture(tex, passTextureCoordinateAttribute)*vec4(passColorAttribute, 1.0); "
+		"}";
+	Text_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(Text_fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(Text_fragmentShader);
+
+	glGetShaderiv(Text_fragmentShader, GL_COMPILE_STATUS, &result);
+}
+
+void FrameWork::Init_Shader()
+{
+	Make_VertexShader(); //--- 버텍스 세이더 만들기
+	Make_FragmentShader(); //--- 프래그먼트 세이더 만들기
+
+	s_program = glCreateProgram();
+	glAttachShader(s_program, vertexshader);
+	glAttachShader(s_program, fragmentshader);
+	glLinkProgram(s_program);
+
+	GLchar errorLog[512];
+	if (!result)
+	{
+		glGetShaderInfoLog(fragmentshader, 512, NULL, errorLog);
+		std::cerr << "ERROR: fragment shader 컴파일 실패\n" << errorLog << std::endl;
+		return;
+	}
+	//--- 세이더 삭제하기
+	glDeleteShader(vertexshader);
+	glDeleteShader(fragmentshader);
+	//--- Shader Program 사용하기
+
+	triangleShaderProgramID = glCreateProgram();
+
+	glAttachShader(triangleShaderProgramID, Text_vertexShader);
+	glAttachShader(triangleShaderProgramID, Text_fragmentShader);
+
+	glLinkProgram(triangleShaderProgramID);
+
+
+	glDeleteShader(Text_vertexShader);
+	glDeleteShader(Text_fragmentShader);
+
+
+	glGetProgramiv(triangleShaderProgramID, GL_LINK_STATUS, &result);
+}
+
+void FrameWork::init_Buffer()
+{
+	glGenVertexArrays(1, &vao); //--- VAO 를 지정하고 할당하기
+	glBindVertexArray(vao); //--- VAO를 바인드하기
+	glGenBuffers(2, vbo); //--- 2개의 VBO를 지정하고 
+
+	glGenVertexArrays(1, &linevao); //--- VAO 를 지정하고 할당하기
+	glBindVertexArray(linevao); //--- VAO를 바인드하기
+	glGenBuffers(2, linevbo); //--- 2개의 VBO를 지정하고 할당하기
+	glBindBuffer(GL_ARRAY_BUFFER, linevbo[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(line), line, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+
+	Define_VertexArrayObject();
+}
+
+void FrameWork::Define_VertexArrayObject()
+{
+	float position[] = {
+	-0.5f,  -0.5f, 0.0f, //vertex 1 : Top-left
+	0.5f, -0.5f, 0.0f, //vertex 2 : Top-right
+	0.5f, 0.5f, 0.0f, //vertex 3 : Bottom-right
+	0.5f, 0.5f, 0.0f, //vertex 4 : Bottom-right
+	-0.5f, 0.5f, 0.0f, //vertex 5 : Bottom-left
+	-0.5f,  -0.5f, 0.0f //vertex 6 : Top-left
+	};
+
+	float color[] = {
+		1.0f, 1.0f, 1.0f, //vertex 1 : RED (1,0,0)
+		1.0f, 1.0f, 1.0f, //vertex 2 : GREEN (0,1,0) 
+		1.0f, 1.0f, 1.0f,  //vertex 3 : BLUE (0,0,1)
+		1.0f, 1.0f, 1.0f,  //vertex 4 : BLUE (0,0,1)
+		1.0f, 1.0f, 1.0f,  //vertex 5 : WHITE (1,1,1)
+		1.0f, 1.0f, 1.0f //vertex 6 : RED (1,0,0)
+	};
+
+	float textureCoordinate[] = {
+	0.0f, 0.0f,  //vertex 1  
+	1.0f, 0.0f,  //vertex 2
+	1.0f, 1.0f,   //vertex 3        
+	1.0f, 1.0f,  //vertex 1  
+	0.0f, 1.0f,  //vertex 2
+	0.0f, 0.0f   //vertex 3        
+	};
+
+
+
+	//#2
+	//Vertex Buffer Object(VBO)를 생성하여 vertex 데이터를 복사한다.
+	glGenBuffers(1, &trianglePositionVertexBufferObjectID);
+	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObjectID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(position), position, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &triangleColorVertexBufferObjectID);
+	glBindBuffer(GL_ARRAY_BUFFER, triangleColorVertexBufferObjectID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &triangleTextureCoordinateBufferObjectID);
+	glBindBuffer(GL_ARRAY_BUFFER, triangleTextureCoordinateBufferObjectID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinate), textureCoordinate, GL_STATIC_DRAW);
+
+
+	//#6
+	glGenVertexArrays(1, &triangleVertexArrayObject);
+	glBindVertexArray(triangleVertexArrayObject);
+
+
+	GLint positionAttribute = glGetAttribLocation(triangleShaderProgramID, "positionAttribute");
+	if (positionAttribute == -1) {
+		cerr << "position 속성 설정 실패" << endl;
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObjectID);
+	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(positionAttribute);
+
+	GLint textureCoordinateAttribute = glGetAttribLocation(triangleShaderProgramID, "textureCoordinateAttribute");
+	if (textureCoordinateAttribute == -1) {
+		cerr << "Texture Coordinate 속성 설정 실패" << endl;
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, triangleTextureCoordinateBufferObjectID);
+	glVertexAttribPointer(textureCoordinateAttribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(textureCoordinateAttribute);
+
+
+	glBindVertexArray(0);
+}
+
+void FrameWork::Draw_Scene()
+{
+		glUseProgram(s_program);
+		glClearColor(1.0, 1.0, 1.0, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glEnable(GL_DEPTH_TEST);
+
+		// state에 맞는게 돌아감.
+		//if (!Game_start)
+		//	Logo_state();
+		//else
+		//	Play_state();
+
+		glutSwapBuffers();
+
+}
+
+GLvoid FrameWork::Reshape(int w, int h)
+{
+	return glViewport(0, 0, w, h);
+}
