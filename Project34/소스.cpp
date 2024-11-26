@@ -17,6 +17,11 @@
 #include <random>
 #include "include/FreeImage.h"
 #include <time.h>
+
+#include "CPlayer.h"
+#include "CItem.h"
+#include "CBullet.h"
+#include "enum.h"
 #include "CPlayer.h"
 #include "FrameWork.h"
 
@@ -43,16 +48,13 @@ typedef struct Texture {
 	glm::mat4 Ttr;
 }Texture;
 
-//void InitBuffer();
+
 void TimerFunction(int value);
 void SKeyDownboard(int key, int x, int y);
 void SKeyUpboard(int key, int x, int y);
-//GLvoid Reshape(int w, int h);
 GLvoid KeyDownboard(unsigned char key, int x, int y);
 GLvoid KeyUpboard(unsigned char key, int x, int y);
-//char* filetobuf(const char* file);
 void Draw_filed(BOOL View_draw_background);
-//void Player_camera(Player* p);
 void Play_state();
 void Logo_state();
 void Create_item();
@@ -70,11 +72,9 @@ void Draw_time();
 void Draw_num(int num);
 void Whos_win();
 
-//void defineVertexArrayObject();
 void Texture_init();
 GLuint CreateTexture(char const* filename);
 
-//GLuint vao, vbo[2], EBO[2], linevbo[2], linevao;
 
 float Cameraz = 15.0f;
 float Camerax = 0.0f;
@@ -98,10 +98,6 @@ Texture Logo_texture;
 
 Item item[20];
 
-//GLuint trianglePositionVertexBufferObjectID, triangleColorVertexBufferObjectID;
-//GLuint triangleTextureCoordinateBufferObjectID;
-//GLuint triangleVertexArrayObject;
-
 GLUquadricObj* qobj = gluNewQuadric();
 
 glm::vec3 cameraPos;
@@ -111,8 +107,6 @@ glm::vec3 cameraDirection_1;
 
 glm::vec3 originPos;
 
-//glm::mat4 view;
-//glm::mat4 projection;
 GLuint texureId[11];
 GLuint Logo;
 GLuint Who_win[2];
