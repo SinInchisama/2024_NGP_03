@@ -51,7 +51,11 @@ unsigned int index[] = {
 
 FrameWork::FrameWork()
 {
-	glewInit();
+	if (glewInit() != GLEW_OK) {
+		std::cerr << "Failed to initialize GLEW" << std::endl;
+	}
+	float vertices[] = { 0.0f, 0.0f, 0.0f };
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	Init_Shader();
 	init_Buffer();
 }
@@ -179,7 +183,15 @@ void FrameWork::init_Buffer()
 {
 	glGenVertexArrays(1, &vao); //--- VAO 를 지정하고 할당하기
 	glBindVertexArray(vao); //--- VAO를 바인드하기
-	glGenBuffers(2, vbo); //--- 2개의 VBO를 지정하고 
+	glGenBuffers(2, vbo); //--- 2개의 VBO를 지정하고 할당하기
+	//--- 1번째 VBO를 활성화하여 바인드하고, 버텍스 속성 (좌표값)을 저장
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vPositionList), vPositionList, GL_STATIC_DRAW);
+	glGenBuffers(1, &EBO[0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]); //--- GL_ELEMENT_ARRAY_BUFFER 버퍼 유형으로 바인딩
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glEnableVertexAttribArray(0);
 
 	glGenVertexArrays(1, &linevao); //--- VAO 를 지정하고 할당하기
 	glBindVertexArray(linevao); //--- VAO를 바인드하기
@@ -189,7 +201,10 @@ void FrameWork::init_Buffer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 
+
+
 	Define_VertexArrayObject();
+	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); //--- 카메라 위쪽 방향
 }
 
 void FrameWork::Define_VertexArrayObject()
@@ -275,7 +290,7 @@ void FrameWork::Draw_Scene()
 		// state에 맞는게 돌아감.
 		//if (!Game_start)
 		//	Logo_state();
-		//Play_state();
+		playstate.Draw();
 
 		glutSwapBuffers();
 

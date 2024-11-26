@@ -1,3 +1,2 @@
-﻿  Common.cpp
-C:\Users\sun98\OneDrive\Desktop\3-1\2024_NGP_03\Project34\Common.cpp(14,9): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  Project34.vcxproj -> C:\Users\sun98\OneDrive\Desktop\3-1\2024_NGP_03\x64\Debug\Project34.exe
+﻿  State.cpp
+  Project34.vcxproj -> C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\x64\Debug\Project34.exe

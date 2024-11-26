@@ -7,6 +7,7 @@
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Common.h"
+#include "State.h"
 
 #include <iostream>
 
@@ -19,16 +20,10 @@ class FrameWork
 private:
 	GLint result;
 
-	GLuint triangleShaderProgramID;
-
-	GLuint vao, vbo[2], EBO[2], linevbo[2], linevao;
-
-	GLuint trianglePositionVertexBufferObjectID, triangleColorVertexBufferObjectID;
-	GLuint triangleTextureCoordinateBufferObjectID;
-	GLuint triangleVertexArrayObject;
-
 	glm::mat4 view;
 	glm::mat4 projection;
+
+	Play_State playstate;
 
 public:
 	FrameWork();

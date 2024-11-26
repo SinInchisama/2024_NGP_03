@@ -9,6 +9,21 @@ GLuint fragmentshader = 0;
 GLuint Text_vertexShader = 0;
 GLuint Text_fragmentShader = 0;
 
+GLuint triangleShaderProgramID = 0;
+
+GLuint vao = 0;
+GLuint vbo[2] = { 0 };
+GLuint EBO[2] = { 0 };
+GLuint linevbo[2] = { 0 };
+GLuint linevao = 0;
+
+GLuint trianglePositionVertexBufferObjectID = 0;
+GLuint triangleColorVertexBufferObjectID = 0;
+GLuint triangleTextureCoordinateBufferObjectID = 0;
+GLuint triangleVertexArrayObject = 0;
+
+glm::vec3 cameraUp; //--- 카메라 위쪽 방향
+
 char* filetobuf(const char* file)
 {
 	FILE* fptr;

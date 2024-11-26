@@ -22,17 +22,6 @@
 
 using namespace std;
 
-typedef struct Box {
-	glm::vec3 Bscale;
-	glm::vec3 Blocate;
-	glm::vec3 Bcolor;
-	glm::mat4 TR;
-
-	int offset;
-
-	glm::vec4 Bounding_box[2];
-}Box;
-
 typedef struct Item {
 	int Item_type;
 
@@ -62,9 +51,7 @@ void SKeyUpboard(int key, int x, int y);
 GLvoid KeyDownboard(unsigned char key, int x, int y);
 GLvoid KeyUpboard(unsigned char key, int x, int y);
 //char* filetobuf(const char* file);
-void Boxinit(int x, int y,int z);
 void Draw_filed(BOOL View_draw_background);
-void playerinit();
 //void Player_camera(Player* p);
 void Play_state();
 void Logo_state();
@@ -95,9 +82,6 @@ float ySelfRot = 0.0f;
 float yZeroRot = 0.0f;
 float Viewz = -1.0f;
 float Viewy = 15.0f;
-float xScale;
-float yScale;
-float zScale;
 float BlockSpeed = 0.0f;
 
 bool ra, Drop = true,Game_over,Game_start;
@@ -106,11 +90,6 @@ int Itemcount = 0;
 time_t Now_time,start_time, Creat_time;
 
 float yz = 0.0f;
-Box All_Box[20][20];
-Player player[2] = {
-	{ 0, {0.0f, 0.0f, 0.0f}},
-	{1, {0.0f, 0.0f, 0.0f}}
-};
 Texture Timecount[2];
 Texture Score[3];
 
@@ -129,7 +108,6 @@ glm::vec3 cameraPos;
 glm::vec3 cameraPos_1;
 glm::vec3 cameraDirection; //--- 카메라 바라보는 방향
 glm::vec3 cameraDirection_1;
-glm::vec3 cameraUp; //--- 카메라 위쪽 방향
 
 glm::vec3 originPos;
 
@@ -173,79 +151,79 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 
 void TimerFunction(int value) {
 
-	time_t u = time(NULL);
+	//time_t u = time(NULL);
 
-	if (!Game_over && Game_start) {
-		for (int i = 0; i < 2; i++) {
-			player[i].Calculate_Move();
+	//if (!Game_over && Game_start) {
+	//	for (int i = 0; i < 2; i++) {
+	//		player[i].Calculate_Move();
 
-			int temp = 0;
+	//		int temp = 0;
 
-			glm::mat4 TR = glm::mat4(1.0f);
-			glm::mat4 Tx = glm::mat4(1.0f);
-			glm::mat4 Scale = glm::mat4(1.0f);
+	//		glm::mat4 TR = glm::mat4(1.0f);
+	//		glm::mat4 Tx = glm::mat4(1.0f);
+	//		glm::mat4 Scale = glm::mat4(1.0f);
 
-			TR = glm::mat4(1.0f);					// 플레이어를 그려주는 부분.
-			Tx = glm::mat4(1.0f);
-			Scale = glm::mat4(1.0f);
+	//		TR = glm::mat4(1.0f);					// 플레이어를 그려주는 부분.
+	//		Tx = glm::mat4(1.0f);
+	//		Scale = glm::mat4(1.0f);
 
 
-			Scale = glm::scale(Scale, player[i].Get_Pscale()); //		플레이어
-			Tx = glm::translate(Tx, player[i].Get_Plocate() + player[i].Get_Move());
-			TR = Tx * Scale;
+	//		Scale = glm::scale(Scale, player[i].Get_Pscale()); //		플레이어
+	//		Tx = glm::translate(Tx, player[i].Get_Plocate() + player[i].Get_Move());
+	//		TR = Tx * Scale;
 
-			for (int a = 0; a < xcount; a++) {
-				for (int k = 0; k < zcount; k++) {
-					temp = collide(&player[i], All_Box[a][k], TR);
-					if (temp != -1) {
-						Crash(i, temp);
-					}
-				}
-			}
+	//		for (int a = 0; a < xcount; a++) {
+	//			for (int k = 0; k < zcount; k++) {
+	//				temp = collide(&player[i], All_Box[a][k], TR);
+	//				if (temp != -1) {
+	//					Crash(i, temp);
+	//				}
+	//			}
+	//		}
 
-			temp = 0;
+	//		temp = 0;
 
-			for (int a = 0; a < 12; a++) {
-				if (item[a].View == true) {
-					temp = item_collide(&player[i], item[a], TR);
-					if (temp != -1) {
-						if (item[a].Item_type == 0)
-							Item_zero(&player[i], item[a]);
-						else if (item[a].Item_type == 1)
-							Item_one(&player[i], item[a]);
-						
-						item[a].View = false;
-						break;
-					}
-				}
-			}
-			// 움직이고나서 해당 위치 블록 체크	(현재는 배열로 체크하는 중. 배열로 체크시 각 꼭짓점마다 이전 위치 저장해줘야할듯?)
-			//Player_camera(&player[i]);																// 플레이어 카메라 위치 계산.
-			player[i].Calculate_Camera();
+	//		for (int a = 0; a < 12; a++) {
+	//			if (item[a].View == true) {
+	//				temp = item_collide(&player[i], item[a], TR);
+	//				if (temp != -1) {
+	//					if (item[a].Item_type == 0)
+	//						Item_zero(&player[i], item[a]);
+	//					else if (item[a].Item_type == 1)
+	//						Item_one(&player[i], item[a]);
+	//					
+	//					item[a].View = false;
+	//					break;
+	//				}
+	//			}
+	//		}
+	//		// 움직이고나서 해당 위치 블록 체크	(현재는 배열로 체크하는 중. 배열로 체크시 각 꼭짓점마다 이전 위치 저장해줘야할듯?)
+	//		//Player_camera(&player[i]);																// 플레이어 카메라 위치 계산.
+	//		player[i].Calculate_Camera();
 
-			// 해결해야되는 코드
-			/*player[i].Move[1] -= player[i].gravity;
-			if (player[i].Move[1] < -3.0) {
-				player[i].Plocate = All_Box[19 * i][19 * i].Blocate;
-				player[i].Plocate[1] = 0.0f;
-				player[i].Move = { 0.0f,0.0f,0.0f };
-			}
-			if (Now_time - player[i].timer >= 1) {
-				player[i].stop = false;
-			}*/
+	//		// 해결해야되는 코드
+	//		/*player[i].Move[1] -= player[i].gravity;
+	//		if (player[i].Move[1] < -3.0) {
+	//			player[i].Plocate = All_Box[19 * i][19 * i].Blocate;
+	//			player[i].Plocate[1] = 0.0f;
+	//			player[i].Move = { 0.0f,0.0f,0.0f };
+	//		}
+	//		if (Now_time - player[i].timer >= 1) {
+	//			player[i].stop = false;
+	//		}*/
 
-		}
-		
-		Now_time = u - start_time;
-		if ((u - Creat_time )%5 == 0) {
-			item[Itemcount++].View = true;
-			Creat_time = u + 4;
-		}
+	//	}
+	//	
+	//	Now_time = u - start_time;
+	//	if ((u - Creat_time )%5 == 0) {
+	//		item[Itemcount++].View = true;
+	//		Creat_time = u + 4;
+	//	}
 
-		if (Now_time == 60) 
-			Game_over = true;
+	//	if (Now_time == 60) 
+	//		Game_over = true;
 
-	}
+	//}
 
 	glutTimerFunc(50, TimerFunction, 1);
 	glutPostRedisplay();
@@ -259,40 +237,40 @@ GLvoid KeyDownboard(unsigned char key, int x, int y) {
 			Creat_time = time(NULL);
 		}
 	}
-	else {
-		//if (!player[1].stop && player[1].Move[1] == 0) {
-			if (key == 'a') {
-				player[1].Set_X(-1);
-			}
-			else if (key == 'd') {
-				player[1].Set_X(+1);
-			}
-			else if (key == 'w') {
-				player[1].Set_Z(-1);
-			}
-			else if (key == 's') {
-				player[1].Set_Z(1);
-			}
-		//	else if (key == 'q')
-		//		player[1].lotate += 10;
-		//	else if (key == 'e')
-		//		player[1].lotate -= 10;
-		//}
-		//if (!player[0].stop && player[0].Move[1] == 0) {
-		//	if (key == ',')
-		//		player[0].lotate += 10;
-		//	else if (key == '.')
-		//		player[0].lotate -= 10;
-		//}
-		if (key == 'r' && Game_over)
-			init();
-			
-	}
+	//else {
+	//	//if (!player[1].stop && player[1].Move[1] == 0) {
+	//		if (key == 'a') {
+	//			player[1].Set_X(-1);
+	//		}
+	//		else if (key == 'd') {
+	//			player[1].Set_X(+1);
+	//		}
+	//		else if (key == 'w') {
+	//			player[1].Set_Z(-1);
+	//		}
+	//		else if (key == 's') {
+	//			player[1].Set_Z(1);
+	//		}
+	//	//	else if (key == 'q')
+	//	//		player[1].lotate += 10;
+	//	//	else if (key == 'e')
+	//	//		player[1].lotate -= 10;
+	//	//}
+	//	//if (!player[0].stop && player[0].Move[1] == 0) {
+	//	//	if (key == ',')
+	//	//		player[0].lotate += 10;
+	//	//	else if (key == '.')
+	//	//		player[0].lotate -= 10;
+	//	//}
+	//	if (key == 'r' && Game_over)
+	//		init();
+	//		
+	//}
 	glutPostRedisplay();
 }
 
 GLvoid KeyUpboard(unsigned char key, int x, int y) {
-	if (key == 'a') {
+	/*if (key == 'a') {
 		player[1].Set_X(0);
 	}
 	else if (key == 'd') {
@@ -303,12 +281,12 @@ GLvoid KeyUpboard(unsigned char key, int x, int y) {
 	}
 	else if (key == 's') {
 		player[1].Set_Z(0);
-	}
+	}*/
 }
 
 void SKeyDownboard(int key, int x, int y) {
 	//if (Game_start && !player[0].stop && player[0].Move[1] == 0) {
-		switch (key) {
+		/*switch (key) {
 		case GLUT_KEY_LEFT:
 			player[0].Set_X(-1);
 			break;
@@ -320,12 +298,12 @@ void SKeyDownboard(int key, int x, int y) {
 			break;
 		case GLUT_KEY_DOWN:
 			player[0].Set_Z(+1);
-		}
+		}*/
 	//}
 }
 
 void SKeyUpboard(int key, int x, int y) {
-	switch (key) {
+	/*switch (key) {
 
 	case GLUT_KEY_LEFT:
 		player[0].Set_X(0);
@@ -339,69 +317,9 @@ void SKeyUpboard(int key, int x, int y) {
 		break;
 	case GLUT_KEY_DOWN:
 		player[0].Set_Z(0);
-	}
+	}*/
 }
 
-void Boxinit(int x, int y,int z) {				// 박스 갯수 추후에 25/25로 늘려도 박스 배열만 변경해주고 x,z값만 25로 넘겨주면 25*25 박스들이 만들어짐
-	xScale = (float)10 / x;
-	yScale = (float)10 / y;
-	zScale = (float)10 / z;
-	float xlocate = 5 - (xScale / 2);
-	float zlocate = 5 - (zScale / 2);
-
-	glm::vec3 bound_scale = { xScale / 2, yScale, zScale / 2 };
-
-	int a = 0;
-	for (int i = 0; i < zcount; i = i++,a++) {
-		for (int k = 0; k < x; k++) {
-			All_Box[i][k].Bscale[0] = xScale;
-			All_Box[i][k].Bscale[1] = yScale;
-			All_Box[i][k].Bscale[2] = zScale;
-			All_Box[i][k].Bcolor = glm::vec3{ 0.0f,0.0f ,0.0f };
-			All_Box[i][k].Blocate[0] = xlocate - xScale * k;
-			All_Box[i][k].Blocate[1] = -yScale;
-			All_Box[i][k].Blocate[2] = zlocate - zScale * a;
-
-			All_Box[i][k].offset = i * x + k;
-
-			All_Box[i][k].Bounding_box[0] = { (All_Box[i][k].Blocate - bound_scale), 1.f };
-			All_Box[i][k].Bounding_box[1] = { (All_Box[i][k].Blocate + bound_scale), 1.f };
-
-			glm::mat4 TR = glm::mat4(1.0f);
-			glm::mat4 Tx = glm::mat4(1.0f);
-			glm::mat4 Scale = glm::mat4(1.0f);
-
-			Scale = glm::scale(Scale, glm::vec3(All_Box[i][k].Bscale)); //		각 사각형 크기 
-			Tx = glm::translate(Tx, All_Box[i][k].Blocate);
-
-			All_Box[i][k].TR = Tx * Scale * TR;
-		}
-
-	}
-}
-
-void playerinit() {
-	for (int i = 0; i < 2; i++) {
-		//player[i].PColor = { 1.0,1.0 * i ,0.0 };
-		//player[i].Color = { 0.5,1.0 * i,0.3 * i };
-		player[i].Set_Plocate(All_Box[19 * i][19 * i].Blocate);
-		//player[i].Plocate = All_Box[19*i][19 * i].Blocate;
-		All_Box[19 * i][19 * i].Bcolor = player[i].Get_Color();
-		//player[i].Plocate[1] = 0.0f;
-		//player[i].Pscale = { 0.2,0.2,0.2 };
-		//player[i].lotate = 180 * i;
-		//player[i].prev_locate[0] = 0;
-		//player[i].prev_locate[1] = 0;
-		//player[i].x = 0;
-		//player[i].y = 0;
-		//player[i].z = 0;
-		//player[i].gravity = 0.01;
-		//player[i].speed = 0.05f;
-		//player[i].Occupy_box = 1;
-		//player[i].player_number = i;
-		//player[i].Move = { 0.0f,0.0f,0.0f };
-	}
-}
 
 //void Player_camera(Player* p) {
 //	glm::mat4 TR = glm::mat4(1.0f);
@@ -618,7 +536,7 @@ int collide(Player* p, Box b, glm::mat4 TR)
 
 void Crash(int num, int inspection)
 {
-	if (All_Box[inspection / 20][inspection % 20].Bcolor != player[num].Get_Color()) {
+	/*if (All_Box[inspection / 20][inspection % 20].Bcolor != player[num].Get_Color()) {
 		if (All_Box[inspection / 20][inspection % 20].Bcolor != glm::vec3{ 0.0f,0.0f,0.0f }) {
 			if (num == 0)
 				player[1].Add_Occupy(-1);
@@ -627,7 +545,7 @@ void Crash(int num, int inspection)
 		}
 		All_Box[inspection / 20][inspection % 20].Bcolor = player[num].Get_Color();
 		player[num].Add_Occupy(+1);
-	}
+	}*/
 	//player[num].gravity = 0;
 }
 
@@ -880,56 +798,57 @@ void Whos_win() {
 }
 
 void Create_item() {
-	srand(time(NULL));
+	//srand(time(NULL));
 
-	glm::vec3 bound_scale = { 0.3f / 2, yScale, 0.3f / 2 };
+	//glm::vec3 bound_scale = { 0.3f / 2, yScale, 0.3f / 2 };
 
-	for (int i = 0; i < 20; i++) {
-		int x = rand() % 20;
-		int y = rand() % 20;
-		item[i].Ilocate = All_Box[x][y].Blocate;
-		item[i].Iscale = glm::vec3{0.3f,0.3f,0.3f};
-		item[i].Ilocate[1] =  0.0f;
-		item[i].Item_type = rand()%2;
-		
-		if (item[i].Item_type == 0)
-			item[i].Icolor = glm::vec3{ 1.0f,0.0f,1.0f };
-		else if (item[i].Item_type == 1)
-			item[i].Icolor = glm::vec3{ 1.0f,1.0f,1.0f };
+	//for (int i = 0; i < 20; i++) {
+	//	int x = rand() % 20;
+	//	int y = rand() % 20;
+	//	item[i].Ilocate = All_Box[x][y].Blocate;
+	//	item[i].Iscale = glm::vec3{0.3f,0.3f,0.3f};
+	//	item[i].Ilocate[1] =  0.0f;
+	//	item[i].Item_type = rand()%2;
+	//	
+	//	if (item[i].Item_type == 0)
+	//		item[i].Icolor = glm::vec3{ 1.0f,0.0f,1.0f };
+	//	else if (item[i].Item_type == 1)
+	//		item[i].Icolor = glm::vec3{ 1.0f,1.0f,1.0f };
 
-		glm::mat4 TR = glm::mat4(1.0f);
-		glm::mat4 Tx = glm::mat4(1.0f);
-		glm::mat4 Scale = glm::mat4(1.0f);
+	//	glm::mat4 TR = glm::mat4(1.0f);
+	//	glm::mat4 Tx = glm::mat4(1.0f);
+	//	glm::mat4 Scale = glm::mat4(1.0f);
 
-		Scale = glm::scale(Scale, glm::vec3(item[i].Iscale)); //		각 사각형 크기 
-		Tx = glm::translate(Tx, item[i].Ilocate);
+	//	Scale = glm::scale(Scale, glm::vec3(item[i].Iscale)); //		각 사각형 크기 
+	//	Tx = glm::translate(Tx, item[i].Ilocate);
 
-		item[i].TR = Tx * Scale * TR;
+	//	item[i].TR = Tx * Scale * TR;
 
-		item[i].Bounding_box[0] = {(item[i].Ilocate - bound_scale), 1.f};
-		item[i].Bounding_box[1] = { (item[i].Ilocate + bound_scale), 1.f };
+	//	item[i].Bounding_box[0] = {(item[i].Ilocate - bound_scale), 1.f};
+	//	item[i].Bounding_box[1] = { (item[i].Ilocate + bound_scale), 1.f };
 
-		
+	//	
 
-		item[i].View = false;
-	}
+	//	item[i].View = false;
+	//}
 }
 
 int item_collide(Player* p, Item i, glm::mat4 TR)
 {
-	glm::vec4 a1 = TR * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);                    // 플레이어 왼,오른,앞,뒤  원래 좌표를 각각 vec로 저장
-	glm::vec4 a2 = TR * glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
-	glm::vec4 a3 = TR * glm::vec4(-0.5f, 0.0f, 0.5f, 1.0f);
-	glm::vec4 a4 = TR * glm::vec4(0.5f, 1.0f, -0.5f, 1.0f);
+	//glm::vec4 a1 = TR * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);                    // 플레이어 왼,오른,앞,뒤  원래 좌표를 각각 vec로 저장
+	//glm::vec4 a2 = TR * glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
+	//glm::vec4 a3 = TR * glm::vec4(-0.5f, 0.0f, 0.5f, 1.0f);
+	//glm::vec4 a4 = TR * glm::vec4(0.5f, 1.0f, -0.5f, 1.0f);
 
-	glm::vec4 player_bounding_box[2] = { a1, a2 }; // 0이 min, 1이 max
+	//glm::vec4 player_bounding_box[2] = { a1, a2 }; // 0이 min, 1이 max
 
-	if ((player_bounding_box[0][0] <= i.Bounding_box[1][0] && player_bounding_box[0][0] >= i.Bounding_box[0][0] && player_bounding_box[0][2] >= i.Bounding_box[0][2] && player_bounding_box[0][2] <= i.Bounding_box[1][2]) ||
-		(player_bounding_box[0][0] <= i.Bounding_box[1][0] && player_bounding_box[0][0] >= i.Bounding_box[0][0] && player_bounding_box[1][2] >= i.Bounding_box[0][2] && player_bounding_box[1][2] <= i.Bounding_box[1][2]) ||
-		(player_bounding_box[1][0] <= i.Bounding_box[1][0] && player_bounding_box[1][0] >= i.Bounding_box[0][0] && player_bounding_box[1][2] >= i.Bounding_box[0][2] && player_bounding_box[1][2] <= i.Bounding_box[1][2]) ||
-		(player_bounding_box[1][0] <= i.Bounding_box[1][0] && player_bounding_box[1][0] >= i.Bounding_box[0][0] && player_bounding_box[0][2] >= i.Bounding_box[0][2] && player_bounding_box[0][2] <= i.Bounding_box[1][2])) {
-		//return p->player_number;
-	}
+	//if ((player_bounding_box[0][0] <= i.Bounding_box[1][0] && player_bounding_box[0][0] >= i.Bounding_box[0][0] && player_bounding_box[0][2] >= i.Bounding_box[0][2] && player_bounding_box[0][2] <= i.Bounding_box[1][2]) ||
+	//	(player_bounding_box[0][0] <= i.Bounding_box[1][0] && player_bounding_box[0][0] >= i.Bounding_box[0][0] && player_bounding_box[1][2] >= i.Bounding_box[0][2] && player_bounding_box[1][2] <= i.Bounding_box[1][2]) ||
+	//	(player_bounding_box[1][0] <= i.Bounding_box[1][0] && player_bounding_box[1][0] >= i.Bounding_box[0][0] && player_bounding_box[1][2] >= i.Bounding_box[0][2] && player_bounding_box[1][2] <= i.Bounding_box[1][2]) ||
+	//	(player_bounding_box[1][0] <= i.Bounding_box[1][0] && player_bounding_box[1][0] >= i.Bounding_box[0][0] && player_bounding_box[0][2] >= i.Bounding_box[0][2] && player_bounding_box[0][2] <= i.Bounding_box[1][2])) {
+	//	//return p->player_number;
+	//}
+	//return -1;
 	return -1;
 }
 
@@ -968,9 +887,7 @@ void Item_one(Player* p, Item i) {
 }
 
 void init() {
-	Boxinit(xcount, 20, zcount);
-	Create_item();
-	playerinit();
+	//Create_item();
 	start_time = time(NULL);
 	Creat_time = time(NULL);
 	Game_over = false;
