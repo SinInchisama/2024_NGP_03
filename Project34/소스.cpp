@@ -5,21 +5,25 @@
 #pragma comment(lib, "lib/glfw3.lib")
 
 #include <iostream>
+#include <random>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "include/GL/glew.h" // 필요한 헤더파일 include
 #include "include/GL/freeglut.h"
 #include "include/GL/freeglut_ext.h"
 #include "include/GL/glut.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include "include/glm/glm.hpp"
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
-#include <random>
 #include "include/FreeImage.h"
-#include <time.h>
 
 #include "CPlayer.h"
 #include "CItem.h"
+#include "CBullet.h"
+#include "enum.h"
 
 using namespace std;
 
