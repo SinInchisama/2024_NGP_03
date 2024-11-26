@@ -4,6 +4,8 @@
 #pragma comment(lib, "lib/glew32.lib")
 #pragma comment(lib, "lib/glfw3.lib")
 
+#include <random>
+
 #include <iostream>
 #include "include/GL/glew.h" // 필요한 헤더파일 include
 #include "include/GL/freeglut.h"
@@ -17,6 +19,11 @@
 #include <random>
 #include "include/FreeImage.h"
 #include <time.h>
+
+#include "CPlayer.h"
+#include "CItem.h"
+#include "CBullet.h"
+#include "enum.h"
 #include "CPlayer.h"
 #include "FrameWork.h"
 
@@ -31,7 +38,7 @@ typedef struct Item {
 	glm::mat4 TR;
 
 	glm::vec4 Bounding_box[2];
-	
+
 	bool View;
 };
 
@@ -43,16 +50,13 @@ typedef struct Texture {
 	glm::mat4 Ttr;
 }Texture;
 
-//void InitBuffer();
+
 void TimerFunction(int value);
 void SKeyDownboard(int key, int x, int y);
 void SKeyUpboard(int key, int x, int y);
-//GLvoid Reshape(int w, int h);
 GLvoid KeyDownboard(unsigned char key, int x, int y);
 GLvoid KeyUpboard(unsigned char key, int x, int y);
-//char* filetobuf(const char* file);
 void Draw_filed(BOOL View_draw_background);
-//void Player_camera(Player* p);
 void Play_state();
 void Logo_state();
 void Create_item();
@@ -64,17 +68,15 @@ int collide(Player* p, Box b, glm::mat4 TR);
 int item_collide(Player* p, Item i, glm::mat4 TR);
 
 void Item_zero(Player* p, Item i);
-void Item_one(Player* p,Item i);
+void Item_one(Player* p, Item i);
 
 void Draw_time();
 void Draw_num(int num);
 void Whos_win();
 
-//void defineVertexArrayObject();
 void Texture_init();
 GLuint CreateTexture(char const* filename);
 
-//GLuint vao, vbo[2], EBO[2], linevbo[2], linevao;
 
 float Cameraz = 15.0f;
 float Camerax = 0.0f;
@@ -84,10 +86,10 @@ float Viewz = -1.0f;
 float Viewy = 15.0f;
 float BlockSpeed = 0.0f;
 
-bool ra, Drop = true,Game_over,Game_start;
+bool ra, Drop = true, Game_over, Game_start;
 int xcount = 20, zcount = 20;
 int Itemcount = 0;
-time_t Now_time,start_time, Creat_time;
+time_t Now_time, start_time, Creat_time;
 
 float yz = 0.0f;
 Texture Timecount[2];
@@ -98,10 +100,6 @@ Texture Logo_texture;
 
 Item item[20];
 
-//GLuint trianglePositionVertexBufferObjectID, triangleColorVertexBufferObjectID;
-//GLuint triangleTextureCoordinateBufferObjectID;
-//GLuint triangleVertexArrayObject;
-
 GLUquadricObj* qobj = gluNewQuadric();
 
 glm::vec3 cameraPos;
@@ -111,8 +109,6 @@ glm::vec3 cameraDirection_1;
 
 glm::vec3 originPos;
 
-//glm::mat4 view;
-//glm::mat4 projection;
 GLuint texureId[11];
 GLuint Logo;
 GLuint Who_win[2];
@@ -135,7 +131,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 
 	Texture_init();
 
-	init(); 
+	init();
 	glewInit();
 	framework.Init_Shader();
 	framework.init_Buffer();
@@ -299,7 +295,7 @@ void SKeyDownboard(int key, int x, int y) {
 		case GLUT_KEY_DOWN:
 			player[0].Set_Z(+1);
 		}*/
-	//}
+		//}
 }
 
 void SKeyUpboard(int key, int x, int y) {
@@ -402,7 +398,7 @@ GLuint CreateTexture(char const* filename)
 		GL_UNSIGNED_BYTE, // Type of texture data
 		textureData);     // The image data to use for this texture
 
-						  // Specify our minification and magnification filters
+	// Specify our minification and magnification filters
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -463,14 +459,14 @@ void Texture_init() {
 	}
 
 	for (int i = 0; i < 3; i++) {
-		Score[i].Tlocate = glm::vec3(-0.66f + 0.66*i, 0.0f, 0.0f);
+		Score[i].Tlocate = glm::vec3(-0.66f + 0.66 * i, 0.0f, 0.0f);
 		glm::mat4 Tx = glm::mat4(1.0f);
 		Score[i].Ttr = glm::mat4(1.0f);
 
 		Tx = glm::translate(Tx, Score[i].Tlocate);
 		Score[i].Ttr = Tx * Score[i].Ttr;
 	}
-	
+
 
 	glm::mat4 Tscale = glm::mat4(1.0f);
 	Tscale = glm::scale(Tscale, glm::vec3(2.0f, 2.0f, 2.0f));
@@ -492,7 +488,7 @@ void Texture_init() {
 	Who_win[0] = CreateTexture("1_win.png");
 	Who_win[1] = CreateTexture("2_win.png");
 
-	Worldbox[0].Tlocate = glm::vec3(0.0f, 0.0f,8.0f);
+	Worldbox[0].Tlocate = glm::vec3(0.0f, 0.0f, 8.0f);
 	Worldbox[1].Tlocate = glm::vec3(8.0f, 0.0f, 0.0f);
 	Worldbox[2].Tlocate = glm::vec3(0.0f, 0.0f, -8.0f);
 	Worldbox[3].Tlocate = glm::vec3(-8.0f, 0.0f, 0.0f);
@@ -855,10 +851,10 @@ int item_collide(Player* p, Item i, glm::mat4 TR)
 void Item_zero(Player* p, Item i) {
 	int enermy = 0;
 	//if (p->player_number == 0) {
-		enermy = 1;
+	enermy = 1;
 	//}
 	//else {
-		enermy = 0;
+	enermy = 0;
 	//}
 	//player[enermy].stop = true;
 	//player[enermy].timer = Now_time;
