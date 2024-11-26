@@ -29,19 +29,6 @@
 
 using namespace std;
 
-typedef struct Item {
-	int Item_type;
-
-	glm::vec3 Iscale;
-	glm::vec3 Ilocate;
-	glm::vec3 Icolor;
-	glm::mat4 TR;
-
-	glm::vec4 Bounding_box[2];
-
-	bool View;
-};
-
 
 typedef struct Texture {
 	glm::vec3 Tlocate;
