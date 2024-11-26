@@ -17,7 +17,6 @@
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include <random>
-#include "include/FreeImage.h"
 #include <time.h>
 
 #include "CPlayer.h"
@@ -28,22 +27,11 @@
 
 using namespace std;
 
-
-typedef struct Texture {
-	glm::vec3 Tlocate;
-	int Trotate;
-	glm::vec3 Tscale;
-	glm::mat4 Ttr;
-}Texture;
-
-
 void TimerFunction(int value);
 void SKeyDownboard(int key, int x, int y);
 void SKeyUpboard(int key, int x, int y);
 GLvoid KeyDownboard(unsigned char key, int x, int y);
 GLvoid KeyUpboard(unsigned char key, int x, int y);
-void Draw_filed(BOOL View_draw_background);
-void Play_state();
 void Logo_state();
 void Create_item();
 
@@ -60,7 +48,7 @@ void Draw_time();
 void Draw_num(int num);
 void Whos_win();
 
-void Texture_init();
+//void Texture_init();
 GLuint CreateTexture(char const* filename);
 
 
@@ -78,11 +66,10 @@ int Itemcount = 0;
 time_t Now_time, start_time, Creat_time;
 
 float yz = 0.0f;
-Texture Timecount[2];
-Texture Score[3];
+//Texture Timecount[2];
+//Texture Score[3];
 
-Texture Worldbox[4];
-Texture Logo_texture;
+//Texture Worldbox[4];
 
 Item item[20];
 
@@ -96,7 +83,6 @@ glm::vec3 cameraDirection_1;
 glm::vec3 originPos;
 
 GLuint texureId[11];
-GLuint Logo;
 GLuint Who_win[2];
 
 FrameWork* FrameWork::currentInstance = nullptr;
@@ -116,7 +102,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	FrameWork framework;  // 전역 변수로 FrameWork 객체 생성
 	FrameWork::currentInstance = &framework;
 
-	Texture_init();
+	//Texture_init();
 
 	init();
 	glewInit();
@@ -214,13 +200,7 @@ void TimerFunction(int value) {
 }
 
 GLvoid KeyDownboard(unsigned char key, int x, int y) {
-	if (!Game_start) {
-		if (key == 'a') {
-			Game_start = true;
-			start_time = time(NULL);
-			Creat_time = time(NULL);
-		}
-	}
+	FrameWork::currentInstance->KeyDownboard(key,x,y);
 	//else {
 	//	//if (!player[1].stop && player[1].Move[1] == 0) {
 	//		if (key == 'a') {
@@ -254,18 +234,7 @@ GLvoid KeyDownboard(unsigned char key, int x, int y) {
 }
 
 GLvoid KeyUpboard(unsigned char key, int x, int y) {
-	/*if (key == 'a') {
-		player[1].Set_X(0);
-	}
-	else if (key == 'd') {
-		player[1].Set_X(0);
-	}
-	else if (key == 'w') {
-		player[1].Set_Z(0);
-	}
-	else if (key == 's') {
-		player[1].Set_Z(0);
-	}*/
+	FrameWork::currentInstance->KeyUpboard(key, x, y);
 }
 
 void SKeyDownboard(int key, int x, int y) {
@@ -276,177 +245,67 @@ void SKeyUpboard(int key, int x, int y) {
 	FrameWork::currentInstance->SKeyUpboard(key, x, y);
 }
 
-// 이하 텍스쳐를 위한 함수들
-GLuint CreateTexture(char const* filename)
-{
-	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename, 0);
 
-	if (format == -1)
-	{
-		cout << "Could not find image: " << filename << " - Aborting." << endl;
-		exit(-1);
-	}
-
-	if (format == FIF_UNKNOWN)
-	{
-		cout << "Couldn't determine file format - attempting to get from file extension..." << endl;
-
-		format = FreeImage_GetFIFFromFilename(filename);
-
-		if (!FreeImage_FIFSupportsReading(format))
-		{
-			cout << "Detected image format cannot be read!" << endl;
-			exit(-1);
-		}
-	}
-
-	FIBITMAP* bitmap = FreeImage_Load(format, filename);
-
-	int bitsPerPixel = FreeImage_GetBPP(bitmap);
-
-	FIBITMAP* bitmap32;
-	if (bitsPerPixel == 32)
-	{
-		cout << "Source image has " << bitsPerPixel << " bits per pixel. Skipping conversion." << endl;
-		bitmap32 = bitmap;
-	}
-	else
-	{
-		cout << "Source image has " << bitsPerPixel << " bits per pixel. Converting to 32-bit colour." << endl;
-		bitmap32 = FreeImage_ConvertTo32Bits(bitmap);
-	}
-
-	// Some basic image info - strip it out if you don't care
-	int imageWidth = FreeImage_GetWidth(bitmap32);
-	int imageHeight = FreeImage_GetHeight(bitmap32);
-	cout << "Image: " << filename << " is size: " << imageWidth << "x" << imageHeight << "." << endl;
-
-
-	GLubyte* textureData = FreeImage_GetBits(bitmap32);
-
-	GLuint tempTextureID;
-	glGenTextures(1, &tempTextureID);
-	glBindTexture(GL_TEXTURE_2D, tempTextureID);
-
-
-	glTexImage2D(GL_TEXTURE_2D,    // Type of texture
-		0,                // Mipmap level (0 being the top level i.e. full size)
-		GL_RGBA,          // Internal format
-		imageWidth,       // Width of the texture
-		imageHeight,      // Height of the texture,
-		0,                // Border in pixels
-		GL_BGRA,          // Data format
-		GL_UNSIGNED_BYTE, // Type of texture data
-		textureData);     // The image data to use for this texture
-
-	// Specify our minification and magnification filters
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-
-	GLenum glError = glGetError();
-	if (glError)
-	{
-		cout << "There was an error loading the texture: " << filename << endl;
-
-		switch (glError)
-		{
-		case GL_INVALID_ENUM:
-			cout << "Invalid enum." << endl;
-			break;
-
-		case GL_INVALID_VALUE:
-			cout << "Invalid value." << endl;
-			break;
-
-		case GL_INVALID_OPERATION:
-			cout << "Invalid operation." << endl;
-
-		default:
-			cout << "Unrecognised GLenum." << endl;
-			break;
-		}
-
-		cout << "See https://www.opengl.org/sdk/docs/man/html/glTexImage2D.xhtml for further details." << endl;
-	}
-
-	FreeImage_Unload(bitmap32);
-
-	if (bitsPerPixel != 32)
-	{
-		FreeImage_Unload(bitmap);
-	}
-
-	return tempTextureID;
-}
-
-void Texture_init() {
-	Timecount[0].Tlocate = glm::vec3(0.5f, 0.0f, 0.0f);
-	Timecount[1].Tlocate = glm::vec3(-0.5f, 0.0f, 0.0f);
-
-	for (int i = 0; i < 2; i++) {
-		glm::mat4 Tx = glm::mat4(1.0f);
-		Timecount[i].Ttr = glm::mat4(1.0f);
-
-		Tx = glm::translate(Tx, Timecount[i].Tlocate);
-		Timecount[i].Ttr = Tx * Timecount[i].Ttr;
-	}
-
-	for (int i = 0; i < 3; i++) {
-		Score[i].Tlocate = glm::vec3(-0.66f + 0.66 * i, 0.0f, 0.0f);
-		glm::mat4 Tx = glm::mat4(1.0f);
-		Score[i].Ttr = glm::mat4(1.0f);
-
-		Tx = glm::translate(Tx, Score[i].Tlocate);
-		Score[i].Ttr = Tx * Score[i].Ttr;
-	}
-
-
-	glm::mat4 Tscale = glm::mat4(1.0f);
-	Tscale = glm::scale(Tscale, glm::vec3(2.0f, 2.0f, 2.0f));
-	Logo_texture.Ttr = Tscale * glm::mat4(1.0f);
-
-	Logo = CreateTexture("Logo_state.png");
-	texureId[0] = CreateTexture("0.png");
-	texureId[1] = CreateTexture("1.png");
-	texureId[2] = CreateTexture("2.png");
-	texureId[3] = CreateTexture("3.png");
-	texureId[4] = CreateTexture("4.png");
-	texureId[5] = CreateTexture("5.png");
-	texureId[6] = CreateTexture("6.png");
-	texureId[7] = CreateTexture("7.png");
-	texureId[8] = CreateTexture("8.png");
-	texureId[9] = CreateTexture("9.png");
-	texureId[10] = CreateTexture("comg_bg.png");
-
-	Who_win[0] = CreateTexture("1_win.png");
-	Who_win[1] = CreateTexture("2_win.png");
-
-	Worldbox[0].Tlocate = glm::vec3(0.0f, 0.0f, 8.0f);
-	Worldbox[1].Tlocate = glm::vec3(8.0f, 0.0f, 0.0f);
-	Worldbox[2].Tlocate = glm::vec3(0.0f, 0.0f, -8.0f);
-	Worldbox[3].Tlocate = glm::vec3(-8.0f, 0.0f, 0.0f);
-
-	for (int i = 0; i < 4; i++) {
-		Worldbox[i].Tscale = glm::vec3(20.0f, 15.0f, 20.0f);
-		Worldbox[i].Trotate = 90 * i;
-		Worldbox[i].Ttr = glm::mat4(1.0f);
-		glm::mat4 Tx = glm::mat4(1.0f);
-		glm::mat4 Scale = glm::mat4(1.0f);
-		glm::mat4 Rotate = glm::mat4(1.0f);
-		Scale = glm::scale(Scale, glm::vec3(Worldbox[i].Tscale)); //		각 사각형 크기 
-		Rotate = glm::rotate(Rotate, glm::radians(float(Worldbox[i].Trotate)), glm::vec3(0.0, 1.0, 0.0));
-		Tx = glm::translate(Tx, Worldbox[i].Tlocate);
-		Worldbox[i].Ttr = Tx * Rotate * Scale * Worldbox[i].Ttr;
-	}
-}
+//void Texture_init() {
+//	Timecount[0].Tlocate = glm::vec3(0.5f, 0.0f, 0.0f);
+//	Timecount[1].Tlocate = glm::vec3(-0.5f, 0.0f, 0.0f);
+//
+//	for (int i = 0; i < 2; i++) {
+//		glm::mat4 Tx = glm::mat4(1.0f);
+//		Timecount[i].Ttr = glm::mat4(1.0f);
+//
+//		Tx = glm::translate(Tx, Timecount[i].Tlocate);
+//		Timecount[i].Ttr = Tx * Timecount[i].Ttr;
+//	}
+//
+//	for (int i = 0; i < 3; i++) {
+//		Score[i].Tlocate = glm::vec3(-0.66f + 0.66 * i, 0.0f, 0.0f);
+//		glm::mat4 Tx = glm::mat4(1.0f);
+//		Score[i].Ttr = glm::mat4(1.0f);
+//
+//		Tx = glm::translate(Tx, Score[i].Tlocate);
+//		Score[i].Ttr = Tx * Score[i].Ttr;
+//	}
+//
+//
+//	glm::mat4 Tscale = glm::mat4(1.0f);
+//	Tscale = glm::scale(Tscale, glm::vec3(2.0f, 2.0f, 2.0f));
+//	Logo_texture.Ttr = Tscale * glm::mat4(1.0f);
+//
+//	Logo = CreateTexture("Logo_state.png");
+//	texureId[0] = CreateTexture("0.png");
+//	texureId[1] = CreateTexture("1.png");
+//	texureId[2] = CreateTexture("2.png");
+//	texureId[3] = CreateTexture("3.png");
+//	texureId[4] = CreateTexture("4.png");
+//	texureId[5] = CreateTexture("5.png");
+//	texureId[6] = CreateTexture("6.png");
+//	texureId[7] = CreateTexture("7.png");
+//	texureId[8] = CreateTexture("8.png");
+//	texureId[9] = CreateTexture("9.png");
+//	texureId[10] = CreateTexture("comg_bg.png");
+//
+//	Who_win[0] = CreateTexture("1_win.png");
+//	Who_win[1] = CreateTexture("2_win.png");
+//
+//	Worldbox[0].Tlocate = glm::vec3(0.0f, 0.0f, 8.0f);
+//	Worldbox[1].Tlocate = glm::vec3(8.0f, 0.0f, 0.0f);
+//	Worldbox[2].Tlocate = glm::vec3(0.0f, 0.0f, -8.0f);
+//	Worldbox[3].Tlocate = glm::vec3(-8.0f, 0.0f, 0.0f);
+//
+//	for (int i = 0; i < 4; i++) {
+//		Worldbox[i].Tscale = glm::vec3(20.0f, 15.0f, 20.0f);
+//		Worldbox[i].Trotate = 90 * i;
+//		Worldbox[i].Ttr = glm::mat4(1.0f);
+//		glm::mat4 Tx = glm::mat4(1.0f);
+//		glm::mat4 Scale = glm::mat4(1.0f);
+//		glm::mat4 Rotate = glm::mat4(1.0f);
+//		Scale = glm::scale(Scale, glm::vec3(Worldbox[i].Tscale)); //		각 사각형 크기 
+//		Rotate = glm::rotate(Rotate, glm::radians(float(Worldbox[i].Trotate)), glm::vec3(0.0, 1.0, 0.0));
+//		Tx = glm::translate(Tx, Worldbox[i].Tlocate);
+//		Worldbox[i].Ttr = Tx * Rotate * Scale * Worldbox[i].Ttr;
+//	}
+//}
 // 여기까지
 
 
@@ -511,74 +370,6 @@ void Draw_time() {
 	//glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-// 필드를 그리는 함수
-void Draw_filed(BOOL View_draw_background) {
-	//glUseProgram(s_program);
-
-	//unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	//unsigned int modelLocation1 = glGetUniformLocation(s_program, "in_Color"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-
-	//glBindVertexArray(vao);
-
-	//for (int i = 0; i < zcount; i = i++) {					// 박스를 그려주는 부분.
-	//	for (int j = 0; j < xcount; j++) {
-
-	//		glUniform3f(modelLocation1, All_Box[i][j].Bcolor[0], All_Box[i][j].Bcolor[1], All_Box[i][j].Bcolor[2]);
-
-	//		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(All_Box[i][j].TR)); //--- modelTransform 변수에 변환 값 적용하기
-	//		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
-	//	}
-	//}
-
-	//for (int i = 0; i < 12; i++) {
-	//	if (item[i].View) {
-	//		glUniform3f(modelLocation1, item[i].Icolor[0], item[i].Icolor[1], item[i].Icolor[2]);
-
-	//		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(item[i].TR)); //--- modelTransform 변수에 변환 값 적용하기
-	//		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
-	//	}
-	//}
-
-	//glm::mat4 TR = glm::mat4(1.0f);
-	//glm::mat4 Tx = glm::mat4(1.0f);
-	//glm::mat4 Scale = glm::mat4(1.0f);
-
-
-	//for (int i = 0; i < 2; i++) {
-	//	TR = glm::mat4(1.0f);					// 플레이어를 그려주는 부분.
-	//	Tx = glm::mat4(1.0f);
-	//	Scale = glm::mat4(1.0f);
-	//	glm::mat4 Rotate = glm::mat4(1.0f);
-
-	//	glUniform3f(modelLocation1, player[i].Get_R(), player[i].Get_G(), player[i].Get_B());
-
-	//	Rotate = glm::rotate(Rotate, glm::radians(player[i].Get_Lotate()), glm::vec3(0.0, 1.0, 0.0)); //--- z축에 대하여 회전 행렬
-	//	Scale = glm::scale(Scale, player[i].Get_Pscale()); //		플레이어
-	//	Tx = glm::translate(Tx, player[i].Get_Plocate() + player[i].Get_Move());
-	//	TR = Tx * Rotate * Scale * TR;
-
-	//	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR)); //--- modelTransform 변수에 변환 값 적용하기
-	//	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
-	//}
-
-	//if (View_draw_background) {
-	//	glUseProgram(triangleShaderProgramID);
-	//	glBindVertexArray(triangleVertexArrayObject);
-
-	//	glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
-
-	//	unsigned int modelLocation2 = glGetUniformLocation(triangleShaderProgramID, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	//	for (int i = 0; i < 4; i++) {
-	//		glUniformMatrix4fv(modelLocation2, 1, GL_FALSE, glm::value_ptr(Worldbox[i].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-
-	//		glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
-	//		glBindTexture(GL_TEXTURE_2D, texureId[10]);
-	//		glDrawArrays(GL_TRIANGLES, 0, 6);
-	//	}
-	//}
-	//glUseProgram(s_program);
-}
-
 void Draw_num(int num) {
 	//glUseProgram(triangleShaderProgramID);
 	//glBindVertexArray(triangleVertexArrayObject);
@@ -606,86 +397,6 @@ void Draw_num(int num) {
 	//glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Play_state() {
-	//unsigned int projectionLocation = glGetUniformLocation(s_program, "projectionTransform"); //--- 투영 변환 값 설정
-	//unsigned int viewLocation = glGetUniformLocation(s_program, "viewTransform"); //--- 뷰잉 변환 설정
-
-
-	//glm::mat4 Prev_rotation = glm::mat4(1.0f);
-
-	//view = glm::mat4(1.0f);
-	//projection = glm::mat4(1.0f);
-	//projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.01f, 100.0f);
-	//projection = glm::rotate(projection, glm::radians(45.0f), glm::vec3(1.0, 0.0, 0.0));
-	//projection = glm::translate(projection, glm::vec3(0.0, 0.0, -3)); //--- 공간을 약간 뒤로 미뤄줌
-	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
-
-
-	//view = glm::lookAt(player[0].Get_Camerapos(), player[0].Get_Camerapos() + player[0].Get_Cameradirection(), cameraUp);
-	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-
-	//glUseProgram(triangleShaderProgramID);
-
-	//unsigned int Texture_viewlocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
-	//unsigned int Teture_projectionlocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform");
-
-	//glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
-
-	//glUniformMatrix4fv(Teture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
-
-	//glViewport(0, 0, 630, 700);
-	//Draw_filed(true);
-
-
-	//view = glm::lookAt(player[1].Get_Camerapos(), player[1].Get_Camerapos() + player[1].Get_Cameradirection(), cameraUp);
-	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-
-	//glUseProgram(triangleShaderProgramID);
-	//glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
-
-
-	//glViewport(630, 0, 630, 700);
-	//Draw_filed(true);
-
-	//view = glm::lookAt(cameraPos, cameraPos + cameraDirection, cameraUp);
-	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-
-
-	//glm::mat4 projection = glm::mat4(1.0f);
-	//projection = glm::perspective(glm::radians(60.0f), 1.0f, 0.01f, 100.0f);
-	//projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)); //--- z축에 대하여 회전 행렬
-	//projection = glm::translate(projection, glm::vec3(0.0, -3.0, 15.0)); //--- 공간을 약간 뒤로 미뤄줌
-	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
-
-	//glUseProgram(triangleShaderProgramID);
-
-	//glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
-
-	//glUniformMatrix4fv(Teture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
-
-	//glDisable(GL_DEPTH_TEST);
-	//glViewport(830, 500, 200, 200);
-	//Draw_filed(false);
-
-
-	//glViewport(180, 500, 200, 200);
-	//Draw_filed(false);
-
-
-	//glViewport(530, 500, 200, 200);
-	//Draw_time();
-
-	//glViewport(100, 550, 150, 150);
-	////Draw_num(player[0].Occupy_box);
-
-	//glViewport(1000, 550, 150, 150);
-	////Draw_num(player[1].Occupy_box);
-
-	//if (Game_over) {
-	//	glViewport(530, 300, 200, 200);
-	//	Whos_win();
-	//}
-}
 
 void Logo_state() {
 	//glUseProgram(triangleShaderProgramID);

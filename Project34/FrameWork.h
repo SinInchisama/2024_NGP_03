@@ -24,7 +24,7 @@ private:
 	glm::mat4 projection;
 
 	Play_State playstate;
-
+	Stay_State staystate;
 public:
 	FrameWork();
 
@@ -41,6 +41,9 @@ public:
 	void Draw_Scene();
 
 	GLvoid Reshape(int w, int h);
+
+	void KeyDownboard(int key, int x, int y);
+	void KeyUpboard(int key, int x, int y);
 
 	void SKeyDownboard(int key, int x, int y);
 	void SKeyUpboard(int key, int x, int y);

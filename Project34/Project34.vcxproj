@@ -145,6 +145,7 @@
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="FrameWork.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="소스.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="FreeImage.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

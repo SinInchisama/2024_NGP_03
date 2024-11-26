@@ -281,7 +281,7 @@ void FrameWork::Define_VertexArrayObject()
 
 void FrameWork::Update(int value)
 {
-	playstate.Update();
+	staystate.Update();
 }
 
 void FrameWork::Draw_Scene()
@@ -292,7 +292,7 @@ void FrameWork::Draw_Scene()
 
 		glEnable(GL_DEPTH_TEST);
 
-		playstate.Draw();
+		staystate.Draw();
 
 		glutSwapBuffers();
 
@@ -303,12 +303,20 @@ GLvoid FrameWork::Reshape(int w, int h)
 	return glViewport(0, 0, w, h);
 }
 
+void FrameWork::KeyDownboard(int key, int x, int y)
+{
+}
+
+void FrameWork::KeyUpboard(int key, int x, int y)
+{
+}
+
 void FrameWork::SKeyDownboard(int key, int x, int y)
 {
-	playstate.SKeyDown(key);
+	staystate.SKeyDown(key);
 }
 
 void FrameWork::SKeyUpboard(int key, int x, int y)
 {
-	playstate.SKeyUp(key);
+	staystate.SKeyUp(key);
 }

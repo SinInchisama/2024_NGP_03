@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "CPlayer.h"
 #include "include/GL/glut.h"
+#include "Texture.h"
 
 class State
 {
@@ -37,4 +38,21 @@ public:
 	void KeyDown(int key);
 
 	void Boxinit(int x, int y, int z);
+};
+
+class Stay_State :State
+{
+private:
+	Texture Logo_texture;
+public:
+	Stay_State();
+
+	void Update() override {};
+	void Draw()override;
+
+	void SKeyUp(int key) override {};
+	void SKeyDown(int key)override {};
+
+	void KeyUp(int key) {};
+	void KeyDown(int key) {};
 };
