@@ -2,10 +2,6 @@
 #include "include/glm/glm.hpp"
 
 class Bullet {
-private:
-	int dir_x, dir_y;
-	float speed;
-
 public:
 	glm::vec3 Iscale;
 	glm::vec3 Ilocate;
@@ -18,23 +14,6 @@ public:
 	glm::vec4 Bounding_box[2];
 
 	bool View;
-
-	void set_dir(int _dir_x, int _dir_y) 
-	{
-		dir_x = _dir_x;
-		dir_y = _dir_y;
-	}
-
-	void set_speed(float _speed) 
-	{
-		speed = _speed;
-	}
-
-	void move() 
-	{
-		x += speed * dir_x;
-		y += speed * dir_y;
-	}
 };
 // 소스.cpp 파일에 플레이어 별 배열 생성
 // 배열의 인덱스로 총알을 구분 (플레이어에 남은 총알 개수 변수 추가 필요?)
