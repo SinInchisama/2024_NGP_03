@@ -1,14 +1,21 @@
 #pragma once
+#pragma comment(lib, "lib/freeglut.lib")
+
 #include "Common.h"
 #include "CPlayer.h"
+#include "include/GL/glut.h"
 
 class State
 {
 public:
-	virtual void Draw() {};
-	virtual void KeyUp() {};
-	virtual void KeyDown() {};
 	virtual void Update() {};
+	virtual void Draw() {};
+
+	virtual void SKeyUp(int key) {};
+	virtual void SKeyDown(int key) {};
+
+	virtual void KeyUp(int key) {  };
+	virtual void KeyDown(int key) {};
 };
 
 class Play_State :State
@@ -20,9 +27,14 @@ private:
 public:
 	Play_State();
 
+	void Update() override;
 	void Draw()override;
-	void KeyUp() override {};
-	void KeyDown()override {};
+
+	void SKeyUp(int key) override;
+	void SKeyDown(int key)override;;
+
+	void KeyUp(int key);
+	void KeyDown(int key);
 
 	void Boxinit(int x, int y, int z);
 };

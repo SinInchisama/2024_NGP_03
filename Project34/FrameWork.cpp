@@ -279,6 +279,11 @@ void FrameWork::Define_VertexArrayObject()
 	glBindVertexArray(0);
 }
 
+void FrameWork::Update(int value)
+{
+	playstate.Update();
+}
+
 void FrameWork::Draw_Scene()
 {
 		glUseProgram(s_program);
@@ -287,9 +292,6 @@ void FrameWork::Draw_Scene()
 
 		glEnable(GL_DEPTH_TEST);
 
-		// state에 맞는게 돌아감.
-		//if (!Game_start)
-		//	Logo_state();
 		playstate.Draw();
 
 		glutSwapBuffers();
@@ -299,4 +301,14 @@ void FrameWork::Draw_Scene()
 GLvoid FrameWork::Reshape(int w, int h)
 {
 	return glViewport(0, 0, w, h);
+}
+
+void FrameWork::SKeyDownboard(int key, int x, int y)
+{
+	playstate.SKeyDown(key);
+}
+
+void FrameWork::SKeyUpboard(int key, int x, int y)
+{
+	playstate.SKeyUp(key);
 }

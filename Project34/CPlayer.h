@@ -3,6 +3,8 @@
 #include "include/glm/glm.hpp"
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
+#include "Common.h"
+#include <bitset>
 
 class Player
 {
@@ -16,7 +18,6 @@ private:
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDirection;
 
-	int x, y, z;
 	float gravity;
 	float lotate;
 	bool view;
@@ -30,6 +31,8 @@ private:
 	int player_number;  //캐릭터 고유 숫자 1p, 2p
 	bool stop; //시계 효과를 받았을 경우 true
 
+	byte Action = 0;
+
 	int timer;
 
 public:
@@ -41,9 +44,6 @@ public:
 		Plocate[1] = 0.0f; // Y 좌표 설정
 		Pscale = { 0.2f, 0.2f, 0.2f };
 		lotate = 180.0f * i;
-		x = 0;
-		y = 0;
-		z = 0;
 		gravity = 0.01f;
 		speed = 0.05f;
 		Occupy_box = 1;
@@ -62,9 +62,11 @@ public:
 	GLfloat Get_B() { return Color[2]; }
 	float Get_Lotate() {return lotate;}
 
-	void Set_X(int i) {x = i;}
-	void Set_Y(int i) { y = i; }
-	void Set_Z(int i) { z = i; }
+	void Set_UpAction(KeyInput key) {
+		Action &= ~key;  }
+	void Set_DownAction(KeyInput key) {
+		Action|= key;
+	}
 	void Set_Plocate(glm::vec3 v) {Plocate = v;}
 
 	void Add_Occupy(int x) {Occupy_box += x;}

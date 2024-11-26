@@ -36,22 +36,27 @@ public:
 	void init_Buffer();
 	void Define_VertexArrayObject();
 
+	void Update(int value);
+
 	void Draw_Scene();
 
 	GLvoid Reshape(int w, int h);
 
+	void SKeyDownboard(int key, int x, int y);
+	void SKeyUpboard(int key, int x, int y);
+
 	static FrameWork* currentInstance;
 
 	static void DisplayWrapper() {
-		if (currentInstance) {
 			currentInstance->Draw_Scene();
-		}
 	}
 
 	static void DisplayReShape(int w,int h) {
-		if (currentInstance) {
-			currentInstance->Reshape(w,h);
-		}
+		currentInstance->Reshape(w,h);
 	}
+
+	/*static void Update() {
+		currentInstance->Update();
+	}*/
 };
 

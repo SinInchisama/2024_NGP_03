@@ -23,7 +23,6 @@
 #include "CPlayer.h"
 #include "CItem.h"
 #include "CBullet.h"
-#include "enum.h"
 #include "CPlayer.h"
 #include "FrameWork.h"
 
@@ -102,6 +101,7 @@ GLuint Who_win[2];
 
 FrameWork* FrameWork::currentInstance = nullptr;
 
+
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
 	//--- 윈도우 생성하기
@@ -113,7 +113,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	//--- GLEW 초기화하기
 	glewExperimental = GL_TRUE;
 
-	FrameWork framework;
+	FrameWork framework;  // 전역 변수로 FrameWork 객체 생성
 	FrameWork::currentInstance = &framework;
 
 	Texture_init();
@@ -133,7 +133,8 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 }
 
 void TimerFunction(int value) {
-
+	FrameWork::currentInstance->Update(value);
+	//framework.Update();
 	//time_t u = time(NULL);
 
 	//if (!Game_over && Game_start) {
@@ -268,59 +269,12 @@ GLvoid KeyUpboard(unsigned char key, int x, int y) {
 }
 
 void SKeyDownboard(int key, int x, int y) {
-	//if (Game_start && !player[0].stop && player[0].Move[1] == 0) {
-		/*switch (key) {
-		case GLUT_KEY_LEFT:
-			player[0].Set_X(-1);
-			break;
-		case GLUT_KEY_RIGHT:
-			player[0].Set_X(1);
-			break;
-		case GLUT_KEY_UP:
-			player[0].Set_Z(-1);
-			break;
-		case GLUT_KEY_DOWN:
-			player[0].Set_Z(+1);
-		}*/
-		//}
+	FrameWork::currentInstance->SKeyDownboard(key,x,y);
 }
 
 void SKeyUpboard(int key, int x, int y) {
-	/*switch (key) {
-
-	case GLUT_KEY_LEFT:
-		player[0].Set_X(0);
-		break;
-	case GLUT_KEY_RIGHT:
-		player[0].Set_X(0);
-		break;
-	case GLUT_KEY_UP:
-		player[0].Set_Z(0);
-
-		break;
-	case GLUT_KEY_DOWN:
-		player[0].Set_Z(0);
-	}*/
+	FrameWork::currentInstance->SKeyUpboard(key, x, y);
 }
-
-
-//void Player_camera(Player* p) {
-//	glm::mat4 TR = glm::mat4(1.0f);
-//	glm::mat4 Tx = glm::mat4(1.0f);
-//	glm::mat4 Scale = glm::mat4(1.0f);
-//	glm::mat4 Rotate = glm::mat4(1.0f);
-//
-//	Rotate = glm::rotate(Rotate, glm::radians(p->lotate), glm::vec3(0.0, 1.0, 0.0));
-//	Scale = glm::scale(Scale, p->Pscale); //		플레이어
-//	Tx = glm::translate(Tx, p->Plocate + p->Move);
-//	TR = Tx * Rotate * Scale * TR;
-//
-//	p->cameraPos = TR * glm::vec4(0.0f, Viewy, 0.0f, 1.0f);
-//	p->cameraDirection = glm::vec3(0.0f, 0.5f, -1.0f);
-//
-//	p->cameraDirection[0] = sin(glm::radians(p->lotate)) * -1.0;
-//	p->cameraDirection[2] = cos(glm::radians(p->lotate)) * -1.0;
-//}
 
 // 이하 텍스쳐를 위한 함수들
 GLuint CreateTexture(char const* filename)

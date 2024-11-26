@@ -7,10 +7,15 @@ Play_State::Play_State()
 	All_Box[0][0].Bcolor = player.Get_Color();
 }
 
+void Play_State::Update()
+{
+	time_t u = time(NULL); 
+	player.Calculate_Move();
+	player.Calculate_Camera();
+}
+
 void Play_State::Draw()
 {
-	player.Calculate_Camera();
-
 	unsigned int projectionLocation = glGetUniformLocation(s_program, "projectionTransform"); //--- 투영 변환 값 설정
 	unsigned int viewLocation = glGetUniformLocation(s_program, "viewTransform"); //--- 뷰잉 변환 설정
 
@@ -163,6 +168,56 @@ void Play_State::Draw()
 	//	glViewport(530, 300, 200, 200);
 	//	Whos_win();
 	//}
+}
+
+void Play_State::SKeyDown(int key) {
+	switch (key) {
+	case GLUT_KEY_UP:
+		player.Set_DownAction(KEY_UP);
+		break;
+	case GLUT_KEY_DOWN:
+		player.Set_DownAction(KEY_DOWN);
+		break;
+	case GLUT_KEY_LEFT:
+		player.Set_DownAction(KEY_LEFT);
+		break;
+	case GLUT_KEY_RIGHT:
+		player.Set_DownAction(KEY_RIGHT);
+		break;
+
+	}
+}
+
+
+void Play_State::SKeyUp(int key) {
+	switch (key) {
+	case GLUT_KEY_UP:
+		player.Set_UpAction(KEY_UP);
+		break;
+	case GLUT_KEY_DOWN:
+		player.Set_UpAction(KEY_DOWN);
+		break;
+	case GLUT_KEY_LEFT:
+		player.Set_UpAction(KEY_LEFT);
+		break;
+	case GLUT_KEY_RIGHT:
+		player.Set_UpAction(KEY_RIGHT);
+		break;
+	}
+}
+
+void Play_State::KeyUp(int key)
+{
+	switch (key) {
+
+	}
+}
+
+void Play_State::KeyDown(int key)
+{
+	switch (key) {
+
+	}
 }
 
 void Play_State::Boxinit(int x, int y, int z) {				// 박스 갯수 추후에 25/25로 늘려도 박스 배열만 변경해주고 x,z값만 25로 넘겨주면 25*25 박스들이 만들어짐
