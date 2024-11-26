@@ -1,11 +1,59 @@
 #include "FrameWork.h"
 
+// 전역 변수 정의
+float line[] = {
+	5.0f, 0.0f, 0.0f,
+	-5.0f, 0.0f, 0.0f,
+	0.0f, 5.0f, 0.0f,
+	0.0f, -5.0f, 0.0f,
+	0.0f, 0.0f, 5.0f,
+	0.0f, 0.0f, -5.0f
+};
+
+float vPositionList[] = {
+	0.5f, 1.0f, 0.5f, // 앞 우측 상단
+	0.5f, 1.0f, -0.5f, // 뒤 우측 상단
+	-0.5f, 1.0f, -0.5f, // 뒤 좌측 상단
+	-0.5f, 1.0f, 0.5f, // 앞 좌측 상단
+	-0.5f, 0.0f, 0.5f, // 앞 좌측 하단
+	-0.5f, 0.0f, -0.5f, // 뒤 좌측 하단
+	0.5f, 0.0f, -0.5f, // 뒤 우측 하단
+	0.5f, 0.0f, 0.5f, // 앞 우측 하단
+
+	0.5f, 0.0f, 0.5f,
+	0.5f, 0.0f, -0.5f,
+	-0.5f, 0.0f, 0.5f, // 앞 좌측 하단
+	-0.5f, 0.0f, -0.5f, // 뒤 좌측 하단
+	0.0f, 0.5f, 0.0f
+};
+
+unsigned int index[] = {
+	1, 3, 0, // 첫 번째 삼각형         // 위 사각형
+	1, 2, 3, // 두 번째 삼각형
+	5, 4, 2, // 왼쪽 사각형
+	3, 2, 4,
+	0, 7, 6, // 오른쪽 사각형
+	6, 1, 0,
+	3, 4, 7, // 앞 사각형
+	7, 0, 3,
+	6, 5, 2, // 뒤 사각형
+	6, 2, 1,
+	6, 7, 4, // 세 번째 삼각형         // 아래 사각형
+	6, 4, 5, // 네 번째 삼각형
+
+	8, 9, 10,
+	10, 9, 11,
+	10, 8, 12, // 앞 삼각형
+	8, 9, 12, // 오른쪽
+	9, 11, 12, // 뒤쪽
+	11, 10, 12 // 왼쪽
+};
+
 FrameWork::FrameWork()
 {
 	glewInit();
 	Init_Shader();
 	init_Buffer();
-
 }
 
 void FrameWork::Make_VertexShader()
@@ -147,7 +195,7 @@ void FrameWork::init_Buffer()
 void FrameWork::Define_VertexArrayObject()
 {
 	float position[] = {
-	-0.5f,  -0.5f, 0.0f, //vertex 1 : Top-left
+	-0.5f,  -0.5f, 0.0f, //vertex 1 : Top
 	0.5f, -0.5f, 0.0f, //vertex 2 : Top-right
 	0.5f, 0.5f, 0.0f, //vertex 3 : Bottom-right
 	0.5f, 0.5f, 0.0f, //vertex 4 : Bottom-right
@@ -197,7 +245,7 @@ void FrameWork::Define_VertexArrayObject()
 
 	GLint positionAttribute = glGetAttribLocation(triangleShaderProgramID, "positionAttribute");
 	if (positionAttribute == -1) {
-		cerr << "position 속성 설정 실패" << endl;
+		//cerr << "position 속성 설정 실패" << endl;
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObjectID);
 	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -206,7 +254,7 @@ void FrameWork::Define_VertexArrayObject()
 
 	GLint textureCoordinateAttribute = glGetAttribLocation(triangleShaderProgramID, "textureCoordinateAttribute");
 	if (textureCoordinateAttribute == -1) {
-		cerr << "Texture Coordinate 속성 설정 실패" << endl;
+		//cerr << "Texture Coordinate 속성 설정 실패" << endl;
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, triangleTextureCoordinateBufferObjectID);
 	glVertexAttribPointer(textureCoordinateAttribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -227,8 +275,7 @@ void FrameWork::Draw_Scene()
 		// state에 맞는게 돌아감.
 		//if (!Game_start)
 		//	Logo_state();
-		//else
-		//	Play_state();
+		//Play_state();
 
 		glutSwapBuffers();
 

@@ -133,60 +133,13 @@ glm::vec3 cameraUp; //--- 카메라 위쪽 방향
 
 glm::vec3 originPos;
 
-glm::mat4 view;
-glm::mat4 projection;
+//glm::mat4 view;
+//glm::mat4 projection;
 GLuint texureId[11];
 GLuint Logo;
 GLuint Who_win[2];
 
-float vPositionList[] = {
-0.5f, 1.0f, 0.5f, // 앞 우측 상단
-0.5f, 1.0f, -0.5f, // 뒤 우측 상단
--0.5f, 1.0f, -0.5f, // 뒤 좌측 상단
--0.5f, 1.0f, 0.5f, // 앞 좌측 상단
--0.5f,0.0f,0.5f, // 앞 좌측 하단
--0.5f,0.0f,-0.5f,	// 뒤 좌측 하단
-0.5f,0.0f,-0.5f,	// 뒤 우측 하단
-0.5f,0.0f,0.5f,		// 앞 우측 하단
-
-0.5f,0.0f,0.5f,
-0.5f,0.0f,-0.5f,
--0.5f,0.0f,0.5f, // 앞 좌측 하단
--0.5f,0.0f,-0.5f,	// 뒤 좌측 하단
-0.0f,0.5f,0.0f
-};
-
-unsigned int index[] = {
-1, 3, 0, // 첫 번째 삼각형			// 위 사각형
-1, 2, 3, // 두 번째 삼각형
-5, 4, 2,									// 왼쪽 사각형
-3, 2, 4,
-0, 7, 6,							// 오른쪽 사각형
-6, 1, 0,
-3, 4, 7,							// 앞 사각형
-7, 0, 3,
-6, 5, 2,								// 뒤 사각형
-6, 2, 1,
-6, 7, 4,	// 세 번째 삼각형			// 아래 사각형
-6, 4, 5,	// 네 번째 삼각형
-
-8,9,10,
-10,9,11,
-10,8,12,		// 앞 삼각형
-8,9,12,			// 오른쪽
-9,11,12,		// 뒤쪽
-11,10,12		// 왼쪽
-};
-
-float line[]{
-5.0f,0.0f,0.0f,
--5.0f,0.0f,0.0f,
-0.0f,5.0f,0.0f,
-0.0f,-5.0f,0.0f,
-0.0f,0.0f,5.0f,
-0.0f,0.0f,-5.0f
-};
-
+FrameWork* FrameWork::currentInstance = nullptr;
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
@@ -200,6 +153,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glewExperimental = GL_TRUE;
 
 	FrameWork framework;
+	FrameWork::currentInstance = &framework;
 
 	Texture_init();
 
@@ -207,66 +161,14 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glewInit();
 	framework.Init_Shader();
 	framework.init_Buffer();
-	glutDisplayFunc(framework.Draw_Scene);
-	glutReshapeFunc(framework.Reshape);
+	glutDisplayFunc(FrameWork::DisplayWrapper);
+	glutReshapeFunc(FrameWork::DisplayReShape);
 	glutKeyboardFunc(KeyDownboard); // 키보드 입력 콜백함수 지정
 	glutKeyboardUpFunc(KeyUpboard);
 	glutSpecialFunc(SKeyDownboard);
 	glutSpecialUpFunc(SKeyUpboard);
 	glutTimerFunc(50, TimerFunction, 1);
 	glutMainLoop();
-}
-
-//void InitBuffer()
-//{
-//	glGenVertexArrays(1, &vao); //--- VAO 를 지정하고 할당하기
-//	glBindVertexArray(vao); //--- VAO를 바인드하기
-//	glGenBuffers(2, vbo); //--- 2개의 VBO를 지정하고 할당하기
-//	//--- 1번째 VBO를 활성화하여 바인드하고, 버텍스 속성 (좌표값)을 저장
-//	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(vPositionList), vPositionList, GL_STATIC_DRAW);
-//	glGenBuffers(1, &EBO[0]);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]); //--- GL_ELEMENT_ARRAY_BUFFER 버퍼 유형으로 바인딩
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-//	glEnableVertexAttribArray(0);
-//
-//	glGenVertexArrays(1, &linevao); //--- VAO 를 지정하고 할당하기
-//	glBindVertexArray(linevao); //--- VAO를 바인드하기
-//	glGenBuffers(2, linevbo); //--- 2개의 VBO를 지정하고 할당하기
-//	glBindBuffer(GL_ARRAY_BUFFER, linevbo[0]);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(line), line, GL_STATIC_DRAW);
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-//	glEnableVertexAttribArray(0);
-//
-//	defineVertexArrayObject();
-//
-//	cameraPos = glm::vec3(Camerax, 17.0f, Cameraz);
-//	cameraDirection = glm::vec3(0.0f, 0.0f, -1.0f); //--- 카메라 바라보는 방향
-//	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); //--- 카메라 위쪽 방향
-//}
-
-GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
-{
-	glViewport(0, 0, w, h);
-}
-
-char* filetobuf(const char* file)
-{
-	FILE* fptr;
-	long length;
-	char* buf;
-	fptr = fopen(file, "rb"); // Open file for reading 
-	if (!fptr) // Return NULL on failure 
-		return NULL;
-	fseek(fptr, 0, SEEK_END); // Seek to the end of the file 
-	length = ftell(fptr); // Find out how many bytes into the file we are 
-	buf = (char*)malloc(length + 1); // Allocate a buffer for the entire length of the file and a null terminator 
-	fseek(fptr, 0, SEEK_SET); // Go back to the beginning of the file 
-	fread(buf, length, 1, fptr); // Read the contents of the file in to the buffer 
-	fclose(fptr); // Close the file 
-	buf[length] = 0; // Null terminator 
-	return buf; // Return the buffer 
 }
 
 void TimerFunction(int value) {
@@ -630,93 +532,6 @@ GLuint CreateTexture(char const* filename)
 	return tempTextureID;
 }
 
-//void defineVertexArrayObject() {
-//
-//	//#1
-//	//삼각형을 구성하는 vertex 데이터 - position과 color
-//	float position[] = {
-//	-0.5f,  -0.5f, 0.0f, //vertex 1 : Top-left
-//	0.5f, -0.5f, 0.0f, //vertex 2 : Top-right
-//	0.5f, 0.5f, 0.0f, //vertex 3 : Bottom-right
-//	0.5f, 0.5f, 0.0f, //vertex 4 : Bottom-right
-//	-0.5f, 0.5f, 0.0f, //vertex 5 : Bottom-left
-//	-0.5f,  -0.5f, 0.0f //vertex 6 : Top-left
-//	};
-//
-//	float color[] = {
-//		1.0f, 1.0f, 1.0f, //vertex 1 : RED (1,0,0)
-//		1.0f, 1.0f, 1.0f, //vertex 2 : GREEN (0,1,0) 
-//		1.0f, 1.0f, 1.0f,  //vertex 3 : BLUE (0,0,1)
-//		1.0f, 1.0f, 1.0f,  //vertex 4 : BLUE (0,0,1)
-//		1.0f, 1.0f, 1.0f,  //vertex 5 : WHITE (1,1,1)
-//		1.0f, 1.0f, 1.0f //vertex 6 : RED (1,0,0)
-//	};
-//
-//	float textureCoordinate[] = {
-//	0.0f, 0.0f,  //vertex 1  
-//	1.0f, 0.0f,  //vertex 2
-//	1.0f, 1.0f,   //vertex 3        
-//	1.0f, 1.0f,  //vertex 1  
-//	0.0f, 1.0f,  //vertex 2
-//	0.0f, 0.0f   //vertex 3        
-//	};
-//
-//
-//
-//	//#2
-//	//Vertex Buffer Object(VBO)를 생성하여 vertex 데이터를 복사한다.
-//	glGenBuffers(1, &trianglePositionVertexBufferObjectID);
-//	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObjectID);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(position), position, GL_STATIC_DRAW);
-//
-//	glGenBuffers(1, &triangleColorVertexBufferObjectID);
-//	glBindBuffer(GL_ARRAY_BUFFER, triangleColorVertexBufferObjectID);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
-//
-//	glGenBuffers(1, &triangleTextureCoordinateBufferObjectID);
-//	glBindBuffer(GL_ARRAY_BUFFER, triangleTextureCoordinateBufferObjectID);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinate), textureCoordinate, GL_STATIC_DRAW);
-//
-//
-//	//#6
-//	glGenVertexArrays(1, &triangleVertexArrayObject);
-//	glBindVertexArray(triangleVertexArrayObject);
-//
-//
-//	GLint positionAttribute = glGetAttribLocation(triangleShaderProgramID, "positionAttribute");
-//	if (positionAttribute == -1) {
-//		cerr << "position 속성 설정 실패" << endl;
-//	}
-//	glBindBuffer(GL_ARRAY_BUFFER, trianglePositionVertexBufferObjectID);
-//	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
-//
-//	glEnableVertexAttribArray(positionAttribute);
-//
-//
-//	/*
-//	GLint colorAttribute = glGetAttribLocation(triangleShaderProgramID, "colorAttribute");
-//	if (colorAttribute == -1) {
-//		cerr << "color 속성 설정 실패" << endl;
-//		return false;
-//	}
-//	glBindBuffer(GL_ARRAY_BUFFER, triangleColorVertexBufferObjectID);
-//	glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
-//	glEnableVertexAttribArray(colorAttribute);
-//	*/
-//
-//
-//	GLint textureCoordinateAttribute = glGetAttribLocation(triangleShaderProgramID, "textureCoordinateAttribute");
-//	if (textureCoordinateAttribute == -1) {
-//		cerr << "Texture Coordinate 속성 설정 실패" << endl;
-//	}
-//	glBindBuffer(GL_ARRAY_BUFFER, triangleTextureCoordinateBufferObjectID);
-//	glVertexAttribPointer(textureCoordinateAttribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
-//	glEnableVertexAttribArray(textureCoordinateAttribute);
-//
-//
-//	glBindVertexArray(0);
-//}
-
 void Texture_init() {
 	Timecount[0].Tlocate = glm::vec3(0.5f, 0.0f, 0.0f);
 	Timecount[1].Tlocate = glm::vec3(-0.5f, 0.0f, 0.0f);
@@ -818,250 +633,250 @@ void Crash(int num, int inspection)
 
 // 타임을 그려주는 함수
 void Draw_time() {
-	glUseProgram(triangleShaderProgramID);
-	glBindVertexArray(triangleVertexArrayObject);
+	//glUseProgram(triangleShaderProgramID);
+	//glBindVertexArray(triangleVertexArrayObject);
 
-	glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
+	//glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
 
-	glm::mat4 projection = glm::mat4(1.0f);
-	unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+	//glm::mat4 projection = glm::mat4(1.0f);
+	//unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
+	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
-	glm::mat4 view = glm::mat4(1.0f);
-	unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	//glm::mat4 view = glm::mat4(1.0f);
+	//unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
-	unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
-	glBindTexture(GL_TEXTURE_2D, texureId[int(Now_time) % 10]);
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Timecount[0].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindTexture(GL_TEXTURE_2D, texureId[int(Now_time) / 10]);			// 앞자리 숫자
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Timecount[1].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
+	//glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
+	//glBindTexture(GL_TEXTURE_2D, texureId[int(Now_time) % 10]);
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Timecount[0].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
+	//glBindTexture(GL_TEXTURE_2D, texureId[int(Now_time) / 10]);			// 앞자리 숫자
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Timecount[1].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 // 필드를 그리는 함수
 void Draw_filed(BOOL View_draw_background) {
-	glUseProgram(s_program);
+	//glUseProgram(s_program);
 
-	unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	unsigned int modelLocation1 = glGetUniformLocation(s_program, "in_Color"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
+	//unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
+	//unsigned int modelLocation1 = glGetUniformLocation(s_program, "in_Color"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
 
-	glBindVertexArray(vao);
+	//glBindVertexArray(vao);
 
-	for (int i = 0; i < zcount; i = i++) {					// 박스를 그려주는 부분.
-		for (int j = 0; j < xcount; j++) {
+	//for (int i = 0; i < zcount; i = i++) {					// 박스를 그려주는 부분.
+	//	for (int j = 0; j < xcount; j++) {
 
-			glUniform3f(modelLocation1, All_Box[i][j].Bcolor[0], All_Box[i][j].Bcolor[1], All_Box[i][j].Bcolor[2]);
+	//		glUniform3f(modelLocation1, All_Box[i][j].Bcolor[0], All_Box[i][j].Bcolor[1], All_Box[i][j].Bcolor[2]);
 
-			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(All_Box[i][j].TR)); //--- modelTransform 변수에 변환 값 적용하기
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
-		}
-	}
+	//		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(All_Box[i][j].TR)); //--- modelTransform 변수에 변환 값 적용하기
+	//		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+	//	}
+	//}
 
-	for (int i = 0; i < 12; i++) {
-		if (item[i].View) {
-			glUniform3f(modelLocation1, item[i].Icolor[0], item[i].Icolor[1], item[i].Icolor[2]);
+	//for (int i = 0; i < 12; i++) {
+	//	if (item[i].View) {
+	//		glUniform3f(modelLocation1, item[i].Icolor[0], item[i].Icolor[1], item[i].Icolor[2]);
 
-			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(item[i].TR)); //--- modelTransform 변수에 변환 값 적용하기
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
-		}
-	}
+	//		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(item[i].TR)); //--- modelTransform 변수에 변환 값 적용하기
+	//		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+	//	}
+	//}
 
-	glm::mat4 TR = glm::mat4(1.0f);
-	glm::mat4 Tx = glm::mat4(1.0f);
-	glm::mat4 Scale = glm::mat4(1.0f);
+	//glm::mat4 TR = glm::mat4(1.0f);
+	//glm::mat4 Tx = glm::mat4(1.0f);
+	//glm::mat4 Scale = glm::mat4(1.0f);
 
 
-	for (int i = 0; i < 2; i++) {
-		TR = glm::mat4(1.0f);					// 플레이어를 그려주는 부분.
-		Tx = glm::mat4(1.0f);
-		Scale = glm::mat4(1.0f);
-		glm::mat4 Rotate = glm::mat4(1.0f);
+	//for (int i = 0; i < 2; i++) {
+	//	TR = glm::mat4(1.0f);					// 플레이어를 그려주는 부분.
+	//	Tx = glm::mat4(1.0f);
+	//	Scale = glm::mat4(1.0f);
+	//	glm::mat4 Rotate = glm::mat4(1.0f);
 
-		glUniform3f(modelLocation1, player[i].Get_R(), player[i].Get_G(), player[i].Get_B());
+	//	glUniform3f(modelLocation1, player[i].Get_R(), player[i].Get_G(), player[i].Get_B());
 
-		Rotate = glm::rotate(Rotate, glm::radians(player[i].Get_Lotate()), glm::vec3(0.0, 1.0, 0.0)); //--- z축에 대하여 회전 행렬
-		Scale = glm::scale(Scale, player[i].Get_Pscale()); //		플레이어
-		Tx = glm::translate(Tx, player[i].Get_Plocate() + player[i].Get_Move());
-		TR = Tx * Rotate * Scale * TR;
+	//	Rotate = glm::rotate(Rotate, glm::radians(player[i].Get_Lotate()), glm::vec3(0.0, 1.0, 0.0)); //--- z축에 대하여 회전 행렬
+	//	Scale = glm::scale(Scale, player[i].Get_Pscale()); //		플레이어
+	//	Tx = glm::translate(Tx, player[i].Get_Plocate() + player[i].Get_Move());
+	//	TR = Tx * Rotate * Scale * TR;
 
-		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR)); //--- modelTransform 변수에 변환 값 적용하기
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
-	}
+	//	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR)); //--- modelTransform 변수에 변환 값 적용하기
+	//	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+	//}
 
-	if (View_draw_background) {
-		glUseProgram(triangleShaderProgramID);
-		glBindVertexArray(triangleVertexArrayObject);
+	//if (View_draw_background) {
+	//	glUseProgram(triangleShaderProgramID);
+	//	glBindVertexArray(triangleVertexArrayObject);
 
-		glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
+	//	glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
 
-		unsigned int modelLocation2 = glGetUniformLocation(triangleShaderProgramID, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-		for (int i = 0; i < 4; i++) {
-			glUniformMatrix4fv(modelLocation2, 1, GL_FALSE, glm::value_ptr(Worldbox[i].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//	unsigned int modelLocation2 = glGetUniformLocation(triangleShaderProgramID, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
+	//	for (int i = 0; i < 4; i++) {
+	//		glUniformMatrix4fv(modelLocation2, 1, GL_FALSE, glm::value_ptr(Worldbox[i].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
 
-			glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
-			glBindTexture(GL_TEXTURE_2D, texureId[10]);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
-	}
-	glUseProgram(s_program);
+	//		glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
+	//		glBindTexture(GL_TEXTURE_2D, texureId[10]);
+	//		glDrawArrays(GL_TRIANGLES, 0, 6);
+	//	}
+	//}
+	//glUseProgram(s_program);
 }
 
 void Draw_num(int num) {
-	glUseProgram(triangleShaderProgramID);
-	glBindVertexArray(triangleVertexArrayObject);
+	//glUseProgram(triangleShaderProgramID);
+	//glBindVertexArray(triangleVertexArrayObject);
 
-	glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
+	//glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
 
-	glm::mat4 projection = glm::mat4(1.0f);
-	unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+	//glm::mat4 projection = glm::mat4(1.0f);
+	//unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
+	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
-	glm::mat4 view = glm::mat4(1.0f);
-	unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	//glm::mat4 view = glm::mat4(1.0f);
+	//unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
-	unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
-	glBindTexture(GL_TEXTURE_2D, texureId[int(num / 100)]);
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Score[0].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindTexture(GL_TEXTURE_2D, texureId[int(num / 10) % 10]);			// 앞자리 숫자
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Score[1].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindTexture(GL_TEXTURE_2D, texureId[num % 10]);			// 앞자리 숫자
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Score[2].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
+	//glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
+	//glBindTexture(GL_TEXTURE_2D, texureId[int(num / 100)]);
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Score[0].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
+	//glBindTexture(GL_TEXTURE_2D, texureId[int(num / 10) % 10]);			// 앞자리 숫자
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Score[1].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
+	//glBindTexture(GL_TEXTURE_2D, texureId[num % 10]);			// 앞자리 숫자
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Score[2].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 void Play_state() {
-	unsigned int projectionLocation = glGetUniformLocation(s_program, "projectionTransform"); //--- 투영 변환 값 설정
-	unsigned int viewLocation = glGetUniformLocation(s_program, "viewTransform"); //--- 뷰잉 변환 설정
+	//unsigned int projectionLocation = glGetUniformLocation(s_program, "projectionTransform"); //--- 투영 변환 값 설정
+	//unsigned int viewLocation = glGetUniformLocation(s_program, "viewTransform"); //--- 뷰잉 변환 설정
 
 
-	glm::mat4 Prev_rotation = glm::mat4(1.0f);
+	//glm::mat4 Prev_rotation = glm::mat4(1.0f);
 
-	view = glm::mat4(1.0f);
-	projection = glm::mat4(1.0f);
-	projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.01f, 100.0f);
-	projection = glm::rotate(projection, glm::radians(45.0f), glm::vec3(1.0, 0.0, 0.0));
-	projection = glm::translate(projection, glm::vec3(0.0, 0.0, -3)); //--- 공간을 약간 뒤로 미뤄줌
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
-
-
-	view = glm::lookAt(player[0].Get_Camerapos(), player[0].Get_Camerapos() + player[0].Get_Cameradirection(), cameraUp);
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-
-	glUseProgram(triangleShaderProgramID);
-
-	unsigned int Texture_viewlocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
-	unsigned int Teture_projectionlocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform");
-
-	glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
-
-	glUniformMatrix4fv(Teture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
-
-	glViewport(0, 0, 630, 700);
-	Draw_filed(true);
+	//view = glm::mat4(1.0f);
+	//projection = glm::mat4(1.0f);
+	//projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.01f, 100.0f);
+	//projection = glm::rotate(projection, glm::radians(45.0f), glm::vec3(1.0, 0.0, 0.0));
+	//projection = glm::translate(projection, glm::vec3(0.0, 0.0, -3)); //--- 공간을 약간 뒤로 미뤄줌
+	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-	view = glm::lookAt(player[1].Get_Camerapos(), player[1].Get_Camerapos() + player[1].Get_Cameradirection(), cameraUp);
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	//view = glm::lookAt(player[0].Get_Camerapos(), player[0].Get_Camerapos() + player[0].Get_Cameradirection(), cameraUp);
+	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
-	glUseProgram(triangleShaderProgramID);
-	glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
+	//glUseProgram(triangleShaderProgramID);
 
+	//unsigned int Texture_viewlocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	//unsigned int Teture_projectionlocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform");
 
-	glViewport(630, 0, 630, 700);
-	Draw_filed(true);
+	//glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
 
-	view = glm::lookAt(cameraPos, cameraPos + cameraDirection, cameraUp);
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	//glUniformMatrix4fv(Teture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
 
-
-	glm::mat4 projection = glm::mat4(1.0f);
-	projection = glm::perspective(glm::radians(60.0f), 1.0f, 0.01f, 100.0f);
-	projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)); //--- z축에 대하여 회전 행렬
-	projection = glm::translate(projection, glm::vec3(0.0, -3.0, 15.0)); //--- 공간을 약간 뒤로 미뤄줌
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
-
-	glUseProgram(triangleShaderProgramID);
-
-	glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
-
-	glUniformMatrix4fv(Teture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
-
-	glDisable(GL_DEPTH_TEST);
-	glViewport(830, 500, 200, 200);
-	Draw_filed(false);
+	//glViewport(0, 0, 630, 700);
+	//Draw_filed(true);
 
 
-	glViewport(180, 500, 200, 200);
-	Draw_filed(false);
+	//view = glm::lookAt(player[1].Get_Camerapos(), player[1].Get_Camerapos() + player[1].Get_Cameradirection(), cameraUp);
+	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+
+	//glUseProgram(triangleShaderProgramID);
+	//glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
 
 
-	glViewport(530, 500, 200, 200);
-	Draw_time();
+	//glViewport(630, 0, 630, 700);
+	//Draw_filed(true);
 
-	glViewport(100, 550, 150, 150);
-	//Draw_num(player[0].Occupy_box);
+	//view = glm::lookAt(cameraPos, cameraPos + cameraDirection, cameraUp);
+	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
-	glViewport(1000, 550, 150, 150);
-	//Draw_num(player[1].Occupy_box);
 
-	if (Game_over) {
-		glViewport(530, 300, 200, 200);
-		Whos_win();
-	}
+	//glm::mat4 projection = glm::mat4(1.0f);
+	//projection = glm::perspective(glm::radians(60.0f), 1.0f, 0.01f, 100.0f);
+	//projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)); //--- z축에 대하여 회전 행렬
+	//projection = glm::translate(projection, glm::vec3(0.0, -3.0, 15.0)); //--- 공간을 약간 뒤로 미뤄줌
+	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+
+	//glUseProgram(triangleShaderProgramID);
+
+	//glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
+
+	//glUniformMatrix4fv(Teture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
+
+	//glDisable(GL_DEPTH_TEST);
+	//glViewport(830, 500, 200, 200);
+	//Draw_filed(false);
+
+
+	//glViewport(180, 500, 200, 200);
+	//Draw_filed(false);
+
+
+	//glViewport(530, 500, 200, 200);
+	//Draw_time();
+
+	//glViewport(100, 550, 150, 150);
+	////Draw_num(player[0].Occupy_box);
+
+	//glViewport(1000, 550, 150, 150);
+	////Draw_num(player[1].Occupy_box);
+
+	//if (Game_over) {
+	//	glViewport(530, 300, 200, 200);
+	//	Whos_win();
+	//}
 }
 
 void Logo_state() {
-	glUseProgram(triangleShaderProgramID);
-	glBindVertexArray(triangleVertexArrayObject);
+	//glUseProgram(triangleShaderProgramID);
+	//glBindVertexArray(triangleVertexArrayObject);
 
-	glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
+	//glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
 
-	glm::mat4 projection = glm::mat4(1.0f);
-	unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+	//glm::mat4 projection = glm::mat4(1.0f);
+	//unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
+	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
-	glm::mat4 view = glm::mat4(1.0f);
-	unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	//glm::mat4 view = glm::mat4(1.0f);
+	//unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
-	unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Logo_texture.Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
-	glBindTexture(GL_TEXTURE_2D, Logo);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Logo_texture.Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
+	//glBindTexture(GL_TEXTURE_2D, Logo);
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	glViewport(0,0,1260,700);
+	//glViewport(0,0,1260,700);
 }
 
 void Whos_win() {
-	glUseProgram(triangleShaderProgramID);
-	glBindVertexArray(triangleVertexArrayObject);
+	//glUseProgram(triangleShaderProgramID);
+	//glBindVertexArray(triangleVertexArrayObject);
 
-	glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
+	//glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
 
-	glm::mat4 projection = glm::mat4(1.0f);
-	unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+	//glm::mat4 projection = glm::mat4(1.0f);
+	//unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
+	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
-	glm::mat4 view = glm::mat4(1.0f);
-	unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	//glm::mat4 view = glm::mat4(1.0f);
+	//unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
-	unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Logo_texture.Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
-	//if(player[0].Occupy_box>player[1].Occupy_box)
-	//	glBindTexture(GL_TEXTURE_2D, Who_win[0]);
-	//else
-		glBindTexture(GL_TEXTURE_2D, Who_win[1]);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Logo_texture.Ttr)); //--- modelTransform 변수에 변환 값 적용하기
+	//glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
+	////if(player[0].Occupy_box>player[1].Occupy_box)
+	////	glBindTexture(GL_TEXTURE_2D, Who_win[0]);
+	////else
+	//	glBindTexture(GL_TEXTURE_2D, Who_win[1]);
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 void Create_item() {

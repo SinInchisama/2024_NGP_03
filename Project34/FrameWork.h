@@ -1,21 +1,22 @@
 #pragma once
+#pragma comment(lib, "lib/freeglut.lib")
+
 #include "include/GL/glew.h"
+#include "include/GL/glut.h"
 #include "include/glm/glm.hpp"
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Common.h"
 
+#include <iostream>
+
+extern float line[];            // line 배열 선언
+extern float vPositionList[];   // vPositionList 배열 선언
+extern unsigned int index[];    // index 배열 선언
+
 class FrameWork
 {
 private:
-	GLuint s_program;
-
-	GLchar* vertexsource, * fragmentsource; //--- 소스코드 저장 변수
-	GLuint vertexshader, fragmentshader; //--- 세이더 객체
-
-	GLuint Text_vertexShader;
-	GLuint Text_fragmentShader;
-
 	GLint result;
 
 	GLuint triangleShaderProgramID;
@@ -25,6 +26,9 @@ private:
 	GLuint trianglePositionVertexBufferObjectID, triangleColorVertexBufferObjectID;
 	GLuint triangleTextureCoordinateBufferObjectID;
 	GLuint triangleVertexArrayObject;
+
+	glm::mat4 view;
+	glm::mat4 projection;
 
 public:
 	FrameWork();
@@ -40,5 +44,19 @@ public:
 	void Draw_Scene();
 
 	GLvoid Reshape(int w, int h);
+
+	static FrameWork* currentInstance;
+
+	static void DisplayWrapper() {
+		if (currentInstance) {
+			currentInstance->Draw_Scene();
+		}
+	}
+
+	static void DisplayReShape(int w,int h) {
+		if (currentInstance) {
+			currentInstance->Reshape(w,h);
+		}
+	}
 };
 
