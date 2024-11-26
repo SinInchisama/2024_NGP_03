@@ -1,4 +1,7 @@
 #pragma once
+
+#define byte char
+
 typedef enum {
 	KEY_UP = 0x01, // UP 키
 	KEY_DOWN = 0x02, // DOWN 키
@@ -20,3 +23,8 @@ typedef enum {
 	PACKET_UPDATE_TIMER = 0x08, // Update_timer
 	PACKET_UPDATE_SCORE = 0x09 // Update_score
 } PacketType;
+
+typedef struct playerInput {
+	byte p_index; // - 플레이어 1인지 2인지 구분(1 or 2)
+	byte input_key; // - 1 ~ 7 입력된 키 정보
+} playerInput;
