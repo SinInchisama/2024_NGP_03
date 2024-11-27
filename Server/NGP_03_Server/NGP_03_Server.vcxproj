@@ -127,10 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Public.cpp" />
+    <ClCompile Include="RecvThread.cpp" />
+    <ClCompile Include="WorkThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="Public.h" />
+    <ClInclude Include="RecvThead.h" />
+    <ClInclude Include="WorkThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

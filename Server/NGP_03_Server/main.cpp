@@ -2,64 +2,9 @@
 #include "fstream"
 #include "iostream"
 #include "Windows.h"
-
-#define SERVERPORT 9000
-#define BUFSIZE    1024
-
-CRITICAL_SECTION cs;
-
-// 클라이언트와 데이터 통신
-DWORD WINAPI ProcessClient(LPVOID arg)
-{
-	EnterCriticalSection(&cs);
-
-	int retval;
-	SOCKET client_sock = (SOCKET)arg;
-	struct sockaddr_in clientaddr;
-	char addr[INET_ADDRSTRLEN];
-	int addrlen;
-	char buf[BUFSIZE + 1];
-	int len; // 고정 길이 데이터
-	float total_received = 0;
-
-	// 클라이언트 정보 얻기
-	addrlen = sizeof(clientaddr);
-	getpeername(client_sock, (struct sockaddr*)&clientaddr, &addrlen);
-	inet_ntop(AF_INET, &clientaddr.sin_addr, addr, sizeof(addr));
-
-	while (1) {
-
-		// 데이터 받기
-		// 클라이언트가 파일명을 보내는 부분
-		retval = recv(client_sock, buf, sizeof(buf), 0);
-
-		buf[retval] = '\0';
-
-		std::ofstream file(buf, std::ios::binary);
-		std::cout << buf << std::endl;
-
-		// 클라이언트가 동영상 파일 보내는 부분
-		// 데이터 받기(고정 길이)
-		/*retval = recv(client_sock, (char*)&len, sizeof(int), MSG_WAITALL);
-
-		while (retval = recv(client_sock, buf, BUFSIZE, MSG_WAITALL)) {
-			file.write(buf, retval);
-			total_received += (float)retval;
-			float progress = total_received / len * 100;
-		}*/
-
-		// 소켓 닫기
-		closesocket(client_sock);
-
-		printf("\n[TCP 서버] 클라이언트 종료: IP 주소=%s, 포트 번호=%d\n",
-			addr, ntohs(clientaddr.sin_port));
-
-
-		break;
-	}
-	return 0;
-}
-
+#include "Public.h"
+#include "RecvThead.h"
+#include "WorkThread.h"
 
 int main(int argc, char* argv[])
 
@@ -113,10 +58,15 @@ int main(int argc, char* argv[])
 			addr, ntohs(clientaddr.sin_port));
 
 		// 스레드 생성
-		hThread = CreateThread(NULL, 0, ProcessClient,
+		hThread = CreateThread(NULL, 0, RecvThread,
 			(LPVOID)client_sock, 0, NULL);
 		if (hThread == NULL) { closesocket(client_sock); }
 		else { CloseHandle(hThread); }
+
+		if(index == 2)
+			hThread = CreateThread(NULL, 0, WorkThread,
+				(LPVOID)client_sock, 0, NULL);
+
 	}
 	DeleteCriticalSection(&cs);
 	// 소켓 닫기
