@@ -73,5 +73,8 @@ public:
 
 	void Calculate_Move();
 	void Calculate_Camera();
+
+	void deserializePlayer(const PlayerData& data);
 };
 
+PlayerData serializePlayer(const Player& player);

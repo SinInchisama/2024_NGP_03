@@ -3,6 +3,7 @@
 CRITICAL_SECTION cs;
 byte index = 0;
 SOCKET client_sock[2];
+struct sockaddr_in clientaddr[2];
 
 GLuint s_program = 0;
 GLchar* vertexsource = nullptr;

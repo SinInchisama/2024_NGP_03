@@ -119,11 +119,6 @@ int main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	len = (int)strlen(s);
 	strncpy(buf, s, len);
 	send(sock, buf, len + 1, 0);
-	// 소켓 닫기
-	closesocket(sock);
-
-	// 윈속 종료
-	WSACleanup();
 
 
 	//--- 윈도우 생성하기
@@ -152,6 +147,11 @@ int main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutSpecialUpFunc(SKeyUpboard);
 	glutTimerFunc(50, TimerFunction, 1);
 	glutMainLoop();
+
+	// 소켓 닫기
+	closesocket(sock);
+	// 윈속 종료
+	WSACleanup();
 }
 
 void TimerFunction(int value) {

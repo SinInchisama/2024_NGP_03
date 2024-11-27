@@ -17,6 +17,8 @@
 extern CRITICAL_SECTION cs;
 extern byte index;
 
+extern struct sockaddr_in clientaddr[2];
+
 extern GLuint s_program;
 
 extern GLchar* vertexsource, * fragmentsource; //--- 소스코드 저장 변수
@@ -77,4 +79,31 @@ typedef struct Box {
 
 	glm::vec4 Bounding_box[2];
 }Box;
+
+struct PlayerData {
+	float Pscale[3];
+	float Plocate[3];
+	float PColor[3];
+	float Color[3];
+	float Move[3];
+	float cameraPos[3];
+	float cameraDirection[3];
+
+	float gravity;
+	float rotate;
+	bool view;
+
+	int Occupy_box;
+	float speed;
+
+	bool left_rotate;
+	bool right_rotate;
+
+	int player_number;  // 캐릭터 고유 숫자 1p, 2p
+	bool stop;          // 시계 효과를 받았을 경우 true
+
+	byte Action;
+
+	int timer;
+};
 #endif // COMMON_H
