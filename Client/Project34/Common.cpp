@@ -1,4 +1,4 @@
-#include "Common.h"
+#include "Public.h"
 
 GLuint s_program = 0;
 GLchar* vertexsource = nullptr;

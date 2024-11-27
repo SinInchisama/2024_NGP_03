@@ -1,7 +1,7 @@
 #pragma once
 #pragma comment(lib, "lib/freeglut.lib")
 
-#include "Common.h"
+#include "Public.h"
 #include "CPlayer.h"
 #include "include/GL/glut.h"
 #include "Texture.h"

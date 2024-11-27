@@ -155,9 +155,8 @@
   <ItemGroup>
     <ClInclude Include="CBullet.h" />
     <ClInclude Include="CItem.h" />
-    <ClInclude Include="Common.h" />
+    <ClInclude Include="Public.h" />
     <ClInclude Include="CPlayer.h" />
-    <ClInclude Include="enum.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="FreeImage.h" />
     <ClInclude Include="State.h" />
