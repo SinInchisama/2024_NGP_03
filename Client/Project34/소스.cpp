@@ -24,7 +24,6 @@
 #include "CBullet.h"
 #include "CPlayer.h"
 #include "FrameWork.h"
-#include "Common.h"
 
 using namespace std;
 
@@ -70,12 +69,6 @@ float yz = 0.0f;
 
 Item item[20];
 
-char* SERVERIP = (char*)"127.0.0.1";
-
-#define SERVERPORT 9000
-
-#define BUFSIZE    1024
-
 GLUquadricObj* qobj = gluNewQuadric();
 
 glm::vec3 cameraPos;
@@ -93,34 +86,6 @@ FrameWork* FrameWork::currentInstance = nullptr;
 
 int main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
-	int retval;
-	// 윈속 초기화
-	WSADATA wsa;
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-		return 0; 
-
-	// 소켓 생성
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == INVALID_SOCKET) err_quit("socket()");
-
-	// connect()
-	struct sockaddr_in serveraddr;
-	memset(&serveraddr, 0, sizeof(serveraddr));
-	serveraddr.sin_family = AF_INET;
-	inet_pton(AF_INET, SERVERIP, &serveraddr.sin_addr);
-	serveraddr.sin_port = htons(SERVERPORT);
-	retval = connect(sock, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
-	if (retval == SOCKET_ERROR) err_quit("connect()");
-
-	// 데이터 통신에 사용할 변수
-	char buf[BUFSIZE];
-	int len;
-	char* s = (char*)"192.000.00.01";
-	len = (int)strlen(s);
-	strncpy(buf, s, len);
-	send(sock, buf, len + 1, 0);
-
-
 	//--- 윈도우 생성하기
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -147,11 +112,6 @@ int main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutSpecialUpFunc(SKeyUpboard);
 	glutTimerFunc(50, TimerFunction, 1);
 	glutMainLoop();
-
-	// 소켓 닫기
-	closesocket(sock);
-	// 윈속 종료
-	WSACleanup();
 }
 
 void TimerFunction(int value) {

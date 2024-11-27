@@ -73,5 +73,8 @@ public:
 
 	void Calculate_Move();
 	void Calculate_Camera();
+
+	void serializePlayer(char* buffer) const;
+	void deserializePlayer(const char* buffer);
 };
 

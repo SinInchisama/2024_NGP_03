@@ -15,13 +15,13 @@ public:
 	virtual void SKeyUp(int key) {};
 	virtual void SKeyDown(int key) {};
 
-	virtual void KeyUp(int key) {  };
+	virtual void KeyUp(int key) {};
 	virtual void KeyDown(int key) {};
 };
 
-class Play_State :State
+class Play_State :public State
 {
-private:
+public:
 	Player player = { 0, {0.0f, 0.0f, 0.0f} };
 
 	Box All_Box[20][20];
@@ -40,7 +40,7 @@ public:
 	void Boxinit(int x, int y, int z);
 };
 
-class Stay_State :State
+class Stay_State :public State
 {
 private:
 	Texture Logo_texture;

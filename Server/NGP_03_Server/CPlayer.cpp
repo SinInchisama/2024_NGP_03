@@ -40,79 +40,120 @@ void Player::Calculate_Camera()
 	cameraDirection[2] = cos(glm::radians(lotate)) * -1.0;
 }
 
-void Player::deserializePlayer(const PlayerData& data)
+void Player::serializePlayer(char* buffer) const
 {
-	glm::vec3 temp;
+    int offset = 0;
 
-	// glm::vec3 데이터를 복원 (Set 함수 사용)
-	std::memcpy(&temp, data.Pscale, sizeof(temp));
-	Pscale = temp;
+    // 각 변수들을 buffer에 복사
+    memcpy(buffer + offset, &Pscale, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	std::memcpy(&temp, data.Plocate, sizeof(temp));
-	Plocate = temp;
+    memcpy(buffer + offset, &Plocate, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	std::memcpy(&temp, data.PColor, sizeof(temp));
-	PColor = temp;
+    memcpy(buffer + offset, &PColor, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	std::memcpy(&temp, data.Move, sizeof(temp));
-	Move = temp;
+    memcpy(buffer + offset, &Color, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	std::memcpy(&temp, data.cameraPos, sizeof(temp));
-	cameraPos = temp;
+    memcpy(buffer + offset, &Move, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	std::memcpy(&temp, data.cameraDirection, sizeof(temp));
-	cameraDirection = temp;
+    memcpy(buffer + offset, &cameraPos, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	//// 단일 데이터 멤버 복원
-	//lotate = data.rotate;
-	//Action = data.Action;
-	//Occupy_box = data.Occupy_box;
-	//view = data.view;
-	//speed = data.speed;
-	//left_rotate = data.left_rotate;
-	//right_rotate = data.right_rotate;
-	//player_number = data.player_number;
-	//stop = data.stop;
-	//timer = data.timer;
+    memcpy(buffer + offset, &cameraDirection, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
+
+    memcpy(buffer + offset, &gravity, sizeof(float));
+    offset += sizeof(float);
+
+    memcpy(buffer + offset, &lotate, sizeof(float));
+    offset += sizeof(float);
+
+    memcpy(buffer + offset, &view, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(buffer + offset, &Occupy_box, sizeof(int));
+    offset += sizeof(int);
+
+    memcpy(buffer + offset, &speed, sizeof(float));
+    offset += sizeof(float);
+
+    memcpy(buffer + offset, &left_rotate, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(buffer + offset, &right_rotate, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(buffer + offset, &player_number, sizeof(int));
+    offset += sizeof(int);
+
+    memcpy(buffer + offset, &stop, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(buffer + offset, &Action, sizeof(byte));
+    offset += sizeof(byte);
+
+    memcpy(buffer + offset, &timer, sizeof(int));
 }
 
-
-PlayerData serializePlayer(Player& player)
+void Player::deserializePlayer(const char* buffer)
 {
-	PlayerData data = {};
+    int offset = 0;
 
-	// glm::vec3 데이터를 배열로 변환
-	glm::vec3 temp;
+    memcpy(&Pscale, buffer + offset, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	temp = player.Get_Pscale();
-	std::memcpy(data.Pscale, &temp, sizeof(data.Pscale));
+    memcpy(&Plocate, buffer + offset, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	temp = player.Get_Plocate();
-	std::memcpy(data.Plocate, &temp, sizeof(data.Plocate));
+    memcpy(&PColor, buffer + offset, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	temp = player.Get_Color();
-	std::memcpy(data.PColor, &temp, sizeof(data.PColor));
+    memcpy(&Color, buffer + offset, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	temp = player.Get_Move();
-	std::memcpy(data.Move, &temp, sizeof(data.Move));
+    memcpy(&Move, buffer + offset, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	temp = player.Get_Camerapos();
-	std::memcpy(data.cameraPos, &temp, sizeof(data.cameraPos));
+    memcpy(&cameraPos, buffer + offset, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	temp = player.Get_Cameradirection();
-	std::memcpy(data.cameraDirection, &temp, sizeof(data.cameraDirection));
+    memcpy(&cameraDirection, buffer + offset, sizeof(glm::vec3));
+    offset += sizeof(glm::vec3);
 
-	// 단일 데이터 멤버 추출
-	//data.rotate = player.Get_Lotate();
-	//data.Action = player.Action; // Action은 직접 접근 가능
-	//data.Occupy_box = player.Occupy_box;
-	//data.view = player.view;
-	//data.speed = player.speed;
-	//data.left_rotate = player.left_rotate;
-	//data.right_rotate = player.right_rotate;
-	//data.player_number = player.player_number;
-	//data.stop = player.stop;
-	//data.timer = player.timer;
+    memcpy(&gravity, buffer + offset, sizeof(float));
+    offset += sizeof(float);
 
-	return data;
+    memcpy(&lotate, buffer + offset, sizeof(float));
+    offset += sizeof(float);
+
+    memcpy(&view, buffer + offset, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(&Occupy_box, buffer + offset, sizeof(int));
+    offset += sizeof(int);
+
+    memcpy(&speed, buffer + offset, sizeof(float));
+    offset += sizeof(float);
+
+    memcpy(&left_rotate, buffer + offset, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(&right_rotate, buffer + offset, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(&player_number, buffer + offset, sizeof(int));
+    offset += sizeof(int);
+
+    memcpy(&stop, buffer + offset, sizeof(bool));
+    offset += sizeof(bool);
+
+    memcpy(&Action, buffer + offset, sizeof(byte));
+    offset += sizeof(byte);
+
+    memcpy(&timer, buffer + offset, sizeof(int));
+
 }

@@ -6,7 +6,11 @@ Box All_Box[20][20];
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
 {
+	char buffer[sizeof(Player)];
+
 	Reset_Ojbect();
+	players[0].serializePlayer(buffer);
+	int result =  send(client_sock[1], buffer, sizeof(buffer), 0);
 	// send(오브젝트);
 
 	while (true) {

@@ -3,8 +3,8 @@
 Play_State::Play_State()
 {
 	Boxinit(20,20,20);
-	player.Set_Plocate(All_Box[0][0].Blocate);
-	All_Box[0][0].Bcolor = player.Get_Color();
+	//player.Set_Plocate(All_Box[0][0].Blocate);
+	//All_Box[0][0].Bcolor = player.Get_Color();
 }
 
 void Play_State::Update()

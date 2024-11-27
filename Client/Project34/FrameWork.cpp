@@ -49,8 +49,39 @@ unsigned int index[] = {
 	11, 10, 12 // 왼쪽
 };
 
+char* SERVERIP = (char*)"127.0.0.1";
+#define SERVERPORT 9000
+#define BUFSIZE    1024
+
 FrameWork::FrameWork()
 {
+	int retval;
+	// 윈속 초기화
+	WSADATA wsa;
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+		std::cout << "실패" << std::endl;
+
+	// 소켓 생성
+	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock == INVALID_SOCKET) err_quit("socket()");
+
+	// connect()
+	struct sockaddr_in serveraddr;
+	memset(&serveraddr, 0, sizeof(serveraddr));
+	serveraddr.sin_family = AF_INET;
+	inet_pton(AF_INET, SERVERIP, &serveraddr.sin_addr);
+	serveraddr.sin_port = htons(SERVERPORT);
+	retval = connect(sock, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
+	if (retval == SOCKET_ERROR) err_quit("connect()");
+
+	// 데이터 통신에 사용할 변수
+	char buf[BUFSIZE];
+	int len;
+	char* s = (char*)"192.000.00.01";
+	len = (int)strlen(s);
+	strncpy(buf, s, len);
+	send(sock, buf, len + 1, 0);
+
 	if (glewInit() != GLEW_OK) {
 		std::cerr << "Failed to initialize GLEW" << std::endl;
 	}
@@ -58,6 +89,23 @@ FrameWork::FrameWork()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	Init_Shader();
 	init_Buffer();
+
+	states.push_back(&playstate);  // 벡터에 동적으로 할당된 객체를 추가
+	states.push_back(&staystate);  // 벡터에 동적으로 할당된 객체를 추가
+
+
+	currentStateIndex = 0;  // 처음 상태는 Stay_State
+
+
+	// 데이터 수신
+	char buffer[sizeof(Player)];
+	int result = recv(sock, buffer, sizeof(buffer), 0);
+	if (result > 0) {
+		Play_State* playState = dynamic_cast<Play_State*>(states[0]);
+		if (playState) {
+			playState->player.deserializePlayer(buffer);
+		}
+	}
 }
 
 void FrameWork::Make_VertexShader()
@@ -281,7 +329,7 @@ void FrameWork::Define_VertexArrayObject()
 
 void FrameWork::Update(int value)
 {
-	staystate.Update();
+	states[currentStateIndex]->Update();
 }
 
 void FrameWork::Draw_Scene()
@@ -292,7 +340,7 @@ void FrameWork::Draw_Scene()
 
 		glEnable(GL_DEPTH_TEST);
 
-		staystate.Draw();
+		states[currentStateIndex]->Draw();
 
 		glutSwapBuffers();
 
@@ -305,18 +353,20 @@ GLvoid FrameWork::Reshape(int w, int h)
 
 void FrameWork::KeyDownboard(int key, int x, int y)
 {
+	states[currentStateIndex]->KeyDown(key);
 }
 
 void FrameWork::KeyUpboard(int key, int x, int y)
 {
+	states[currentStateIndex]->KeyDown(key);
 }
 
 void FrameWork::SKeyDownboard(int key, int x, int y)
 {
-	staystate.SKeyDown(key);
+	states[currentStateIndex]->SKeyDown(key);
 }
 
 void FrameWork::SKeyUpboard(int key, int x, int y)
 {
-	staystate.SKeyUp(key);
+	states[currentStateIndex]->SKeyUp(key);
 }

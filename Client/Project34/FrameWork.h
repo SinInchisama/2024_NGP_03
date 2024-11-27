@@ -8,8 +8,10 @@
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Public.h"
 #include "State.h"
+#include "Common.h"
 
 #include <iostream>
+#include <vector>
 
 extern float line[];            // line 배열 선언
 extern float vPositionList[];   // vPositionList 배열 선언
@@ -23,10 +25,14 @@ private:
 	glm::mat4 view;
 	glm::mat4 projection;
 
-	Play_State playstate;
+	std::vector<State*> states;  // 상태들을 저장할 벡터
+	int currentStateIndex;       // 현재 상태 인덱스
+
 	Stay_State staystate;
+	Play_State playstate;
 public:
 	FrameWork();
+	//~FrameWork() ;
 
 	void Make_VertexShader();
 	void Make_FragmentShader();
