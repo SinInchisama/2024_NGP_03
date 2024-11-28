@@ -4,18 +4,14 @@
 
 class Box {
 public:
-	glm::vec3 Bscale;
-	glm::vec3 Blocate;
-	glm::vec3 Bcolor;
+	//glm::vec3 Bcolor;
 	glm::mat4 TR;
-
-	int offset;
-
-	glm::vec4 Bounding_box[2];
 
 	glm::vec3 Color = { 0.0f, 0.0f, 0.0f }; // 상자 기본 색깔
 
-	glm::vec3 Get_Color() { return Bcolor; }
+	glm::vec4 Bounding_box[2];
+
+	//glm::vec3 Get_Color() { return Bcolor; }
 
 	GLfloat Get_R() { return Color[0]; }
 	GLfloat Get_G() { return Color[1]; }

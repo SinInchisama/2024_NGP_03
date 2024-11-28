@@ -45,7 +45,6 @@ public:
 	void KeyUp(int key);
 	void KeyDown(int key);
 
-	void Boxinit(int x, int y, int z);
 };
 
 class Stay_State :public State

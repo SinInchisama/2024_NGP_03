@@ -99,11 +99,19 @@ FrameWork::FrameWork()
 
 	// 데이터 수신
 	char buffer[sizeof(Player)];
+	Play_State* playState = dynamic_cast<Play_State*>(states[1]);
 	int result = recv(sock, buffer, sizeof(buffer), 0);
 	if (result > 0) {
-		Play_State* playState = dynamic_cast<Play_State*>(states[1]);
 		if (playState) {
 			playState->player.deserializePlayer(buffer);
+		}
+	}
+
+	char bbuffer[sizeof(Box)];
+	for (int i = 0; i < 20; ++i) {
+		for (int k = 0; k < 20; ++k) {
+			recv(sock, bbuffer, sizeof(bbuffer), 0);
+			playState->All_Box[i][k].deserializeBox(bbuffer);
 		}
 	}
 }

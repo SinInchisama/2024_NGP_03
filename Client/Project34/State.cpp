@@ -3,7 +3,7 @@
 
 Play_State::Play_State()
 {
-	Boxinit(20,20,20);
+
 }
 
 // recv Thread 이거 맞는지 확인 가능할까요?
@@ -146,7 +146,6 @@ void Play_State::Draw()
 
 		glUniform3f(modelLocation1, player.Get_R(), player.Get_G(), player.Get_B());
 
-		Rotate = glm::rotate(Rotate, glm::radians(player.Get_Lotate()), glm::vec3(0.0, 1.0, 0.0)); //--- z축에 대하여 회전 행렬
 		Scale = glm::scale(Scale, player.Get_Pscale()); //		플레이어
 		Tx = glm::translate(Tx, player.Get_Plocate() + player.Get_Move());
 		TR = Tx * Rotate * Scale * TR;
@@ -269,44 +268,6 @@ void Play_State::KeyUp(int key)
 void Play_State::KeyDown(int key)
 {
 	switch (key) {
-
-	}
-}
-
-void Play_State::Boxinit(int x, int y, int z) {				// 박스 갯수 추후에 25/25로 늘려도 박스 배열만 변경해주고 x,z값만 25로 넘겨주면 25*25 박스들이 만들어짐
-	float xScale = (float)10 / x;
-	float yScale = (float)10 / y;
-	float zScale = (float)10 / z;
-	float xlocate = 5 - (xScale / 2);
-	float zlocate = 5 - (zScale / 2);
-
-	glm::vec3 bound_scale = { xScale / 2, yScale, zScale / 2 };
-
-	int a = 0;
-	for (int i = 0; i < z; i = i++, a++) {
-		for (int k = 0; k < x; k++) {
-			All_Box[i][k].Bscale[0] = xScale;
-			All_Box[i][k].Bscale[1] = yScale;
-			All_Box[i][k].Bscale[2] = zScale;
-			All_Box[i][k].Bcolor = glm::vec3{ 0.0f,0.0f ,0.0f };
-			All_Box[i][k].Blocate[0] = xlocate - xScale * k;
-			All_Box[i][k].Blocate[1] = -yScale;
-			All_Box[i][k].Blocate[2] = zlocate - zScale * a;
-
-			All_Box[i][k].offset = i * x + k;
-
-			All_Box[i][k].Bounding_box[0] = { (All_Box[i][k].Blocate - bound_scale), 1.f };
-			All_Box[i][k].Bounding_box[1] = { (All_Box[i][k].Blocate + bound_scale), 1.f };
-
-			glm::mat4 TR = glm::mat4(1.0f);
-			glm::mat4 Tx = glm::mat4(1.0f);
-			glm::mat4 Scale = glm::mat4(1.0f);
-
-			Scale = glm::scale(Scale, glm::vec3(All_Box[i][k].Bscale)); //		각 사각형 크기 
-			Tx = glm::translate(Tx, All_Box[i][k].Blocate);
-
-			All_Box[i][k].TR = Tx * Scale * TR;
-		}
 
 	}
 }
