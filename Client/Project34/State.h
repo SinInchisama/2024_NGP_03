@@ -33,7 +33,7 @@ public:
 public:
 	Play_State();
 
-	void enter()override {};
+	void enter()override ;
 	void exit()override {};
 
 	void Update() override;
