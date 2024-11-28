@@ -1,6 +1,7 @@
 #pragma once
 #include "CPlayer.h"
 #include "CItem.h"
+#include "CBullet.h"
 #include "Public.h"
 
 void EventMovePlayer(Player* p, KeyInput& k)
@@ -29,4 +30,27 @@ void EventCreateItem(Item* itemArr)
 		std::cout << "#EventCreateItem failed: can't activate item.\n";
 
 	// 이후에 클라이언트로 보내줄 정보: 아이템 인덱스(순서로 추정됨), 색깔(종류로 추정됨), 좌표
+}
+
+void EventCreateBullet(Bullet* bArr)
+{
+	bool bullet_activate = false;
+	for (int i = 0; i < 20; ++i) {
+		if (bArr[i].View == false) {
+			bArr[i].View = true;
+			// 어딘가로 정보 전달이 필요하다면 여기서 처리
+			bullet_activate = true;
+			break;
+		}
+	}
+
+	if (!bullet_activate)
+		std::cout << "#EventCreateBullet failed: can't activate bullet.\n";
+}
+
+void EventMoveBullet(Bullet* bArr)
+{
+	// TODO: 
+	// 1. 활성화된 총알을 방향과 속력에 맞춰 움직여주기
+	// 2. 맵을 벗어난 총알을 삭제하기. (여기서 할 것인가? 아니면 다른 곳(다른 이벤트, 충돌처리 등)에서 검사할 것인가? 
 }
