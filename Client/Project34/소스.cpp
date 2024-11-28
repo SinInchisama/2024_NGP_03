@@ -312,21 +312,22 @@ void SKeyUpboard(int key, int x, int y) {
 int collide(Player* p, Box b, glm::mat4 TR)
 {
 
-	glm::vec4 a1 = TR * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);                    // 플레이어 왼,오른,앞,뒤  원래 좌표를 각각 vec로 저장
-	glm::vec4 a2 = TR * glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
-	glm::vec4 a3 = TR * glm::vec4(-0.5f, 0.0f, 0.5f, 1.0f);
-	glm::vec4 a4 = TR * glm::vec4(0.5f, 1.0f, -0.5f, 1.0f);
+	//glm::vec4 a1 = TR * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);                    // 플레이어 왼,오른,앞,뒤  원래 좌표를 각각 vec로 저장
+	//glm::vec4 a2 = TR * glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
+	//glm::vec4 a3 = TR * glm::vec4(-0.5f, 0.0f, 0.5f, 1.0f);
+	//glm::vec4 a4 = TR * glm::vec4(0.5f, 1.0f, -0.5f, 1.0f);
 
-	glm::vec4 player_bounding_box[2] = { a1, a2 }; // 0이 min, 1이 max
+	//glm::vec4 player_bounding_box[2] = { a1, a2 }; // 0이 min, 1이 max
 
-	if ((player_bounding_box[0][0] <= b.Bounding_box[1][0] && player_bounding_box[0][0] >= b.Bounding_box[0][0] && player_bounding_box[0][2] >= b.Bounding_box[0][2] && player_bounding_box[0][2] <= b.Bounding_box[1][2]) ||
-		(player_bounding_box[0][0] <= b.Bounding_box[1][0] && player_bounding_box[0][0] >= b.Bounding_box[0][0] && player_bounding_box[1][2] >= b.Bounding_box[0][2] && player_bounding_box[1][2] <= b.Bounding_box[1][2]) ||
-		(player_bounding_box[1][0] <= b.Bounding_box[1][0] && player_bounding_box[1][0] >= b.Bounding_box[0][0] && player_bounding_box[1][2] >= b.Bounding_box[0][2] && player_bounding_box[1][2] <= b.Bounding_box[1][2]) ||
-		(player_bounding_box[1][0] <= b.Bounding_box[1][0] && player_bounding_box[1][0] >= b.Bounding_box[0][0] && player_bounding_box[0][2] >= b.Bounding_box[0][2] && player_bounding_box[0][2] <= b.Bounding_box[1][2]) &&
-		(player_bounding_box[0][1] <= b.Bounding_box[1][1] && player_bounding_box[1][1] >= b.Bounding_box[0][1])) {
-		return b.offset;
-	}
+	//if ((player_bounding_box[0][0] <= b.Bounding_box[1][0] && player_bounding_box[0][0] >= b.Bounding_box[0][0] && player_bounding_box[0][2] >= b.Bounding_box[0][2] && player_bounding_box[0][2] <= b.Bounding_box[1][2]) ||
+	//	(player_bounding_box[0][0] <= b.Bounding_box[1][0] && player_bounding_box[0][0] >= b.Bounding_box[0][0] && player_bounding_box[1][2] >= b.Bounding_box[0][2] && player_bounding_box[1][2] <= b.Bounding_box[1][2]) ||
+	//	(player_bounding_box[1][0] <= b.Bounding_box[1][0] && player_bounding_box[1][0] >= b.Bounding_box[0][0] && player_bounding_box[1][2] >= b.Bounding_box[0][2] && player_bounding_box[1][2] <= b.Bounding_box[1][2]) ||
+	//	(player_bounding_box[1][0] <= b.Bounding_box[1][0] && player_bounding_box[1][0] >= b.Bounding_box[0][0] && player_bounding_box[0][2] >= b.Bounding_box[0][2] && player_bounding_box[0][2] <= b.Bounding_box[1][2]) &&
+	//	(player_bounding_box[0][1] <= b.Bounding_box[1][1] && player_bounding_box[1][1] >= b.Bounding_box[0][1])) {
+	//	return b.offset;
+	//}
 
+	//return -1;
 	return -1;
 }
 

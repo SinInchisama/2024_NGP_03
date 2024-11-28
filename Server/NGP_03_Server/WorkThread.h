@@ -8,6 +8,7 @@
 #include <chrono>
 #include "EventQueue.h"
 #include "CBox.h"
+#include "CTimer.h"
 
 DWORD WINAPI WorkThread(LPVOID arg);
 extern Player players[2];

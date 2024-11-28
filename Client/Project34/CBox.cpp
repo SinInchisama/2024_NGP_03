@@ -2,17 +2,28 @@
 
 void Box::serializeBox(char* buffer) const
 {
-    int offset = 0;
+    // Serialize glm::vec3 Color (3 floats)
+    memcpy(buffer, &Color, sizeof(Color));
+    buffer += sizeof(Color);
 
-    // 각 멤버 변수를 buffer에 복사
-    memcpy(buffer + offset, &Blocate, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
-    memcpy(buffer + offset, &Bcolor, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
+    // Serialize glm::mat4 TR (16 floats)
+    memcpy(buffer, &TR, sizeof(TR));
+    buffer += sizeof(TR);
+
+    // Serialize glm::vec4 Bounding_box (2 vec4s)
+    memcpy(buffer, &Bounding_box, sizeof(Bounding_box));
 }
 
 void Box::deserializeBox(const char* buffer)
 {
-    int offset = 0;
+    // Deserialize glm::vec3 Color (3 floats)
+    memcpy(&Color, buffer, sizeof(Color));
+    buffer += sizeof(Color);
 
-    memcpy(&Blocate, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
-    memcpy(&Bcolor, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
+    // Deserialize glm::mat4 TR (16 floats)
+    memcpy(&TR, buffer, sizeof(TR));
+    buffer += sizeof(TR);
+
+    // Deserialize glm::vec4 Bounding_box (2 vec4s)
+    memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
