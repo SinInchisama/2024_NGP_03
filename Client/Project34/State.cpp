@@ -3,15 +3,30 @@
 Play_State::Play_State()
 {
 	Boxinit(20,20,20);
-	//player.Set_Plocate(All_Box[0][0].Blocate);
-	//All_Box[0][0].Bcolor = player.Get_Color();
 }
 
 void Play_State::Update()
 {
 	time_t u = time(NULL); 
-	player.Calculate_Move();
+	//player.Calculate_Move();
+	//if (key_change) {
+	//	send(playerInput, sizeof(playerInput));
+	//	key_change = false;
+	//}
+
+	//Parent_pakcet packet;
+
+	//패킷개수를고정크기로recv
+	//	for (int i = 0; i < 패킷 개수; i++)
+	//	{
+	//		recv(client_socket, &packet, sizeof(packet), 0)
+	//			handlePacket(packet)
+	//	}
+	
+	//카메라업데이트
 	player.Calculate_Camera();
+
+	//	오브젝트렌더
 }
 
 void Play_State::Draw()
