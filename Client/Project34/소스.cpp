@@ -20,6 +20,7 @@
 #include <time.h>
 
 #include "CPlayer.h"
+#include "CBox.h"
 #include "CItem.h"
 #include "CBullet.h"
 #include "CPlayer.h"

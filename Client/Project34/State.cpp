@@ -78,7 +78,7 @@ void Play_State::Draw()
 	for (int i = 0; i < 20; i = i++) {					// 박스를 그려주는 부분.
 		for (int j = 0; j < 20; j++) {
 
-			glUniform3f(modelLocation1, All_Box[i][j].Bcolor[0], All_Box[i][j].Bcolor[1], All_Box[i][j].Bcolor[2]);
+			glUniform3f(modelLocation1, All_Box[i][j].Get_R(), All_Box[i][j].Get_G(), All_Box[i][j].Get_B());
 
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(All_Box[i][j].TR)); //--- modelTransform 변수에 변환 값 적용하기
 			
