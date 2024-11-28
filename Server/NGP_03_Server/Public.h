@@ -14,6 +14,10 @@
 #define SERVERPORT 9000
 #define BUFSIZE    1024
 
+#define BOX_X 20
+#define BOX_Y 20
+#define BOX_Z 20
+
 extern CRITICAL_SECTION cs;
 extern byte index;
 
@@ -69,14 +73,14 @@ typedef struct playerInput {
 
 char* filetobuf(const char* file);
 
-typedef struct Box {
-	glm::vec3 Bscale;
-	glm::vec3 Blocate;
-	glm::vec3 Bcolor;
-	glm::mat4 TR;
-
-	int offset;
-
-	glm::vec4 Bounding_box[2];
-}Box;
+//typedef struct Box {
+//	glm::vec3 Bscale;
+//	glm::vec3 Blocate;
+//	glm::vec3 Bcolor;
+//	glm::mat4 TR;
+//
+//	int offset;
+//
+//	glm::vec4 Bounding_box[2];
+//}Box;
 #endif // COMMON_H
