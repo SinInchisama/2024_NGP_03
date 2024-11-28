@@ -6,15 +6,13 @@ Box All_Box[20][20];
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
 {
-	char buffer[sizeof(Player)];
-
-	Reset_Ojbect();
-	players[0].serializePlayer(buffer);
-	int result =  send(client_sock[1], buffer, sizeof(buffer), 0);
+	Reset_Object();
+	Send_Object();
+	
 	// send(오브젝트);
 
 	while (true) {
-		// Timer_Check();
+		Timer_Check();
 
 		// 임계 영역 진입
 
@@ -33,7 +31,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	return 0;
 }
 
-void Reset_Ojbect()
+void Reset_Object()
 {
 	Boxinit(20, 20, 20);
 	players[0].Set_Plocate(All_Box[0][0].Blocate);
@@ -77,4 +75,16 @@ void Boxinit(int x, int y, int z)
 		}
 
 	}
+}
+
+void Send_Object() 
+{
+	char pbuffer[sizeof(Player)];
+	players[0].serializePlayer(pbuffer);
+	int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
+}
+
+void Timer_Check()
+{
+
 }

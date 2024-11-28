@@ -7,7 +7,6 @@
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Public.h"
-#include "State.h"
 #include "Common.h"
 
 #include <iostream>
@@ -16,6 +15,8 @@
 extern float line[];            // line 배열 선언
 extern float vPositionList[];   // vPositionList 배열 선언
 extern unsigned int index[];    // index 배열 선언
+
+class State;
 
 class FrameWork
 {
@@ -27,9 +28,6 @@ private:
 
 	std::vector<State*> states;  // 상태들을 저장할 벡터
 	int currentStateIndex;       // 현재 상태 인덱스
-
-	Stay_State staystate;
-	Play_State playstate;
 public:
 	FrameWork();
 	//~FrameWork() ;
@@ -53,6 +51,9 @@ public:
 
 	void SKeyDownboard(int key, int x, int y);
 	void SKeyUpboard(int key, int x, int y);
+
+	void Enter_State();
+	void Exit_State();
 
 	static FrameWork* currentInstance;
 

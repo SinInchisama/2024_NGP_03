@@ -1,4 +1,5 @@
 #include "FrameWork.h"
+#include "State.h"
 
 // 전역 변수 정의
 float line[] = {
@@ -90,9 +91,8 @@ FrameWork::FrameWork()
 	Init_Shader();
 	init_Buffer();
 
-	states.push_back(&playstate);  // 벡터에 동적으로 할당된 객체를 추가
-	states.push_back(&staystate);  // 벡터에 동적으로 할당된 객체를 추가
-
+	states.push_back(new Stay_State);  // 벡터에 동적으로 할당된 객체를 추가
+	states.push_back(new Play_State);  // 벡터에 동적으로 할당된 객체를 추가
 
 	currentStateIndex = 0;  // 처음 상태는 Stay_State
 
@@ -101,7 +101,7 @@ FrameWork::FrameWork()
 	char buffer[sizeof(Player)];
 	int result = recv(sock, buffer, sizeof(buffer), 0);
 	if (result > 0) {
-		Play_State* playState = dynamic_cast<Play_State*>(states[0]);
+		Play_State* playState = dynamic_cast<Play_State*>(states[1]);
 		if (playState) {
 			playState->player.deserializePlayer(buffer);
 		}
@@ -369,4 +369,16 @@ void FrameWork::SKeyDownboard(int key, int x, int y)
 void FrameWork::SKeyUpboard(int key, int x, int y)
 {
 	states[currentStateIndex]->SKeyUp(key);
+}
+
+void FrameWork::Enter_State()
+{
+	states[currentStateIndex]->enter();
+}
+
+void FrameWork::Exit_State()
+{
+	states[currentStateIndex]->exit();
+	++currentStateIndex;
+	states[currentStateIndex]->enter();
 }

@@ -305,3 +305,9 @@ void Stay_State::Draw()
 	// ºäÆ÷Æ® ¼³Á¤
 	glViewport(0, 0, 1260, 700);
 }
+
+void Stay_State::KeyDown(int key)
+{
+	if (key == 'a')
+		FrameWork::currentInstance->Exit_State();
+}

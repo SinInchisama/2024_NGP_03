@@ -5,10 +5,14 @@
 #include "CPlayer.h"
 #include "include/GL/glut.h"
 #include "Texture.h"
+#include "FrameWork.h"
 
 class State
 {
 public:
+	virtual void enter() {};
+	virtual void exit() {};
+
 	virtual void Update() {};
 	virtual void Draw() {};
 
@@ -27,6 +31,9 @@ public:
 	Box All_Box[20][20];
 public:
 	Play_State();
+
+	void enter()override {};
+	void exit()override {};
 
 	void Update() override;
 	void Draw()override;
@@ -47,6 +54,9 @@ private:
 public:
 	Stay_State();
 
+	void enter()override {};
+	void exit()override {};
+
 	void Update() override {};
 	void Draw()override;
 
@@ -54,5 +64,5 @@ public:
 	void SKeyDown(int key)override {};
 
 	void KeyUp(int key) {};
-	void KeyDown(int key) {};
+	void KeyDown(int key) ;
 };
