@@ -3,6 +3,7 @@
 
 #include "Public.h"
 #include "CPlayer.h"
+#include "CBox.h"
 #include "include/GL/glut.h"
 #include "Texture.h"
 #include "FrameWork.h"

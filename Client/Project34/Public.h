@@ -56,14 +56,14 @@ typedef struct playerInput {
 
 char* filetobuf(const char* file);
 
-typedef struct Box {
-	glm::vec3 Bscale;
-	glm::vec3 Blocate;
-	glm::vec3 Bcolor;
-	glm::mat4 TR;
-
-	int offset;
-
-	glm::vec4 Bounding_box[2];
-}Box;
+//typedef struct Box {
+//	glm::vec3 Bscale;
+//	glm::vec3 Blocate;
+//	glm::vec3 Bcolor;
+//	glm::mat4 TR;
+//
+//	int offset;
+//
+//	glm::vec4 Bounding_box[2];
+//}Box;
 #endif // COMMON_H
