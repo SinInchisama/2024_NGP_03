@@ -30,7 +30,7 @@
     <ClCompile Include="WorkThread.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EventQueue.cpp">
+    <ClCompile Include="CBox.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClInclude Include="WorkThread.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EventQueue.h">
+    <ClInclude Include="CBox.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
