@@ -5,11 +5,16 @@
 #include "Public.h"
 #include "RecvThead.h"
 #include "WorkThread.h"
+#include "EventQueue.h"
+
+EventQueue* EventQueue::currentInstance = nullptr;
 
 int main(int argc, char* argv[])
-
 {
 	int retval;
+
+	EventQueue eventqueue;  // 전역 변수로 eventqueue 객체 생성
+	EventQueue::currentInstance = &eventqueue;
 
 	// 임계 영역 초기화
 	InitializeCriticalSection(&cs);

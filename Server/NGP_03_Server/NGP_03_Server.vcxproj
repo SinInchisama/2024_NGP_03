@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CPlayer.cpp" />
+    <ClCompile Include="EventQueue.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Public.cpp" />
     <ClCompile Include="RecvThread.cpp" />
@@ -136,6 +137,7 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="EventQueue.h" />
     <ClInclude Include="Public.h" />
     <ClInclude Include="RecvThead.h" />
     <ClInclude Include="WorkThread.h" />

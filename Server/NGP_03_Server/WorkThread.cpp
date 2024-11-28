@@ -11,12 +11,14 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	
 	// send(오브젝트);
 
+	previousTime = std::chrono::high_resolution_clock::now();
+
 	while (true) {
 		Timer_Check();
 
 		// 임계 영역 진입
 
-		// EventQueue.exectueAll();
+		// EventQueue::currentInstance->executeAll();
 
 		// 임계 영역 탈출
 
@@ -86,5 +88,11 @@ void Send_Object()
 
 void Timer_Check()
 {
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> deltaTime = currentTime - previousTime;
+	previousTime = currentTime;
 
+	auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(previousTime.time_since_epoch()).count(); // 경과 시간 (초 단위)
+
+	if(elapsed % 5)
 }
