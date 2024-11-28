@@ -6,7 +6,7 @@
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Common.h"
-#include "Windows.h"
+#include <Windows.h>
 
 #define _CRT_SECURE_NO_WARNINGS // 구형 C 함수 사용 시 경고 끄기
 
@@ -40,13 +40,13 @@ extern glm::vec3 cameraUp; //--- 카메라 위쪽 방향
 extern SOCKET client_sock[2];
 
 typedef enum : byte {
-	KEY_UP = 0x01, // UP 키
-	KEY_DOWN = 0x02, // DOWN 키
-	KEY_LEFT = 0x04, // LEFT 키
-	KEY_RIGHT = 0x08, // RIGHT 키
-	KEY_Q = 0x10, // Q 키 (0x016 -> 0x10)
-	KEY_E = 0x20, // E 키 (0x032 -> 0x20)
-	KEY_A = 0x40 // A 키 (0x064 -> 0x40)
+	KEY_UP = 0b0000'0001, // UP 키			0000 0001		
+	KEY_DOWN = 0b0000'0010, // DOWN 키		0000 0010
+	KEY_LEFT = 0b0000'0100, // LEFT 키		0000 0100
+	KEY_RIGHT = 0b0000'1000, // RIGHT 키	0000 1000
+	KEY_Q = 0b0001'0000, // Q 키			0001 0000
+	KEY_E = 0b0010'0000, // E 키			0010 0000
+	KEY_A = 0b0100'0000  // A 키			0100 0000
 } KeyInput;
 
 typedef enum {
