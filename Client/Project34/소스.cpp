@@ -332,6 +332,10 @@ int collide(Player* p, Box b, glm::mat4 TR)
 
 void Crash(int num, int inspection)
 {
+	// 충돌체크해서 충돌 시 점수 상승
+
+
+
 	/*if (All_Box[inspection / 20][inspection % 20].Bcolor != player[num].Get_Color()) {
 		if (All_Box[inspection / 20][inspection % 20].Bcolor != glm::vec3{ 0.0f,0.0f,0.0f }) {
 			if (num == 0)

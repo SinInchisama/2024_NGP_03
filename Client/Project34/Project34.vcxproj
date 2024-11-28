@@ -159,6 +159,7 @@
     <ClInclude Include="CBullet.h" />
     <ClInclude Include="CItem.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="CScore.h" />
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="Public.h" />
     <ClInclude Include="CPlayer.h" />

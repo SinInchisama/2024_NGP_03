@@ -6,6 +6,40 @@ Play_State::Play_State()
 	Boxinit(20,20,20);
 }
 
+// recv Thread 이거 맞는지 확인 가능할까요?
+void Play_State::enter() {
+	/*while (true) {
+		if (key_change) {
+			send(playerInput, sizeof(playerInput));
+			key_change = false;
+		}
+		Parent_pakcet packet;
+		// 패킷개수를고정크기로recv
+			for (int i = 0; i < 패킷 개수; i++)
+			{
+				recv(client_socket, &packet, sizeof(packet), 0)
+					handlePacket(packet)
+			}
+		// 카메라업데이트
+			// 오브젝트렌더
+	}
+	void handlePacket(const Parent_packet & packet) {
+		switch (packet.packet_type) {
+		case move_player:
+			const Move_Player& move_packet = static_cast<const
+				Move_Player&>(packet);
+			// 해당하는처리
+		case create_bullet:
+			const Create_bullet& Create_bpacket = static_cast<const
+				Create_bullet&>(packet);
+			// 해당하는처리
+				.
+				.
+		}
+	}*/
+}
+
+
 void Play_State::Update()
 {
 	//time_t u = time(NULL); 

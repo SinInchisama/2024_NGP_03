@@ -66,4 +66,9 @@ char* filetobuf(const char* file);
 //
 //	glm::vec4 Bounding_box[2];
 //}Box;
+
+typedef struct Update_score {
+	short my_score;
+	short enermy_score;
+};
 #endif // COMMON_H
