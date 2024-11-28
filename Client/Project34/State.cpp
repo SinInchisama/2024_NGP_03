@@ -1,4 +1,5 @@
 #include "State.h"
+#include "CTimer.h"
 
 Play_State::Play_State()
 {
@@ -7,7 +8,10 @@ Play_State::Play_State()
 
 void Play_State::Update()
 {
-	time_t u = time(NULL); 
+	//time_t u = time(NULL); 
+	
+
+
 	//player.Calculate_Move();
 	//if (key_change) {
 	//	send(playerInput, sizeof(playerInput));

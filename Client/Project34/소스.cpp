@@ -21,6 +21,7 @@
 
 #include "CPlayer.h"
 #include "CBox.h"
+#include "CTimer.h"
 #include "CItem.h"
 #include "CBullet.h"
 #include "CPlayer.h"
@@ -116,6 +117,8 @@ int main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 }
 
 void TimerFunction(int value) {
+	
+
 	FrameWork::currentInstance->Update(value);
 	//framework.Update();
 	//time_t u = time(NULL);
