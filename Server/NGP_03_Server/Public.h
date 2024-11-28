@@ -14,10 +14,6 @@
 #define SERVERPORT 9000
 #define BUFSIZE    1024
 
-#define BOX_X 20
-#define BOX_Y 20
-#define BOX_Z 20
-
 extern CRITICAL_SECTION cs;
 extern byte index;
 

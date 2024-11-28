@@ -67,10 +67,6 @@ public:
 	void Set_DownAction(KeyInput key) {
 		Action|= key;
 	}
-	void Set_Action(KeyInput key) {
-		Action = key;
-	}
-
 	void Set_Plocate(glm::vec3 v) {Plocate = v;}
 
 	void Add_Occupy(int x) {Occupy_box += x;}
