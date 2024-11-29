@@ -5,6 +5,7 @@
 #include "include/glm/glm.hpp"
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
+#include "Common.h"
 
 #define byte char
 
@@ -25,6 +26,8 @@ extern GLuint triangleTextureCoordinateBufferObjectID;
 extern GLuint triangleVertexArrayObject;
 
 extern glm::vec3 cameraUp; //--- 카메라 위쪽 방향
+
+extern SOCKET sock;
 
 typedef enum : byte {
 	KEY_UP =	0b0000'0001, // UP 키		0000 0001		

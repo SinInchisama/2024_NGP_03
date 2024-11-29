@@ -37,6 +37,7 @@ void Play_State::enter() {
 				.
 		}
 	}*/
+	player.Set_Action((KeyInput)0);
 }
 
 
@@ -51,7 +52,8 @@ void Play_State::Update()
 	//	send(playerInput, sizeof(playerInput));
 	//	key_change = false;
 	//}
-
+	char keyinput = player.Get_Action();
+	send(sock, &keyinput, sizeof(char), 0);
 	//Parent_pakcet packet;
 
 	//패킷개수를고정크기로recv
@@ -61,6 +63,10 @@ void Play_State::Update()
 	//			handlePacket(packet)
 	//	}
 	
+	char buffer[sizeof(Player)];
+	recv(sock, buffer, sizeof(buffer), 0);
+	player.deserializePlayer(buffer);
+
 	//카메라업데이트
 	player.Calculate_Camera();
 

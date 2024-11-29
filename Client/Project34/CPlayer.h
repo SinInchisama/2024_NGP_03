@@ -61,12 +61,17 @@ public:
 	GLfloat Get_G() { return Color[1]; }
 	GLfloat Get_B() { return Color[2]; }
 	float Get_Lotate() {return lotate;}
+	byte Get_Action() { return Action; }
 
 	void Set_UpAction(KeyInput key) {
 		Action &= ~key;  }
 	void Set_DownAction(KeyInput key) {
 		Action|= key;
 	}
+	void Set_Action(KeyInput key) {
+		Action = key;
+	}
+
 	void Set_Plocate(glm::vec3 v) {Plocate = v;}
 
 	void Add_Occupy(int x) {Occupy_box += x;}
