@@ -23,17 +23,15 @@ void Player::Calculate_Move()
 
 void Player::Calculate_Camera()
 {
-	glm::mat4 TR = glm::mat4(1.0f);
+	glm::mat4 TR1 = glm::mat4(1.0f);
 	glm::mat4 Tx = glm::mat4(1.0f);
 	glm::mat4 Scale = glm::mat4(1.0f);
 	glm::mat4 Rotate = glm::mat4(1.0f);
 
-	Rotate = glm::rotate(Rotate, glm::radians(lotate), glm::vec3(0.0, 1.0, 0.0));
-	Scale = glm::scale(Scale, Pscale); //		플레이어
 	Tx = glm::translate(Tx, Plocate + Move);
-	TR = Tx * Rotate * Scale * TR;
+	TR1 = Tx * Rotate * Scale * TR;
 
-	cameraPos = TR * glm::vec4(0.0f, 15.0f, 0.0f, 1.0f);
+	cameraPos = TR1 * glm::vec4(0.0f, 15.0f, 0.0f, 1.0f);
 	cameraDirection = glm::vec3(0.0f, 0.5f, -1.0f);
 
 	cameraDirection[0] = sin(glm::radians(lotate)) * -1.0;
@@ -59,6 +57,9 @@ void Player::serializePlayer(char* buffer) const
 
     memcpy(buffer + offset, &Move, sizeof(glm::vec3));
     offset += sizeof(glm::vec3);
+
+    memcpy(buffer + offset, &TR, sizeof(glm::mat4));
+    offset += sizeof(glm::mat4);
 
     memcpy(buffer + offset, &cameraPos, sizeof(glm::vec3));
     offset += sizeof(glm::vec3);

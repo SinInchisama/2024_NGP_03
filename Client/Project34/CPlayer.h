@@ -14,6 +14,7 @@ private:
 	glm::vec3 PColor;
 	glm::vec3 Color;
 	glm::vec3 Move;
+	glm::mat4 TR;
 
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDirection;
@@ -62,6 +63,8 @@ public:
 	GLfloat Get_B() { return Color[2]; }
 	float Get_Lotate() {return lotate;}
 	byte Get_Action() { return Action; }
+
+	glm::mat4 Get_TR() { return TR; }
 
 	void Set_UpAction(KeyInput key) {
 		Action &= ~key;  }

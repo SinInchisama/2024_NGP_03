@@ -37,7 +37,7 @@ void Play_State::enter() {
 				.
 		}
 	}*/
-	player.Set_Action((KeyInput)0);
+	//player.Set_Action((KeyInput)0);
 }
 
 
@@ -139,24 +139,18 @@ void Play_State::Draw()
 	//	}
 	//}
 
-	glm::mat4 TR = glm::mat4(1.0f);
+	glm::mat4 TR1 = glm::mat4(1.0f);
 	glm::mat4 Tx = glm::mat4(1.0f);
-	glm::mat4 Scale = glm::mat4(1.0f);
+
+	Tx = glm::mat4(1.0f);
 
 
-	
-		TR = glm::mat4(1.0f);					// 플레이어를 그려주는 부분.
-		Tx = glm::mat4(1.0f);
-		Scale = glm::mat4(1.0f);
-		glm::mat4 Rotate = glm::mat4(1.0f);
+	glUniform3f(modelLocation1, player.Get_R(), player.Get_G(), player.Get_B());
 
-		glUniform3f(modelLocation1, player.Get_R(), player.Get_G(), player.Get_B());
+	Tx = glm::translate(Tx, player.Get_Plocate() + player.Get_Move());
+	TR1 = Tx * player.Get_TR();
 
-		Scale = glm::scale(Scale, player.Get_Pscale()); //		플레이어
-		Tx = glm::translate(Tx, player.Get_Plocate() + player.Get_Move());
-		TR = Tx * Rotate * Scale * TR;
-
-		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR)); //--- modelTransform 변수에 변환 값 적용하기
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR1)); //--- modelTransform 변수에 변환 값 적용하기
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
 	
 

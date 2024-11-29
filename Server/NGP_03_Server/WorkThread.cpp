@@ -17,6 +17,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 	while (true) {
 		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
+		//std::cout << (int)cbuffer << std::endl;
 		Timer_Check();
 
 		// 임계 영역 진입
@@ -36,6 +37,27 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
 
 		// 충돌 체크
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Tx = glm::mat4(1.0f);
+		Tx = glm::translate(Tx, players[0].Get_Plocate() + players[0].Get_Move());
+		TR1 = Tx * players[0].Get_TR();
+
+		glm::vec4 a1 = TR1 * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);
+		glm::vec4 a2 = TR1* glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
+
+		glm::vec4 player_bounding_box[2] = { a1, a2 };
+
+		for (int i = 0; i < 20; ++i) {
+			for (int j = 0; j < 20; ++j) {
+				if ((player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+					(player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
+					(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
+					All_Box[i][j].Color = players->Get_Color();
+				}
+			}
+		}
 
 		// 전송할 패킷리스트 개수 전송(고정크기)
 

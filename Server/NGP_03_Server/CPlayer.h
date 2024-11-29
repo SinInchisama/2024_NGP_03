@@ -14,6 +14,7 @@ private:
 	glm::vec3 PColor;
 	glm::vec3 Color;
 	glm::vec3 Move;
+	glm::mat4 TR;
 
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDirection;
@@ -49,6 +50,14 @@ public:
 		Occupy_box = 1;
 		player_number = i;
 		Move = { 0.0f, 0.0f, 0.0f };
+
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Scale = glm::mat4(1.0f);
+		glm::mat4 Rotate = glm::mat4(1.0f);
+
+		Rotate = glm::rotate(Rotate, glm::radians(lotate), glm::vec3(0.0, 1.0, 0.0));
+		Scale = glm::scale(Scale, Pscale); //		플레이어
+		TR = Rotate * Scale * TR1;
 	}
 
 	glm::vec3 Get_Pscale() {return Pscale;}
@@ -61,6 +70,7 @@ public:
 	GLfloat Get_G() { return Color[1]; }
 	GLfloat Get_B() { return Color[2]; }
 	float Get_Lotate() {return lotate;}
+	glm::mat4 Get_TR() { return TR; }
 
 	void Set_UpAction(KeyInput key) {
 		Action &= ~key;  }
