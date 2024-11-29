@@ -4,19 +4,22 @@
 
 class Item {
 public:
-	int Item_type;	// 비교 연산
+	int Item_type;	// 비교 연산, 최초 전달 정보
 
 	glm::vec3 Iscale;
-	glm::vec3 Ilocate;
-	glm::vec3 Icolor;
-	glm::mat4 TR;
+	glm::vec3 Ilocate;	//최초 전달 정보
+	glm::vec3 Icolor;	// 최초 전달 정보
+	glm::mat4 TR;		// 최초 전달 정보
 
-	glm::vec4 Bounding_box[2];
+	glm::vec4 Bounding_box[2];	// 최초 전달 정보
 
 	bool View;	// boolean check, 덮어쓰기 연산 (437 ~ 445)
 
 	// item_collide 함수에서 item을 인자로 받는다. 확인 필요.
 	// item_zero, item_one 함수에서 item을 인자로 받는다. 확인 필요.
+
+	void serializeItem(char* buffer) const;
+	void deserializeItem(const char* buffer);
 
 	void Change_Locate(int x, int z)	// 0 <= x, z < 20
 	{
@@ -61,4 +64,48 @@ void InitItem(Item& item)
 	item.Bounding_box[1] = { (item.Ilocate + bound_scale), 1.f };
 	 
 	item.View = false;
+}
+
+void Item::serializeItem(char* buffer) const
+{
+	// Serialize int Item_type 
+	memcpy(buffer, &Item_type, sizeof(Item_type));
+	buffer += sizeof(Item_type);
+
+	// Serialize glm::vec3 Locate (3 floats)
+	memcpy(buffer, &Ilocate, sizeof(Ilocate));
+	buffer += sizeof(Ilocate);
+
+	// Serialize glm::vec3 Color (3 floats)
+	memcpy(buffer, &Icolor, sizeof(Icolor));
+	buffer += sizeof(Icolor);
+
+	// Serialize glm::mat4 TR (16 floats)
+	memcpy(buffer, &TR, sizeof(TR));
+	buffer += sizeof(TR);
+
+	// Serialize glm::vec4 Bounding_box (2 vec4s)
+	memcpy(buffer, &Bounding_box, sizeof(Bounding_box));
+}
+
+void Item::deserializeItem(const char* buffer)
+{
+	// Deserialize int Item_type 
+	memcpy(&Item_type, buffer, sizeof(Item_type));
+	buffer += sizeof(Item_type);
+
+	// Deserialize glm::vec3 Locate (3 floats)
+	memcpy(&Ilocate, buffer, sizeof(Ilocate));
+	buffer += sizeof(Ilocate);
+
+	// Deserialize glm::vec3 Color (3 floats)
+	memcpy(&Icolor, buffer, sizeof(Icolor));
+	buffer += sizeof(Icolor);
+
+	// Deserialize glm::mat4 TR (16 floats)
+	memcpy(&TR, buffer, sizeof(TR));
+	buffer += sizeof(TR);
+
+	// Deserialize glm::vec4 Bounding_box (2 vec4s)
+	memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
