@@ -16,6 +16,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	timer.resetTimer();
 
 	while (true) {
+		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
 		Timer_Check();
 
 		// 임계 영역 진입
@@ -25,7 +26,14 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 임계 영역 탈출
 
 		// 행렬 변환(플레이어, 총알 움직임)
+		if (cbuffer == 0) {
+			std::cout << (int)cbuffer << std::endl;
+		}
+		players[0].Set_Action(cbuffer);
 		players[0].Calculate_Move();
+		char pbuffer[sizeof(Player)];
+		players[0].serializePlayer(pbuffer);
+		int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
 
 		// 충돌 체크
 

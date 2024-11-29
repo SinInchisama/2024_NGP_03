@@ -29,6 +29,8 @@ GLuint triangleVertexArrayObject = 0;
 
 glm::vec3 cameraUp; //--- 카메라 위쪽 방향\
 
+char cbuffer = 0;
+
 char* filetobuf(const char* file)
 {
 	FILE* fptr;

@@ -67,7 +67,7 @@ public:
 	void Set_DownAction(KeyInput key) {
 		Action|= key;
 	}
-	void Set_Action(KeyInput key) {
+	void Set_Action(byte key) {
 		Action = key;
 	}
 

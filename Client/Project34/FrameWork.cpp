@@ -63,7 +63,7 @@ FrameWork::FrameWork()
 		std::cout << "角菩" << std::endl;
 
 	// 家南 积己
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == INVALID_SOCKET) err_quit("socket()");
 
 	// connect()
