@@ -141,7 +141,6 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CTimer.h" />
-    <ClInclude Include="FunctionalPackets.h" />
     <ClInclude Include="Public.h" />
     <ClInclude Include="RecvThead.h" />
     <ClInclude Include="WorkThread.h" />
