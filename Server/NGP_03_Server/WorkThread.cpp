@@ -64,10 +64,10 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 전송할 패킷리스트 개수 전송(고정크기)
 
 		// 클라이언트로 큐의 크기 전송
-		char size_buffer[sizeof(int)];
-		int queue_size = packetQueue.size();
-		std::memcpy(size_buffer, &queue_size, sizeof(int));
-		send(client_sock[1], size_buffer, sizeof(size_buffer), 0);
+		//char size_buffer[sizeof(int)];
+		//int queue_size = packetQueue.size();
+		//std::memcpy(size_buffer, &queue_size, sizeof(int));
+		//send(client_sock[1], size_buffer, sizeof(size_buffer), 0);
 
 		// packetQueue가 빌 때까지 소켓데이터를 보냄.
 		while (!packetQueue.empty()) {
