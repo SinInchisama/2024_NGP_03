@@ -3,6 +3,8 @@
 Player players[2] = { {0, {0.0f, 0.0f, 0.0f}},{0, {0.0f, 0.0f, 0.0f}} };
 Box All_Box[20][20];
 Timer timer(60);
+std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
+
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -61,7 +63,21 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 		// 전송할 패킷리스트 개수 전송(고정크기)
 
-		// for문으로 패킷 보내기
+		// 클라이언트로 큐의 크기 전송
+		char size_buffer[sizeof(int)];
+		int queue_size = packetQueue.size();
+		std::memcpy(size_buffer, &queue_size, sizeof(int));
+		send(client_sock[1], size_buffer, sizeof(size_buffer), 0);
+
+		// packetQueue가 빌 때까지 소켓데이터를 보냄.
+		while (!packetQueue.empty()) {
+
+			std::unique_ptr<Parent_Packet> packet = std::move(packetQueue.front());
+			packetQueue.pop();
+			// 패킷 직렬화
+			auto serialized_data = packet->serialize();
+			send(client_sock[1], serialized_data.data(), serialized_data.size(), 0);
+		}
 	}
 	return 0;
 }

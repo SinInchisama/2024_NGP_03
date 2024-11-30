@@ -9,6 +9,8 @@
 #include "EventQueue.h"
 #include "CBox.h"
 #include "CTimer.h"
+#include "FunctionalPackets.h"
+#include "queue"
 
 DWORD WINAPI WorkThread(LPVOID arg);
 extern Player players[2];
