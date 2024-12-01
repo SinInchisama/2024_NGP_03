@@ -1,5 +1,7 @@
 #include "RecvThead.h"
 
+extern char cbuffer;
+
 // 클라이언트와 데이터 통신
 DWORD WINAPI RecvThread(LPVOID arg)
 {
@@ -31,6 +33,10 @@ DWORD WINAPI RecvThread(LPVOID arg)
 
 
 	while (1) {
+		EnterCriticalSection(&cs);
+		recv(client_sock[i], &cbuffer, sizeof(cbuffer), 0);
+		std::cout << cbuffer << std::endl;
+		LeaveCriticalSection(&cs);
 
 		// 데이터 받기
 		// 클라이언트로부터 PlayerInput 구조체 정보를 받음. 

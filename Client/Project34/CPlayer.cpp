@@ -43,7 +43,7 @@ void Player::Calculate_Camera()
 void Player::serializePlayer(char* buffer) const
 {
     int offset = 0;
-
+    std::cout << Action << std::endl;
     // 각 멤버 변수를 buffer에 복사
     memcpy(buffer + offset, &Pscale, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     memcpy(buffer + offset, &Plocate, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
@@ -74,7 +74,7 @@ void Player::serializePlayer(char* buffer) const
 void Player::deserializePlayer(const char* buffer)
 {
     int offset = 0;
-    byte b = Action;
+   // byte b = Action;
 
     memcpy(&Pscale, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     memcpy(&Plocate, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
@@ -102,5 +102,6 @@ void Player::deserializePlayer(const char* buffer)
     memcpy(&Action, buffer + offset, sizeof(byte)); offset += sizeof(byte);
     memcpy(&timer, buffer + offset, sizeof(int)); offset += sizeof(int);
 
-    Action = b;
+    std::cout << Action << std::endl;
+   // Action = b;
 }

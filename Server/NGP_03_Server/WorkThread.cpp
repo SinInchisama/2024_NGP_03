@@ -5,6 +5,8 @@ Box All_Box[20][20];
 Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
 
+char cbuffer = 0;
+
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -18,10 +20,8 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	timer.resetTimer();
 
 	while (true) {
-		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
 		//std::cout << (int)cbuffer << std::endl;
 		Timer_Check();
-
 		// 임계 영역 진입
 
 		EventQueue::currentInstance->executeAll(packetQueue);
@@ -29,9 +29,9 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 임계 영역 탈출
 
 		// 행렬 변환(플레이어, 총알 움직임)
-		if (cbuffer == 0) {
-			std::cout << (int)cbuffer << std::endl;
-		}
+		
+		std::cout <<"WorkThread" << std::addressof(cbuffer) << std::endl;
+		
 		players[0].Set_Action(cbuffer);
 		players[0].Calculate_Move();
 		//char pbuffer[sizeof(Player)];
