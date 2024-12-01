@@ -5,6 +5,8 @@ Box All_Box[20][20];
 Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
 
+char cbuffer = 0;
+
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -18,10 +20,8 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	timer.resetTimer();
 
 	while (true) {
-		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
 		//std::cout << (int)cbuffer << std::endl;
 		Timer_Check();
-
 		// 임계 영역 진입
 
 		EventQueue::currentInstance->executeAll(packetQueue);
@@ -29,9 +29,9 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 임계 영역 탈출
 
 		// 행렬 변환(플레이어, 총알 움직임)
-		if (cbuffer == 0) {
-			std::cout << (int)cbuffer << std::endl;
-		}
+		
+		std::cout <<"WorkThread" << std::addressof(cbuffer) << std::endl;
+		
 		players[0].Set_Action(cbuffer);
 		players[0].Calculate_Move();
 		//char pbuffer[sizeof(Player)];
@@ -56,7 +56,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
 					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
 					(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
-					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], players->Get_Color()));
+					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], players->Get_Color(),i*20 + j));
 				}
 			}
 		}

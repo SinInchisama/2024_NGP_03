@@ -54,6 +54,7 @@ void Play_State::Update()
 	//}
 	char keyinput = player.Get_Action();
 	send(sock, &keyinput, sizeof(char), 0);
+	std::cout << keyinput << std::endl;
 	//Parent_pakcet packet;
 
 	//패킷개수를고정크기로recv
@@ -64,7 +65,7 @@ void Play_State::Update()
 		{
 			char buffer[128];
 			size_t len = recv(sock, buffer, sizeof(buffer), 0);
-			process_received_data(buffer, len,&player);
+			process_received_data(buffer, len,&player,All_Box);
 			//handlePacket(packet)
 		}
 	
