@@ -27,3 +27,9 @@ void Box::deserializeBox(const char* buffer)
     // Deserialize glm::vec4 Bounding_box (2 vec4s)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
+
+void Box::Chage_Color(glm::vec3 v)
+{
+    Color = v;
+    p
+}

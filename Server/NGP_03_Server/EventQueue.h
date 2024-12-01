@@ -5,14 +5,14 @@
 class EventQueue
 {
 public:
-	void addEvent(const std::function<void()>& func) {
+	void addEvent(const std::function<std::unique_ptr<Parent_Packet>()>& func) {
 		queue.push(func);
 	}
 
-	void executeAll() {
+	void executeAll(std::queue<std::unique_ptr<Parent_Packet>>& p) {
 		while (!queue.empty()) {
 			auto event = queue.front();
-			event();
+			p.push(event());
 			queue.pop();
 		}
 	}
@@ -20,5 +20,5 @@ public:
 	static EventQueue* currentInstance;
 
 private:
-	std::queue<std::function<void()>> queue;
+	std::queue<std::function<std::unique_ptr<Parent_Packet>()>> queue;
 };

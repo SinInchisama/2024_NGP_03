@@ -24,7 +24,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 		// 임계 영역 진입
 
-		// EventQueue::currentInstance->executeAll();
+		EventQueue::currentInstance->executeAll();
 
 		// 임계 영역 탈출
 
