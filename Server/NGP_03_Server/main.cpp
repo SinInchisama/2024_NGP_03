@@ -7,6 +7,7 @@
 #include "WorkThread.h"
 #include "EventQueue.h"
 
+
 EventQueue* EventQueue::currentInstance = nullptr;
 
 int main(int argc, char* argv[])

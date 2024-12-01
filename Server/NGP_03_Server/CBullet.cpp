@@ -1,4 +1,5 @@
 #include "CBullet.h"
+#include "CPlayer.h"
 
 void Bullet::InitBullet(Player& p)
 {

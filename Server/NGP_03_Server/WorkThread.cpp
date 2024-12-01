@@ -1,7 +1,7 @@
 #include "WorkThread.h"
 
-Player players[2] = { {0, {0.0f, 0.0f, 0.0f}},{0, {0.0f, 0.0f, 0.0f}} };
 Box All_Box[20][20];
+Player players[2] = { {0, {0.0f, 0.0f, 0.0f}},{0, {0.0f, 0.0f, 0.0f}} };
 Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
 
@@ -18,21 +18,18 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	timer.resetTimer();
 
 	while (true) {
-		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
 		//std::cout << (int)cbuffer << std::endl;
 		Timer_Check();
 
 		// 임계 영역 진입
+		EnterCriticalSection(&cs);
 
 		EventQueue::currentInstance->executeAll(packetQueue);
 
+		
 		// 임계 영역 탈출
 
 		// 행렬 변환(플레이어, 총알 움직임)
-		if (cbuffer == 0) {
-			std::cout << (int)cbuffer << std::endl;
-		}
-		players[0].Set_Action(cbuffer);
 		players[0].Calculate_Move();
 		//char pbuffer[sizeof(Player)];
 		//players[0].serializePlayer(pbuffer);
@@ -64,7 +61,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 전송할 패킷리스트 개수 전송(고정크기)
 
 		// 클라이언트로 큐의 크기 전송
-		packetQueue.push(std::make_unique<Move_Packet>(1, players[0].Get_Move()));
+		packetQueue.push(std::make_unique<Move_Packet>(0, players[0].Get_Move()));
 
 		char size_buffer[sizeof(int)];
 		int queue_size = packetQueue.size();
@@ -80,6 +77,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			packet->serialize(buffer);
 			send(client_sock[1], buffer, sizeof(buffer), 0);
 		}
+		LeaveCriticalSection(&cs);
 	}
 	return 0;
 }

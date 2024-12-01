@@ -70,6 +70,20 @@ typedef enum {
 typedef struct playerInput {
 	byte p_index; // - 플레이어 1인지 2인지 구분(1 or 2)
 	byte input_key; // - 1 ~ 7 입력된 키 정보
+
+	// 구조체를 바이트 배열로 변환
+	void serialize(char* buffer) const {
+		buffer[0] = p_index;
+		buffer[1] = input_key;
+	}
+	
+	// 바이트 배열을 구조체로 변환
+	static playerInput deserialize(const char* buffer) {
+		playerInput input;
+		input.p_index = buffer[0];
+		input.input_key = buffer[1];
+		return input;
+	}
 } playerInput;
 
 

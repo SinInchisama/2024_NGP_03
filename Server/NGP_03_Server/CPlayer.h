@@ -3,8 +3,9 @@
 #include "include/glm/glm.hpp"
 #include "include/glm/ext.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
-#include "Public.h"
+//#include "Public.h"
 #include <bitset>
+#include "CBullet.h"
 
 class Player
 {
@@ -35,6 +36,8 @@ private:
 	byte Action = 0;
 
 	int timer;
+
+	//Bullet bullet;
 
 public:
 	Player(int i, glm::vec3 initialLocation) {

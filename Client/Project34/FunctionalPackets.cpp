@@ -61,8 +61,8 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             Move_Packet packet;
             packet.deserializePlayer(buffer);
             p->Set_Move(packet.move);
-            std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
-                << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
+            /*std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
+                << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";*/
         }
         else if(packet_type == 2) {
             Change_floor packet;
