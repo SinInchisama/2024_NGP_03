@@ -59,5 +59,17 @@
     <ClInclude Include="CTimer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="FunctionalPackets.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CBullet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CItem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+>>>>>>> 김선빈
   </ItemGroup>
 </Project>

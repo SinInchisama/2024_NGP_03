@@ -19,9 +19,15 @@ public:
 	bool View;
 };
 
+<<<<<<< HEAD
 void InitBullet(Bullet& bullet)
 {
 	glm::vec3 bound_scale = { 0.3f / 2, (float)10 / BOX_Y, 0.3f / 2 };
+=======
+void InitBullet(Bullet& bullet);
+
+	//glm::vec3 bound_scale = { 0.3f / 2, (float)10 / BOX_Y, 0.3f / 2 };
+>>>>>>> ê¹€ì„ ë¹ˆ
 
 	int x = rand() % 20;
 	int z = rand() % 20;
@@ -51,5 +57,9 @@ void InitBullet(Bullet& bullet)
 	// ÀÏ´Ü PlayerÀÇ 3¹è ¼Óµµ·Î ÇØ ³ùÀ½. ÇÊ¿äÇÏ´Ù¸é ¼öÁ¤ÇÒ °Í. 
 	bullet.speed = 0.15f;
 
+<<<<<<< HEAD
 	bullet.View = false;
 }
+=======
+	//bullet.View = false;
+>>>>>>> ê¹€ì„ ë¹ˆ

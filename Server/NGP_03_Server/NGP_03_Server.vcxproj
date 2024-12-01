@@ -137,6 +137,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
+    <ClInclude Include="CBullet.h" />
+    <ClInclude Include="CItem.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CTimer.h" />

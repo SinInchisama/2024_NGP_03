@@ -31,15 +31,35 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		}
 		players[0].Set_Action(cbuffer);
 		players[0].Calculate_Move();
-		char pbuffer[sizeof(Player)];
-		players[0].serializePlayer(pbuffer);
-		int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
+		//char pbuffer[sizeof(Player)];
+		//players[0].serializePlayer(pbuffer);
+		//int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
 
 		// Ãæµ¹ Ã¼Å©
 
 		// Àü¼ÛÇÒ ÆÐÅ¶¸®½ºÆ® °³¼ö Àü¼Û(°íÁ¤Å©±â)
 
+<<<<<<< HEAD
 		// for¹®À¸·Î ÆÐÅ¶ º¸³»±â
+=======
+		// Å¬¶óÀÌ¾ðÆ®·Î Å¥ÀÇ Å©±â Àü¼Û
+		packetQueue.push(std::make_unique<Move_Packet>(1, players[0].Get_Move()));
+
+		char size_buffer[sizeof(int)];
+		int queue_size = packetQueue.size();
+		std::memcpy(size_buffer, &queue_size, sizeof(int));
+		send(client_sock[1], size_buffer, sizeof(size_buffer), 0);
+
+		// packetQueue°¡ ºô ¶§±îÁö ¼ÒÄÏµ¥ÀÌÅÍ¸¦ º¸³¿.
+		while (!packetQueue.empty()) {
+			char buffer[128];
+			std::unique_ptr<Parent_Packet> packet = std::move(packetQueue.front());
+			packetQueue.pop();
+			// ÆÐÅ¶ Á÷·ÄÈ­
+			packet->serialize(buffer);
+			send(client_sock[1], buffer, sizeof(buffer), 0);
+		}
+>>>>>>> ê¹€ì„ ë¹ˆ
 	}
 	return 0;
 }
