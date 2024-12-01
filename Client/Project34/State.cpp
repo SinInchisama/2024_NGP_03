@@ -64,7 +64,7 @@ void Play_State::Update()
 		{
 			char buffer[128];
 			size_t len = recv(sock, buffer, sizeof(buffer), 0);
-			process_received_data(buffer, len);
+			process_received_data(buffer, len,&player);
 			//handlePacket(packet)
 		}
 	

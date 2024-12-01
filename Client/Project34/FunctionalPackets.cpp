@@ -51,7 +51,7 @@ void EventMovePlayer(Player* p, KeyInput& k)
 //	// 2. 맵을 벗어난 총알을 삭제하기. (여기서 할 것인가? 아니면 다른 곳(다른 이벤트, 충돌처리 등)에서 검사할 것인가? 
 //}
 
-void process_received_data(const char* buffer, size_t buffer_size) {
+void process_received_data(const char* buffer, size_t buffer_size, Player* p) {
     {
         // 패킷 타입 읽기
         char packet_type = buffer[0];
@@ -60,10 +60,14 @@ void process_received_data(const char* buffer, size_t buffer_size) {
         if (packet_type == 1) {
             Move_Packet packet;
             packet.deserializePlayer(buffer);
+            p->Set_Move(packet.move);
             std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
                 << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
         }
-        else {
+        else if(packet_type == 2) {
+            Change_floor packet;
+            packet.deserializePlayer(buffer);
+            std::cout << packet.box_index << packet.color.x << std::endl;
           //  std::cerr << "Unknown packet type: " << static_cast<int>(packet_type) << "\n";
         }
     }

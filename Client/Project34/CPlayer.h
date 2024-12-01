@@ -73,6 +73,7 @@ public:
 	}
 
 	void Set_Plocate(glm::vec3 v) {Plocate = v;}
+	void Set_Move(glm::vec3 v) { Move = v; }
 
 	void Add_Occupy(int x) {Occupy_box += x;}
 

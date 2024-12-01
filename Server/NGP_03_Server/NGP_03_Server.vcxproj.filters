@@ -36,6 +36,9 @@
     <ClCompile Include="CTimer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="FunctionalPackets.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -59,8 +62,6 @@
     <ClInclude Include="CTimer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="FunctionalPackets.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -70,6 +71,8 @@
     <ClInclude Include="CItem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
->>>>>>> 김선빈
+    <ClInclude Include="EventQueue.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

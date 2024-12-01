@@ -3,6 +3,8 @@
 Player players[2] = { {0, {0.0f, 0.0f, 0.0f}},{0, {0.0f, 0.0f, 0.0f}} };
 Box All_Box[20][20];
 Timer timer(60);
+std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue¸¦ À¯´ÏÅ© Æ÷ÀÎÆ®·Î ¸¸µë.
+
 
 // Å¬¶óÀÌ¾ðÆ®¿Í µ¥ÀÌÅÍ Åë½Å
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -17,11 +19,12 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 	while (true) {
 		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
+		//std::cout << (int)cbuffer << std::endl;
 		Timer_Check();
 
 		// ÀÓ°è ¿µ¿ª ÁøÀÔ
 
-		// EventQueue::currentInstance->executeAll();
+		EventQueue::currentInstance->executeAll(packetQueue);
 
 		// ÀÓ°è ¿µ¿ª Å»Ãâ
 
@@ -36,12 +39,30 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		//int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
 
 		// Ãæµ¹ Ã¼Å©
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Tx = glm::mat4(1.0f);
+		Tx = glm::translate(Tx, players[0].Get_Plocate() + players[0].Get_Move());
+		TR1 = Tx * players[0].Get_TR();
+
+		glm::vec4 a1 = TR1 * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);
+		glm::vec4 a2 = TR1* glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
+
+		glm::vec4 player_bounding_box[2] = { a1, a2 };
+
+		for (int i = 0; i < 20; ++i) {
+			for (int j = 0; j < 20; ++j) {
+				if ((player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+					(player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
+					(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
+					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], players->Get_Color()));
+				}
+			}
+		}
 
 		// Àü¼ÛÇÒ ÆÐÅ¶¸®½ºÆ® °³¼ö Àü¼Û(°íÁ¤Å©±â)
 
-<<<<<<< HEAD
-		// for¹®À¸·Î ÆÐÅ¶ º¸³»±â
-=======
 		// Å¬¶óÀÌ¾ðÆ®·Î Å¥ÀÇ Å©±â Àü¼Û
 		packetQueue.push(std::make_unique<Move_Packet>(1, players[0].Get_Move()));
 
@@ -59,7 +80,6 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			packet->serialize(buffer);
 			send(client_sock[1], buffer, sizeof(buffer), 0);
 		}
->>>>>>> ê¹€ì„ ë¹ˆ
 	}
 	return 0;
 }

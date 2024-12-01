@@ -130,6 +130,7 @@
     <ClCompile Include="CBox.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CTimer.cpp" />
+    <ClCompile Include="FunctionalPackets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Public.cpp" />
     <ClCompile Include="RecvThread.cpp" />
@@ -142,6 +143,8 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CTimer.h" />
+    <ClInclude Include="EventQueue.h" />
+    <ClInclude Include="FunctionalPackets.h" />
     <ClInclude Include="Public.h" />
     <ClInclude Include="RecvThead.h" />
     <ClInclude Include="WorkThread.h" />
