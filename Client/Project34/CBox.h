@@ -1,4 +1,4 @@
-#pragma 
+#pragma once
 #include "include/glm/glm.hpp"
 #include "Public.h"
 

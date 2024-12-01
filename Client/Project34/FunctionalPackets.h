@@ -4,13 +4,14 @@
 #include "CBullet.h"
 #include "Public.h"
 #include <vector>
+#include "CBox.h"
 
 void EventMovePlayer(Player* p, KeyInput& k);
 //void EventCreateItem(Item* itemArr);
 //void EventCreateBullet(Bullet* bArr);
 //void EventMoveBullet(Bullet* bArr);
 
-void process_received_data(const char* buffer, size_t buffer_size,Player* p);
+void process_received_data(const char* buffer, size_t buffer_size,Player* p,Box All_Box[20][20]);
 
 struct Parent_Packet {
 	byte pakcet_type;
