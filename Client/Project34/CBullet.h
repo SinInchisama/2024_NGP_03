@@ -19,8 +19,8 @@ public:
 	bool View;
 };
 
-void InitBullet(Bullet& bullet)
-{
+void InitBullet(Bullet& bullet);
+
 	//glm::vec3 bound_scale = { 0.3f / 2, (float)10 / BOX_Y, 0.3f / 2 };
 
 	//int x = rand() % 20;
@@ -52,4 +52,3 @@ void InitBullet(Bullet& bullet)
 	//bullet.speed = 0.15f;
 
 	//bullet.View = false;
-}

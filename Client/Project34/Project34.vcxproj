@@ -142,9 +142,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CBox.cpp" />
+    <ClCompile Include="CBullet.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="FrameWork.cpp" />
+    <ClCompile Include="FunctionalPackets.cpp" />
     <ClCompile Include="Public.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -161,6 +163,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="CScore.h" />
     <ClInclude Include="CTimer.h" />
+    <ClInclude Include="FunctionalPackets.h" />
     <ClInclude Include="Public.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="FrameWork.h" />

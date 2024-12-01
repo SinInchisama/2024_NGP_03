@@ -7,6 +7,7 @@
 #include "include/GL/glut.h"
 #include "Texture.h"
 #include "FrameWork.h"
+#include "FunctionalPackets.h"
 
 class State
 {

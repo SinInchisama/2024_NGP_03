@@ -11,33 +11,39 @@ void EventMovePlayer(Player* p, KeyInput& k);
 //void EventMoveBullet(Bullet* bArr);
 
 struct Parent_Packet {
-	byte pakcet_type;
+    byte pakcet_type;
 
-	virtual std::vector<char> serialize() const {                   // 데이터를 보내기 위한 직렬화
-		std::vector<char> buffer(sizeof(Parent_Packet));
-		std::memcpy(buffer.data(), this, sizeof(Parent_Packet));
-		return buffer;
-	}
+    virtual void serialize(char* buffer)const {}
 
     virtual ~Parent_Packet() = default;
 };
 
 struct Move_Packet : Parent_Packet {
-	byte player_index;
-	glm::vec3 move;
+    byte player_index;
+    glm::vec3 move;
 
-    Move_Packet() { pakcet_type = 1; } // Move_Packet의 기본 packet_type
-
-    std::vector<char> serialize() const override {          // 데이터를 보내기 위한 직렬화
-        std::vector<char> buffer(sizeof(Move_Packet));
-        std::memcpy(buffer.data(), this, sizeof(Move_Packet));
-        return buffer;
+    Move_Packet() : player_index(0), move(0.0f, 0.0f, 0.0f) {
+        pakcet_type = 1; // Move_Packet의 타입 설정
     }
 
-    static Move_Packet deserialize(const char* data) {      // 데이터를 보내기 위한 역직렬화
-        Move_Packet packet;
-        std::memcpy(&packet, data, sizeof(Move_Packet));
-        return packet;
+    Move_Packet(char player_idx, const glm::vec3& player_move)
+        : player_index(player_idx), move(player_move) {
+        pakcet_type = 1; // Move_Packet 타입 설정
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &player_index, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &move, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
+    }
+
+    void deserializePlayer(const char* buffer)
+    {
+        int offset = 0;
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&player_index, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&move, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     }
 };
-

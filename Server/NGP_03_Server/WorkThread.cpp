@@ -34,9 +34,9 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		}
 		players[0].Set_Action(cbuffer);
 		players[0].Calculate_Move();
-		char pbuffer[sizeof(Player)];
-		players[0].serializePlayer(pbuffer);
-		int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
+		//char pbuffer[sizeof(Player)];
+		//players[0].serializePlayer(pbuffer);
+		//int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
 
 		// 충돌 체크
 		glm::mat4 TR1 = glm::mat4(1.0f);
@@ -64,19 +64,21 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 전송할 패킷리스트 개수 전송(고정크기)
 
 		// 클라이언트로 큐의 크기 전송
-		//char size_buffer[sizeof(int)];
-		//int queue_size = packetQueue.size();
-		//std::memcpy(size_buffer, &queue_size, sizeof(int));
-		//send(client_sock[1], size_buffer, sizeof(size_buffer), 0);
+		packetQueue.push(std::make_unique<Move_Packet>(1, players[0].Get_Move()));
+
+		char size_buffer[sizeof(int)];
+		int queue_size = packetQueue.size();
+		std::memcpy(size_buffer, &queue_size, sizeof(int));
+		send(client_sock[1], size_buffer, sizeof(size_buffer), 0);
 
 		// packetQueue가 빌 때까지 소켓데이터를 보냄.
 		while (!packetQueue.empty()) {
-
+			char buffer[128];
 			std::unique_ptr<Parent_Packet> packet = std::move(packetQueue.front());
 			packetQueue.pop();
 			// 패킷 직렬화
-			auto serialized_data = packet->serialize();
-			send(client_sock[1], serialized_data.data(), serialized_data.size(), 0);
+			packet->serialize(buffer);
+			send(client_sock[1], buffer, sizeof(buffer), 0);
 		}
 	}
 	return 0;

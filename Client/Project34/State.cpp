@@ -57,15 +57,20 @@ void Play_State::Update()
 	//Parent_pakcet packet;
 
 	//패킷개수를고정크기로recv
-	//	for (int i = 0; i < 패킷 개수; i++)
-	//	{
-	//		recv(client_socket, &packet, sizeof(packet), 0)
-	//			handlePacket(packet)
-	//	}
+	char size_buffer[sizeof(int)];
+	recv(sock, size_buffer, sizeof(int), 0);
+	int queue_size = *reinterpret_cast<int*>(size_buffer);
+		for (int i = 0; i < queue_size; i++)
+		{
+			char buffer[128];
+			size_t len = recv(sock, buffer, sizeof(buffer), 0);
+			process_received_data(buffer, len);
+			//handlePacket(packet)
+		}
 	
-	char buffer[sizeof(Player)];
-	recv(sock, buffer, sizeof(buffer), 0);
-	player.deserializePlayer(buffer);
+	//char buffer[sizeof(Player)];
+	//recv(sock, buffer, sizeof(buffer), 0);
+	//player.deserializePlayer(buffer);
 
 	//카메라업데이트
 	player.Calculate_Camera();
