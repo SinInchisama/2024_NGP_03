@@ -64,7 +64,10 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p) {
             std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
                 << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
         }
-        else {
+        else if(packet_type == 2) {
+            Change_floor packet;
+            packet.deserializePlayer(buffer);
+            std::cout << packet.box_index << packet.color.x << std::endl;
           //  std::cerr << "Unknown packet type: " << static_cast<int>(packet_type) << "\n";
         }
     }

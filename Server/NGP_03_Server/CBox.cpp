@@ -28,8 +28,11 @@ void Box::deserializeBox(const char* buffer)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
 
-void Box::Chage_Color(glm::vec3 v)
+std::unique_ptr<Parent_Packet> Box::Chage_Color(glm::vec3 v)
 {
-    Color = v;
-    p
+    if (Color != v) {
+        Color = v;
+        return std::make_unique<Change_floor>(10, Color);
+    }
+    return nullptr;  // Color가 다르지 않으면 nullptr을 반환
 }
