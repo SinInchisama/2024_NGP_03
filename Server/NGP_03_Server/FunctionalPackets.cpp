@@ -1,5 +1,12 @@
 #include "FunctionalPackets.h"
 
+void EventMovePlayer(Player* p, KeyInput& k)
+{
+	// 수행 작업: Player의 Action 값 수정, Player의 Calculate_Move() 호출
+	p->Set_Action(k);
+	p->Calculate_Move();		// 
+}
+
 //void EventCreateItem(Item* itemArr)
 //{
 //	// 수행하는 작업: Init해놓은 아이템의 View를 활성화한다. 

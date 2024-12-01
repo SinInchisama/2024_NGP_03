@@ -46,7 +46,6 @@ public:
 	void KeyUp(int key);
 	void KeyDown(int key);
 
-	void sendData(LPVOID arg);
 };
 
 class Stay_State :public State

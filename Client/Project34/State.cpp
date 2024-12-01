@@ -1,31 +1,13 @@
 #include "State.h"
 #include "CTimer.h"
-#include <thread>
-
-bool Press;
-HANDLE hWriteEvent;
-HANDLE sendThread;
 
 Play_State::Play_State()
 {
-	hWriteEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+
 }
 
 // recv Thread 이거 맞는지 확인 가능할까요?
 void Play_State::enter() {
-	sendThread = CreateThread(
-		NULL, 0, [](LPVOID param) -> DWORD {
-			Play_State* instance = (Play_State*)param;
-			while (true) {
-				WaitForSingleObject(hWriteEvent, INFINITE); // 쓰기 완료 대기
-				char buffer[2] = { 0 };
-				buffer[0] = 0;
-				buffer[1] = instance->player.Get_Action();
-				send(sock, buffer, sizeof(buffer), 0);
-			}
-			return 0;
-		},
-		(LPVOID)this, 0, NULL);
 	/*while (true) {
 		if (key_change) {
 			send(playerInput, sizeof(playerInput));
@@ -70,13 +52,8 @@ void Play_State::Update()
 	//	send(playerInput, sizeof(playerInput));
 	//	key_change = false;
 	//}
-	if (Press) {
-		char buffer[2] = { 0 };
-		buffer[0] = 0;
-		buffer[1] = player.Get_Action();
-		send(sock, buffer, sizeof(buffer),0);
-		Press = false;
-	}
+	char keyinput = player.Get_Action();
+	send(sock, &keyinput, sizeof(char), 0);
 	//Parent_pakcet packet;
 
 	//패킷개수를고정크기로recv
@@ -86,7 +63,6 @@ void Play_State::Update()
 		for (int i = 0; i < queue_size; i++)
 		{
 			char buffer[128];
-			std::cout << buffer << std::endl;
 			size_t len = recv(sock, buffer, sizeof(buffer), 0);
 			process_received_data(buffer, len,&player,All_Box);
 			//handlePacket(packet)
@@ -264,8 +240,8 @@ void Play_State::SKeyDown(int key) {
 		break;
 	case GLUT_KEY_RIGHT:
 		player.Set_DownAction(KEY_RIGHT);
-		Press = true;
 		break;
+
 	}
 }
 
@@ -282,7 +258,7 @@ void Play_State::SKeyUp(int key) {
 		player.Set_UpAction(KEY_LEFT);
 		break;
 	case GLUT_KEY_RIGHT:
-		player.Set_UpAction(KEY_RIGHT); SetEvent(hWriteEvent); // 쓰기 완료 알림
+		player.Set_UpAction(KEY_RIGHT);
 		break;
 	}
 }
@@ -290,32 +266,13 @@ void Play_State::SKeyUp(int key) {
 void Play_State::KeyUp(int key)
 {
 	switch (key) {
-	case 'a':
-		player.Set_UpAction(KEY_A);
-		break;
+
 	}
 }
 
 void Play_State::KeyDown(int key)
 {
 	switch (key) {
-	case 'a':
-		player.Set_DownAction(KEY_A);
-		break;
-	}
-}
-
-void Play_State::sendData(LPVOID arg)
-{
-
-	while (true) {
-		WaitForSingleObject(hWriteEvent, INFINITE); // 쓰기 완료 대기
-
-		char buffer[2] = { 0 };
-		buffer[0] = 0;
-		buffer[1] = player.Get_Action();
-		send(sock, buffer, sizeof(buffer), 0);
-
 
 	}
 }

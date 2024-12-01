@@ -4,8 +4,8 @@
 #include "CBullet.h"
 #include "Public.h"
 #include <vector>
-#include <iostream>
 
+void EventMovePlayer(Player* p, KeyInput& k);
 //void EventCreateItem(Item* itemArr);
 //void EventCreateBullet(Bullet* bArr);
 //void EventMoveBullet(Bullet* bArr);
@@ -33,7 +33,6 @@ struct Move_Packet : Parent_Packet {
 
     void serialize(char* buffer)const override {
         int offset = 0;
-       // std::cout << player_index << " " << move.x << " " << move.y << " " << move.z << std::endl;
 
         memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
         memcpy(buffer + offset, &player_index, sizeof(byte)); offset += sizeof(byte);

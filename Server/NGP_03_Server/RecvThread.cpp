@@ -1,7 +1,5 @@
 #include "RecvThead.h"
 
-extern Player players[2];
-
 // 클라이언트와 데이터 통신
 DWORD WINAPI RecvThread(LPVOID arg)
 {
@@ -10,9 +8,9 @@ DWORD WINAPI RecvThread(LPVOID arg)
 	client_sock[i] = (SOCKET)arg;
 	char addr[INET_ADDRSTRLEN];
 	int addrlen;
-
-	char buffer[2] = { 0 };
+	char buf[BUFSIZE + 1];
 	int len; // 고정 길이 데이터
+	float total_received = 0;
 	++index;
 
 	// 클라이언트 정보 얻기
@@ -34,11 +32,6 @@ DWORD WINAPI RecvThread(LPVOID arg)
 
 	while (1) {
 
-		recv(client_sock[i], buffer, sizeof(buffer), 0);
-		EnterCriticalSection(&cs);
-		playerInput input = playerInput::deserialize(buffer);
-		players[input.p_index].Set_Action(input.input_key);
-		LeaveCriticalSection(&cs);
 		// 데이터 받기
 		// 클라이언트로부터 PlayerInput 구조체 정보를 받음. 
 		// 
