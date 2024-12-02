@@ -2,6 +2,7 @@
 #include "include/glm/glm.hpp"
 #include "Public.h"
 #include "FunctionalPackets.h"
+#include "Public.h"
 
 class Item {
 public:
@@ -25,6 +26,7 @@ public:
 
 	// Create Item¿ª ¿ß«—
 	Item(int type, const glm::vec3& location);
+	void Create_Item(std::vector<Item>& items, int gridSize);
 
 	void serializeItem(char* buffer) const;
 	void deserializeItem(const char* buffer);
@@ -41,6 +43,8 @@ public:
 		ILocate[1] = 0.0f;
 		ILocate[2] = zlocate - zScale * z;
 	}
+
+	std::unique_ptr<Parent_Packet> Create_item(short index, glm::vec3 color, glm::vec3 locate);
 };
 
 //void InitItem(Item& item)

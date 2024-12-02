@@ -28,6 +28,29 @@ Item::Item(int type, const glm::vec3& location)
     View = true;
 }
 
+void Create_Item(std::vector<Item>& items, int gridSize)
+{
+    // 아이템 타입 (0 ~ 2 랜덤)
+    // int randomType = rand() % 3;
+    int randomType = 1;
+
+    // 아이템 위치 (랜덤 좌표 생성)
+    float x = static_cast<float>((rand() % gridSize) - gridSize / 2);
+    float y = 0.0f; // 고정 Y 좌표
+    float z = static_cast<float>((rand() % gridSize) - gridSize / 2);
+    glm::vec3 randomLocation = glm::vec3(x, y, z);
+
+    // 새로운 아이템 생성
+    Item newItem(randomType, randomLocation);
+
+    // 리스트에 추가
+    items.push_back(newItem);
+
+    // 확인용
+    std::cout << "Item created: Type=" << randomType << ", Location=("
+        << x << ", " << y << ", " << z << ")" << std::endl;
+}
+
 void Item::serializeItem(char* buffer) const
 {
     // Serialize glm::vec3 IColor (3 floats)
@@ -61,4 +84,9 @@ void Item::deserializeItem(const char* buffer)
 
     // Deserialize glm::vec4 Bounding_box (2 vec4s)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
+}
+
+std::unique_ptr<Parent_Packet> Item::Create_item(short index, glm::vec3 color, glm::vec3 locate)
+{
+    // return std::make_unique<Create_item>(index, color, locate);
 }
