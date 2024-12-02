@@ -7,8 +7,8 @@ class Item {
 public:
 	int Item_type;	// 비교 연산, 최초 전달 정보
 
-	glm::vec3 Iscale;
-	glm::vec3 Ilocate;	//최초 전달 정보
+	glm::vec3 IScale;
+	glm::vec3 ILocate;	//최초 전달 정보
 	glm::vec3 IColor = {0.0f, 1.0f, 0.0f};	// 최초 전달 정보
 	glm::mat4 TR;		// 최초 전달 정보
 
@@ -34,13 +34,10 @@ public:
 		float xlocate = 5 - (xScale / 2);
 		float zlocate = 5 - (zScale / 2);
 
-		Ilocate[0] = xlocate - xScale * x;
-		Ilocate[1] = 0.0f;
-		Ilocate[2] = zlocate - zScale * z;
+		ILocate[0] = xlocate - xScale * x;
+		ILocate[1] = 0.0f;
+		ILocate[2] = zlocate - zScale * z;
 	}
-
-	std::unique_ptr<Parent_Packet> Create_item(short index, glm::vec3 Item_color, glm::vec3 Item_locate);
-	std::unique_ptr<Parent_Packet> Delete_item(short index);
 };
 
 //void InitItem(Item& item)
