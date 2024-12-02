@@ -5,6 +5,7 @@
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Public.h"
 #include <bitset>
+#include "CBullet.h"
 
 class Player
 {
@@ -23,13 +24,10 @@ private:
 	float lotate;
 	bool view;
 
-	int Occupy_box;
+	short Occupy_box;
 	float speed;
 
-	bool left_rotate;
-	bool right_rotate;
-
-	int player_number;  //캐릭터 고유 숫자 1p, 2p
+	byte player_number;  //캐릭터 고유 숫자 1p, 2p
 	bool stop; //시계 효과를 받았을 경우 true
 
 	byte Action = 0;

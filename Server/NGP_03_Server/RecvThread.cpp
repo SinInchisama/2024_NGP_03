@@ -19,20 +19,8 @@ DWORD WINAPI RecvThread(LPVOID arg)
 	getpeername(client_sock[i], (struct sockaddr*)&clientaddr[i], &addrlen);
 	inet_ntop(AF_INET, &clientaddr[i].sin_addr, addr, sizeof(addr));
 
-	// Game Start?
-
-	// while(1) {
-	// 
-	// recv() // playerInput을 받는 곳
-	//
-	// Insert_Event_Queue;
-	//
-	// is game end?
-	// }
-
 
 	while (1) {
-
 		// 데이터 받기
 		// 클라이언트로부터 PlayerInput 구조체 정보를 받음. 
 		// 

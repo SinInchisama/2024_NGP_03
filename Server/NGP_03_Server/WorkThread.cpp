@@ -18,20 +18,33 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	while (true) {
 		char cbuffer;
 		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
-		if (cbuffer & KEY_RIGHT)
-			std::cout << (int)cbuffer << std::endl;
 		GameManger::Instance->players[0]->Set_Action(cbuffer);
-	
-		//std::cout << (int)cbuffer << std::endl;
+
 		Timer_Check();
-		// 임계 영역 진입
+		
 
-		EventQueue::currentInstance->executeAll(packetQueue);
+		//EventQueue::currentInstance->executeAll(packetQueue);
 
-		// 임계 영역 탈출
+		
 
 		// 행렬 변환(플레이어, 총알 움직임)
 		GameManger::Instance->players[0]->Calculate_Move();
+
+		if (GameManger::Instance->players[0]->Get_Action() & KEY_A) {
+			if (!GameManger::Instance->bullets[0]->View) {
+				GameManger::Instance->bullets[0]->View = true;
+				GameManger::Instance->players[0]->Set_UpAction(KEY_A);
+
+				GameManger::Instance->bullets[0]->InitBullet(0,
+					GameManger::Instance->players[0]->Get_Plocate() + GameManger::Instance->players[0]->Get_Move(), GameManger::Instance->players[0]->Get_Action());
+				packetQueue.push(std::make_unique<Create_bullet>(0, true));
+			}
+		}
+		
+	if (GameManger::Instance->bullets[0]->View){
+		GameManger::Instance->bullets[0]->Move();
+		packetQueue.push(std::make_unique<Move_bullet>(0, GameManger::Instance->bullets[0]->Move1));
+	}
 		
 
 		//char pbuffer[sizeof(Player)];

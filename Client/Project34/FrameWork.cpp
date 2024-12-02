@@ -366,7 +366,7 @@ void FrameWork::KeyDownboard(int key, int x, int y)
 
 void FrameWork::KeyUpboard(int key, int x, int y)
 {
-	states[currentStateIndex]->KeyDown(key);
+	states[currentStateIndex]->KeyUp(key);
 }
 
 void FrameWork::SKeyDownboard(int key, int x, int y)

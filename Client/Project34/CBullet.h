@@ -9,17 +9,37 @@ public:
 	glm::vec3 Bcolor;
 	glm::mat4 TR;
 
-	int x, y, z;
-	int x_dir;
-	int z_dir;
+	byte x_dir;
+	byte z_dir;
 	float speed;
 
 	glm::vec4 Bounding_box[2];
 
 	bool View;
-};
 
-void InitBullet(Bullet& bullet);
+	Bullet()
+		: Bscale(0.1f, 0.1f, 0.1f),   // 기본 크기 1
+		Blocate(0.0f, 0.0f, 0.0f), // 기본 위치 (0, 0, 0)
+		Bcolor(0.7f, 0.0f, 0.7f),  // 기본 색상 흰색
+		TR(1.0f),                  // 기본 변환 행렬 (단위 행렬)
+		x_dir(0),                  // 기본 방향 0
+		z_dir(0),                  // 기본 방향 0
+		speed(0.15f),               // 기본 속도 0
+		Bounding_box{ glm::vec4(0.0f), glm::vec4(0.0f) }, // 기본 Bounding Box
+		View(false)                // 기본적으로 보이지 않음
+	{
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Scale = glm::mat4(1.0f);
+		glm::mat4 Rotate = glm::mat4(1.0f);
+
+		Rotate = glm::rotate(Rotate, glm::radians(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		Scale = glm::scale(Scale, Bscale); //		플레이어
+		TR = Rotate * Scale * TR1;
+	}
+
+	void serializeBullet(char* buffer) const;
+	void deserializeBullet(const char* buffer);
+};
 
 	//glm::vec3 bound_scale = { 0.3f / 2, (float)10 / BOX_Y, 0.3f / 2 };
 
