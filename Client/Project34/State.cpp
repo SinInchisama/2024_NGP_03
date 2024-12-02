@@ -54,11 +54,8 @@ void Play_State::Update()
 	//}
 	
 	char keyinput = player.Get_Action();
-	if (keyinput != 0) {
-		send(sock, &keyinput, sizeof(char), 0);
-	}
-
-	std::cout << keyinput << std::endl;
+	send(sock, &keyinput, sizeof(char), 0);
+	
 	//Parent_pakcet packet;
 
 	//패킷개수를고정크기로recv
@@ -271,14 +268,16 @@ void Play_State::SKeyUp(int key) {
 void Play_State::KeyUp(int key)
 {
 	switch (key) {
-
+	case 'a':
+		player.Set_DownAction(KEY_A);
 	}
 }
 
 void Play_State::KeyDown(int key)
 {
 	switch (key) {
-
+	case 'a':
+		player.Set_UpAction(KEY_A);
 	}
 }
 

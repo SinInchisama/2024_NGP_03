@@ -58,13 +58,10 @@ void Player::serializePlayer(char* buffer) const
     memcpy(buffer + offset, &lotate, sizeof(float)); offset += sizeof(float);
     memcpy(buffer + offset, &view, sizeof(bool)); offset += sizeof(bool);
 
-    memcpy(buffer + offset, &Occupy_box, sizeof(int)); offset += sizeof(int);
+    memcpy(buffer + offset, &Occupy_box, sizeof(short)); offset += sizeof(short);
     memcpy(buffer + offset, &speed, sizeof(float)); offset += sizeof(float);
 
-    memcpy(buffer + offset, &left_rotate, sizeof(bool)); offset += sizeof(bool);
-    memcpy(buffer + offset, &right_rotate, sizeof(bool)); offset += sizeof(bool);
-
-    memcpy(buffer + offset, &player_number, sizeof(int)); offset += sizeof(int);
+    memcpy(buffer + offset, &player_number, sizeof(byte)); offset += sizeof(byte);
     memcpy(buffer + offset, &stop, sizeof(bool)); offset += sizeof(bool);
 
     memcpy(buffer + offset, &Action, sizeof(byte)); offset += sizeof(byte);
@@ -90,13 +87,10 @@ void Player::deserializePlayer(const char* buffer)
     memcpy(&lotate, buffer + offset, sizeof(float)); offset += sizeof(float);
     memcpy(&view, buffer + offset, sizeof(bool)); offset += sizeof(bool);
 
-    memcpy(&Occupy_box, buffer + offset, sizeof(int)); offset += sizeof(int);
+    memcpy(&Occupy_box, buffer + offset, sizeof(short)); offset += sizeof(short);
     memcpy(&speed, buffer + offset, sizeof(float)); offset += sizeof(float);
 
-    memcpy(&left_rotate, buffer + offset, sizeof(bool)); offset += sizeof(bool);
-    memcpy(&right_rotate, buffer + offset, sizeof(bool)); offset += sizeof(bool);
-
-    memcpy(&player_number, buffer + offset, sizeof(int)); offset += sizeof(int);
+    memcpy(&player_number, buffer + offset, sizeof(byte)); offset += sizeof(byte);
     memcpy(&stop, buffer + offset, sizeof(bool)); offset += sizeof(bool);
 
     memcpy(&Action, buffer + offset, sizeof(byte)); offset += sizeof(byte);

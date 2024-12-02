@@ -1,5 +1,8 @@
 #pragma once
+#include "include/GL/glew.h"
 #include "include/glm/glm.hpp"
+#include "include/glm/ext.hpp"
+#include "include/glm/gtc/matrix_transform.hpp"
 #include "Public.h"
 
 class Bullet {
@@ -7,9 +10,9 @@ public:
 	glm::vec3 Bscale;
 	glm::vec3 Blocate;
 	glm::vec3 Bcolor;
+	glm::vec3 Move1;
 	glm::mat4 TR;
 
-	int x, y, z;
 	int x_dir;
 	int z_dir;
 	float speed;
@@ -17,6 +20,11 @@ public:
 	glm::vec4 Bounding_box[2];
 
 	bool View;
+
+	Bullet();
+
+	void InitBullet(byte& index, glm::vec3 locate, byte& b);
+	void Move();
 
 	void serializeBullet(char* buffer) const;
 	void deserializeBullet(const char* buffer);

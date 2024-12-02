@@ -34,7 +34,6 @@ struct Move_Packet : Parent_Packet {
     void serialize(char* buffer)const override {
         int offset = 0;
 
-        std::cout << move.x<<" " << move.y << " " << move.z << std::endl;
         memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
         memcpy(buffer + offset, &player_index, sizeof(byte)); offset += sizeof(byte);
         memcpy(buffer + offset, &move, sizeof(glm::vec3)); offset += sizeof(glm::vec3);

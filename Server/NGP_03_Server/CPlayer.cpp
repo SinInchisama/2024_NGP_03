@@ -19,6 +19,17 @@ void Player::Calculate_Move()
 	Move[2] += sin(glm::radians(lotate)) * speed * x;
 	Move[0] += sin(glm::radians(lotate)) * speed * z;			// 플레이어 위 아래 움직임 할때 쓰는 계산
 	Move[2] += cos(glm::radians(lotate)) * speed * z;
+
+    /*if (Action & KEY_A) {
+        bullet.View = true;
+        Set_UpAction(KEY_A);
+        
+        bullet.InitBullet(player_number, Plocate + Move, Action);
+    }
+
+    if (bullet.View){
+        bullet.Move();
+    }*/
 }
 
 void Player::Calculate_Camera()
@@ -76,20 +87,14 @@ void Player::serializePlayer(char* buffer) const
     memcpy(buffer + offset, &view, sizeof(bool));
     offset += sizeof(bool);
 
-    memcpy(buffer + offset, &Occupy_box, sizeof(int));
-    offset += sizeof(int);
+    memcpy(buffer + offset, &Occupy_box, sizeof(short));
+    offset += sizeof(short);
 
     memcpy(buffer + offset, &speed, sizeof(float));
     offset += sizeof(float);
 
-    memcpy(buffer + offset, &left_rotate, sizeof(bool));
-    offset += sizeof(bool);
-
-    memcpy(buffer + offset, &right_rotate, sizeof(bool));
-    offset += sizeof(bool);
-
-    memcpy(buffer + offset, &player_number, sizeof(int));
-    offset += sizeof(int);
+    memcpy(buffer + offset, &player_number, sizeof(byte));
+    offset += sizeof(byte);
 
     memcpy(buffer + offset, &stop, sizeof(bool));
     offset += sizeof(bool);
@@ -134,20 +139,14 @@ void Player::deserializePlayer(const char* buffer)
     memcpy(&view, buffer + offset, sizeof(bool));
     offset += sizeof(bool);
 
-    memcpy(&Occupy_box, buffer + offset, sizeof(int));
-    offset += sizeof(int);
+    memcpy(&Occupy_box, buffer + offset, sizeof(short));
+    offset += sizeof(short);
 
     memcpy(&speed, buffer + offset, sizeof(float));
     offset += sizeof(float);
 
-    memcpy(&left_rotate, buffer + offset, sizeof(bool));
-    offset += sizeof(bool);
-
-    memcpy(&right_rotate, buffer + offset, sizeof(bool));
-    offset += sizeof(bool);
-
-    memcpy(&player_number, buffer + offset, sizeof(int));
-    offset += sizeof(int);
+    memcpy(&player_number, buffer + offset, sizeof(byte));
+    offset += sizeof(byte);
 
     memcpy(&stop, buffer + offset, sizeof(bool));
     offset += sizeof(bool);

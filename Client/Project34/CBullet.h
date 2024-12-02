@@ -9,17 +9,17 @@ public:
 	glm::vec3 Bcolor;
 	glm::mat4 TR;
 
-	int x, y, z;
-	int x_dir;
-	int z_dir;
+	byte x_dir;
+	byte z_dir;
 	float speed;
 
 	glm::vec4 Bounding_box[2];
 
 	bool View;
-};
 
-void InitBullet(Bullet& bullet);
+	void serializeBullet(char* buffer) const;
+	void deserializeBullet(const char* buffer);
+};
 
 	//glm::vec3 bound_scale = { 0.3f / 2, (float)10 / BOX_Y, 0.3f / 2 };
 
