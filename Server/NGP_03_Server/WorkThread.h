@@ -9,9 +9,13 @@
 #include "EventQueue.h"
 #include "CBox.h"
 #include "CTimer.h"
+#include "CItem.h"
+#include "FunctionalPackets.h"
+#include "queue"
 
 DWORD WINAPI WorkThread(LPVOID arg);
 extern Box All_Box[20][20];
+
 
 // 이전 프레임의 시간
 //std::chrono::high_resolution_clock::time_point previousTime;
