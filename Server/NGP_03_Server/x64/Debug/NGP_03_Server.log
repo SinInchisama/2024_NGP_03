@@ -1,38 +1,33 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: 중간 디렉터리(x64\Debug\)에 다른 프로젝트(Project34.vcxproj)에서 공유하는 파일이 포함되어 있습니다.  이로 인해 잘못된 정리 및 다시 빌드 동작이 수행될 수 있습니다.
-<<<<<<< HEAD
   CBox.cpp
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(29,24): error C2039: 'vector': 'std'의 멤버가 아닙니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(29,24): error C2061: 구문 오류: 식별자 'vector'
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,18): error C2065: 'Parent_Packet': 선언되지 않은 식별자입니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2923: 'std::unique_ptr': 'Parent_Packet'은(는) '_Ty' 매개 변수에 대한 올바른 템플릿 형식 인수가 아닙니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2976: 'std::unique_ptr': 템플릿 인수가 너무 적습니다.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\memory(3434,56): warning C4244: '인수': 'short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 'CBox.cpp'을(를) 컴파일하는 중)
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\memory(3434,56):
+  템플릿 인스턴스화 컨텍스트(가장 오래된 인스턴스화 컨텍스트)가
+  	C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\CBox.cpp(35,21):
+  	컴파일되는 함수 템플릿 인스턴스화 'std::unique_ptr<Change_floor,std::default_delete<Change_floor>> std::make_unique<Change_floor,short&,glm::vec3&,0>(short &,glm::vec3 &)'에 대한 참조를 확인하세요.
+  
   CItem.cpp
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.cpp(59,5): error C2562: 'Create_Item': 'void' 함수에서 값을 반환하고 있습니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.cpp(99,24): error C2672: 'std::make_unique': 일치하는 오버로드된 함수가 없습니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.cpp(101,12): error C3536: 'packet': 초기화되기 전에 사용할 수 없습니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.cpp(101,5): error C2440: 'return': 'int'에서 'std::unique_ptr<Parent_Packet,std::default_delete<Parent_Packet>>'(으)로 변환할 수 없습니다.
-  CTimer.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\CItem.h(48,12): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 'CItem.cpp'을(를) 컴파일하는 중)
+  
   FunctionalPackets.cpp
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(29,24): error C2039: 'vector': 'std'의 멤버가 아닙니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(29,24): error C2061: 구문 오류: 식별자 'vector'
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,18): error C2065: 'Parent_Packet': 선언되지 않은 식별자입니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2923: 'std::unique_ptr': 'Parent_Packet'은(는) '_Ty' 매개 변수에 대한 올바른 템플릿 형식 인수가 아닙니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2976: 'std::unique_ptr': 템플릿 인수가 너무 적습니다.
-  main.cpp
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,18): error C2065: 'Parent_Packet': 선언되지 않은 식별자입니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2923: 'std::unique_ptr': 'Parent_Packet'은(는) '_Ty' 매개 변수에 대한 올바른 템플릿 형식 인수가 아닙니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2976: 'std::unique_ptr': 템플릿 인수가 너무 적습니다.
   RecvThread.cpp
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,18): error C2065: 'Parent_Packet': 선언되지 않은 식별자입니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2923: 'std::unique_ptr': 'Parent_Packet'은(는) '_Ty' 매개 변수에 대한 올바른 템플릿 형식 인수가 아닙니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2976: 'std::unique_ptr': 템플릿 인수가 너무 적습니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\CItem.h(48,12): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 'RecvThread.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\RecvThread.cpp(13,6): warning C4101: 'len' :참조되지 않은 지역 변수입니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\RecvThread.cpp(12,7): warning C4101: 'buf' :참조되지 않은 지역 변수입니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\RecvThread.cpp(7,6): warning C4101: 'retval' :참조되지 않은 지역 변수입니다.
   WorkThread.cpp
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,18): error C2065: 'Parent_Packet': 선언되지 않은 식별자입니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2923: 'std::unique_ptr': 'Parent_Packet'은(는) '_Ty' 매개 변수에 대한 올바른 템플릿 형식 인수가 아닙니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\CItem.h(47,7): error C2976: 'std::unique_ptr': 템플릿 인수가 너무 적습니다.
-C:\Users\skyin\Desktop\University assignments and lecture materials\2024_NGP_03\Server\NGP_03_Server\WorkThread.cpp(71,18): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\CItem.h(48,12): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 'WorkThread.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\WorkThread.cpp(84,18): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  main.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\CItem.h(48,12): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
+  
   코드를 생성하고 있습니다...
-=======
-  CBullet.cpp
+  LINK : C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\x64\Debug\NGP_03_Server.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
   NGP_03_Server.vcxproj -> C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\x64\Debug\NGP_03_Server.exe
->>>>>>> 최정민

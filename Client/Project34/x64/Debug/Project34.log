@@ -1,5 +1,2 @@
-﻿  FunctionalPackets.cpp
-C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
-  (소스 파일 'FunctionalPackets.cpp'을(를) 컴파일하는 중)
-  
+﻿  LINK : C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\x64\Debug\Project34.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
   Project34.vcxproj -> C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\x64\Debug\Project34.exe
