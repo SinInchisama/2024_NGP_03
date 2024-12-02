@@ -66,7 +66,7 @@ void Play_State::Update()
 		{
 			char buffer[128];
 			size_t len = recv(sock, buffer, sizeof(buffer), 0);
-			process_received_data(buffer, len,&player,All_Box);
+			process_received_data(buffer, len,&player,All_Box,bullet);
 			//handlePacket(packet)
 		}
 	
@@ -96,7 +96,7 @@ void Play_State::Draw()
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-	view = glm::lookAt(player.Get_Camerapos(), player.Get_Camerapos() + player.Get_Cameradirection(), cameraUp);
+	view = glm::lookAt(player.Get_Camerapos (), player.Get_Camerapos() + player.Get_Cameradirection(), cameraUp);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
 	glUseProgram(triangleShaderProgramID);
@@ -269,7 +269,7 @@ void Play_State::KeyUp(int key)
 {
 	switch (key) {
 	case 'a':
-		player.Set_DownAction(KEY_A);
+		player.Set_UpAction(KEY_A);
 	}
 }
 
@@ -277,7 +277,7 @@ void Play_State::KeyDown(int key)
 {
 	switch (key) {
 	case 'a':
-		player.Set_UpAction(KEY_A);
+		player.Set_DownAction(KEY_A);
 	}
 }
 

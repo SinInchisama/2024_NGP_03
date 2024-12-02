@@ -32,8 +32,6 @@ private:
 
 	byte Action = 0;
 
-	//Bullet bullet;
-
 	int timer;
 
 public:

@@ -29,6 +29,22 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 		// 행렬 변환(플레이어, 총알 움직임)
 		GameManger::Instance->players[0]->Calculate_Move();
+
+		if (GameManger::Instance->players[0]->Get_Action() & KEY_A) {
+			if (!GameManger::Instance->bullets[0]->View) {
+				GameManger::Instance->bullets[0]->View = true;
+				GameManger::Instance->players[0]->Set_UpAction(KEY_A);
+
+				GameManger::Instance->bullets[0]->InitBullet(0,
+					GameManger::Instance->players[0]->Get_Plocate() + GameManger::Instance->players[0]->Get_Move(), GameManger::Instance->players[0]->Get_Action());
+				packetQueue.push(std::make_unique<Create_bullet>(1, true));
+			}
+		}
+		
+	if (GameManger::Instance->bullets[0]->View){
+		GameManger::Instance->bullets[0]->Move();
+		packetQueue.push(std::make_unique<Move_bullet>(1, GameManger::Instance->bullets[0]->Move1));
+	}
 		
 
 		//char pbuffer[sizeof(Player)];

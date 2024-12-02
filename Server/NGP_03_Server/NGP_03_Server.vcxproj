@@ -151,7 +151,6 @@
     <ClInclude Include="Public.h" />
     <ClInclude Include="RecvThead.h" />
     <ClInclude Include="WorkThread.h" />
-    <ClInclude Include="헤더.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,7 +5,6 @@
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Public.h"
 #include <bitset>
-#include "CBullet.h"
 
 class Player
 {
@@ -31,8 +30,6 @@ private:
 	bool stop; //시계 효과를 받았을 경우 true
 
 	byte Action = 0;
-
-	Bullet bullet;
 
 	int timer;
 
