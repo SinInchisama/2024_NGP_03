@@ -78,3 +78,30 @@ struct Change_floor : Parent_Packet {
         memcpy(&color, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     }
 };
+
+struct Update_timer : Parent_Packet {
+    short timer;
+
+    Update_timer() : timer(0) {
+        pakcet_type = 3;
+    }
+
+    Update_timer(const short G_timer)
+        : timer(G_timer) {
+        pakcet_type = 3;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &timer, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&timer, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};

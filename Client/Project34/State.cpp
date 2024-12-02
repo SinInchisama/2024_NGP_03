@@ -271,14 +271,16 @@ void Play_State::SKeyUp(int key) {
 void Play_State::KeyUp(int key)
 {
 	switch (key) {
-
+	case 'a':
+		break;
 	}
 }
 
 void Play_State::KeyDown(int key)
 {
 	switch (key) {
-
+	case 'a':
+		break;
 	}
 }
 

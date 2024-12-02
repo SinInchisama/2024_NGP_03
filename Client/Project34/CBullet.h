@@ -3,20 +3,54 @@
 #include "Public.h"
 
 class Bullet {
-public:
+private:
 	glm::vec3 Bscale;
 	glm::vec3 Blocate;
 	glm::vec3 Bcolor;
 	glm::mat4 TR;
+
+	glm::vec3 Color;
+	glm::vec3 Move;
 
 	int x, y, z;
 	int x_dir;
 	int z_dir;
 	float speed;
 
+	float lotate;
+
+	int player_number; // 플레이어 고유 숫자
+
 	glm::vec4 Bounding_box[2];
 
 	bool View;
+
+	byte Action = 0;
+
+public:
+	Bullet(int i, glm::vec3 initialLocation) {
+		Bcolor = { 1.0f, 1.0f * i, 0.0f };
+		Color = { 0.5f, 1.0f * i, 0.3f * i };
+		Blocate = initialLocation;
+		Blocate[1] = 0.0f; // Y 좌표 설정
+		Bscale = { 0.2f, 0.2f, 0.2f };
+		lotate = 180.0f * i;
+		speed = 0.05f;
+		player_number = i;
+		Move = { 0.0f, 0.0f, 0.0f };
+	}
+
+	glm::vec3 Get_Pscale() { return Bscale; }
+	glm::vec3 Get_Plocate() { return Blocate; }
+	glm::vec3 Get_Move() { return Move; }
+	glm::vec3 Get_Color() { return Bcolor; }
+	GLfloat Get_R() { return Color[0]; }
+	GLfloat Get_G() { return Color[1]; }
+	GLfloat Get_B() { return Color[2]; }
+	float Get_Lotate() { return lotate; }
+	byte Get_Action() { return Action; }
+
+	void Calculate_Move();
 };
 
 void InitBullet(Bullet& bullet);
