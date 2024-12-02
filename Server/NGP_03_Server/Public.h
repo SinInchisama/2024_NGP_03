@@ -7,6 +7,7 @@
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Common.h"
 #include <Windows.h>
+#include "GameMaanger.h"
 
 #define _CRT_SECURE_NO_WARNINGS // 구형 C 함수 사용 시 경고 끄기
 

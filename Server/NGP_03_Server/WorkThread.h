@@ -11,7 +11,6 @@
 #include "CTimer.h"
 
 DWORD WINAPI WorkThread(LPVOID arg);
-extern Player players[2];
 extern Box All_Box[20][20];
 
 // 이전 프레임의 시간

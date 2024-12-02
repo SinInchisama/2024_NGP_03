@@ -131,6 +131,7 @@
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="FunctionalPackets.cpp" />
+    <ClCompile Include="GameMaanger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Public.cpp" />
     <ClCompile Include="RecvThread.cpp" />
@@ -145,9 +146,11 @@
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="EventQueue.h" />
     <ClInclude Include="FunctionalPackets.h" />
+    <ClInclude Include="GameMaanger.h" />
     <ClInclude Include="Public.h" />
     <ClInclude Include="RecvThead.h" />
     <ClInclude Include="WorkThread.h" />
+    <ClInclude Include="헤더.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
