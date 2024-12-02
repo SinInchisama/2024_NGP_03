@@ -58,6 +58,8 @@ public:
 		Rotate = glm::rotate(Rotate, glm::radians(lotate), glm::vec3(0.0, 1.0, 0.0));
 		Scale = glm::scale(Scale, Pscale); //		플레이어
 		TR = Rotate * Scale * TR1;
+
+		Action = 0;
 	}
 
 	glm::vec3 Get_Pscale() {return Pscale;}

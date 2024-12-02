@@ -16,6 +16,8 @@ int main(int argc, char* argv[])
 	EventQueue eventqueue;  // 전역 변수로 eventqueue 객체 생성
 	EventQueue::currentInstance = &eventqueue;
 
+	GameManger gamemanager;
+
 	// 임계 영역 초기화
 	InitializeCriticalSection(&cs);
 

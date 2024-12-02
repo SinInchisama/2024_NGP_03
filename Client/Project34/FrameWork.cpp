@@ -76,12 +76,12 @@ FrameWork::FrameWork()
 	if (retval == SOCKET_ERROR) err_quit("connect()");
 
 	// 데이터 통신에 사용할 변수
-	char buf[BUFSIZE];
+	/*char buf[BUFSIZE];
 	int len;
 	char* s = (char*)"192.000.00.01";
 	len = (int)strlen(s);
 	strncpy(buf, s, len);
-	send(sock, buf, len + 1, 0);
+	send(sock, buf, len + 1, 0);*/
 
 	if (glewInit() != GLEW_OK) {
 		std::cerr << "Failed to initialize GLEW" << std::endl;

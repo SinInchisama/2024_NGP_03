@@ -1,6 +1,5 @@
 #include "RecvThead.h"
-
-extern char cbuffer;
+#include "WorkThread.h"
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI RecvThread(LPVOID arg)
@@ -33,9 +32,12 @@ DWORD WINAPI RecvThread(LPVOID arg)
 
 
 	while (1) {
+		char cbuffer;
 		EnterCriticalSection(&cs);
-		recv(client_sock[i], &cbuffer, sizeof(cbuffer), 0);
-		std::cout << cbuffer << std::endl;
+		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0); 
+		if(cbuffer & KEY_RIGHT)
+			std::cout << (int)cbuffer << std::endl;
+		GameManger::Instance->players[0]->Set_Action(cbuffer);
 		LeaveCriticalSection(&cs);
 
 		// 데이터 받기

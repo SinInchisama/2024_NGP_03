@@ -1,12 +1,8 @@
 #include "WorkThread.h"
 
-Player players[2] = { {0, {0.0f, 0.0f, 0.0f}},{0, {0.0f, 0.0f, 0.0f}} };
 Box All_Box[20][20];
 Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
-
-char cbuffer = 0;
-
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -20,6 +16,14 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	timer.resetTimer();
 
 	while (true) {
+		//char cbuffer;
+		////EnterCriticalSection(&cs);
+		//recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
+		//if (cbuffer & KEY_RIGHT)
+		//	std::cout << (int)cbuffer << std::endl;
+		//GameManger::Instance->players[0]->Set_Action(cbuffer);
+		//recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
+		//
 		//std::cout << (int)cbuffer << std::endl;
 		Timer_Check();
 		// 임계 영역 진입
@@ -29,11 +33,9 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 임계 영역 탈출
 
 		// 행렬 변환(플레이어, 총알 움직임)
+		GameManger::Instance->players[0]->Calculate_Move();
 		
-		std::cout <<"WorkThread" << std::addressof(cbuffer) << std::endl;
-		
-		players[0].Set_Action(cbuffer);
-		players[0].Calculate_Move();
+
 		//char pbuffer[sizeof(Player)];
 		//players[0].serializePlayer(pbuffer);
 		//int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
@@ -41,8 +43,8 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 충돌 체크
 		glm::mat4 TR1 = glm::mat4(1.0f);
 		glm::mat4 Tx = glm::mat4(1.0f);
-		Tx = glm::translate(Tx, players[0].Get_Plocate() + players[0].Get_Move());
-		TR1 = Tx * players[0].Get_TR();
+		Tx = glm::translate(Tx, GameManger::Instance->players[0]->Get_Plocate() + GameManger::Instance->players[0]->Get_Move());
+		TR1 = Tx * GameManger::Instance->players[0]->Get_TR();
 
 		glm::vec4 a1 = TR1 * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);
 		glm::vec4 a2 = TR1* glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
@@ -56,7 +58,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
 					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
 					(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
-					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], players->Get_Color(),i*20 + j));
+					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], GameManger::Instance->players[0]->Get_Color(),i*20 + j));
 				}
 			}
 		}
@@ -64,7 +66,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		// 전송할 패킷리스트 개수 전송(고정크기)
 
 		// 클라이언트로 큐의 크기 전송
-		packetQueue.push(std::make_unique<Move_Packet>(1, players[0].Get_Move()));
+		packetQueue.push(std::make_unique<Move_Packet>(1, GameManger::Instance->players[0]->Get_Move()));
 
 		char size_buffer[sizeof(int)];
 		int queue_size = packetQueue.size();
@@ -87,8 +89,8 @@ DWORD WINAPI WorkThread(LPVOID arg)
 void Reset_Object()
 {
 	Boxinit(20, 20, 20);
-	players[0].Set_Plocate(glm::vec3(0,0,0));
-	All_Box[0][0].Color= players[0].Get_Color();
+	GameManger::Instance->players[0]->Set_Plocate(glm::vec3(0,0,0));
+	All_Box[0][0].Color= GameManger::Instance->players[0]->Get_Color();
 }
 
 void Boxinit(int x, int y, int z)
@@ -129,7 +131,7 @@ void Boxinit(int x, int y, int z)
 void Send_Object()
 {
 	char pbuffer[sizeof(Player)];
-	players[0].serializePlayer(pbuffer);
+	GameManger::Instance->players[0]->serializePlayer(pbuffer);
 	int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
 
 	char bbuffer[sizeof(Box)];
