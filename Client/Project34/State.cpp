@@ -54,9 +54,9 @@ void Play_State::Update()
 	//}
 	
 	char keyinput = player.Get_Action();
-	if (keyinput != 0) {
-		send(sock, &keyinput, sizeof(char), 0);
-	}
+	
+	send(sock, &keyinput, sizeof(char), 0);
+
 
 	std::cout << keyinput << std::endl;
 	//Parent_pakcet packet;

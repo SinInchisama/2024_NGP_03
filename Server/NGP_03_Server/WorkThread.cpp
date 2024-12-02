@@ -16,14 +16,12 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	timer.resetTimer();
 
 	while (true) {
-		//char cbuffer;
-		////EnterCriticalSection(&cs);
-		//recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
-		//if (cbuffer & KEY_RIGHT)
-		//	std::cout << (int)cbuffer << std::endl;
-		//GameManger::Instance->players[0]->Set_Action(cbuffer);
-		//recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
-		//
+		char cbuffer;
+		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
+		if (cbuffer & KEY_RIGHT)
+			std::cout << (int)cbuffer << std::endl;
+		GameManger::Instance->players[0]->Set_Action(cbuffer);
+	
 		//std::cout << (int)cbuffer << std::endl;
 		Timer_Check();
 		// 임계 영역 진입
