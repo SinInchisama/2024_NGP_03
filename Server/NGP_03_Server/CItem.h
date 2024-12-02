@@ -2,6 +2,7 @@
 #include "include/glm/glm.hpp"
 #include "Public.h"
 #include "FunctionalPackets.h"
+#include <vector>
 
 class Item {
 public:
@@ -41,6 +42,21 @@ public:
 		ILocate[1] = 0.0f;
 		ILocate[2] = zlocate - zScale * z;
 	}
+
+	static std::unique_ptr<Parent_Packet> Create_Item(std::vector<Item>& item)
+	{
+		int size = item.size();
+
+		int randomType = 1;
+		glm::vec3 randomLocation(static_cast<float>(rand() % 100 - 50), 0.0f, static_cast<float>(rand() % 100 - 50));
+
+		Item newItem(randomType, randomLocation);
+
+		item.push_back(newItem);
+
+		return std::make_unique<Create_item>(size, newItem.IColor, newItem.ILocate);
+	};
+	//std::unique_ptr<Parent_Packet> Delete_item(short index);
 };
 
 //void InitItem(Item& item)

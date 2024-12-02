@@ -18,7 +18,7 @@ void Bullet::InitBullet(byte index, glm::vec3 locate,byte b)
 	Bounding_box[0] = { (Blocate - bound_scale), 1.f };
 	Bounding_box[1] = { (Blocate + bound_scale), 1.f };
 
-	Move1 = { 0.0f, 0.0f, 0.0f };
+	Move1 = locate;
 
 	if (b & KEY_UP) {
 		z_dir -= 1;

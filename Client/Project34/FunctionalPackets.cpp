@@ -57,16 +57,16 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
            std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
                 << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
         }
-        else if(packet_type == 2) {
-            Change_floor packet;
-            packet.deserializePlayer(buffer);
-            All_Box[packet.box_index / 20][packet.box_index % 20].Color = packet.color;
-          //  std::cerr << "Unknown packet type: " << static_cast<int>(packet_type) << "\n";
-        }
-        else if (packet_type == 3) {
+        else if (packet_type == 2) {
             Create_bullet packet;
             packet.deserializePlayer(buffer);
             bullet[packet.player_index].View = packet.b;
+        }
+        else if (packet_type == 6) {
+            Change_floor packet;
+            packet.deserializePlayer(buffer);
+            All_Box[packet.box_index / 20][packet.box_index % 20].Color = packet.color;
+            //  std::cerr << "Unknown packet type: " << static_cast<int>(packet_type) << "\n";
         }
         else if (packet_type == 7) {
             Move_bullet packet;

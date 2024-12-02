@@ -1,11 +1,6 @@
 #include "CBullet.h"
 #include "State.h"
 
-void Bullet::Calculate_Move()
-{
-	
-}
-
 void Bullet::serializeBullet(char* buffer) const
 {
 	int offset = 0;
