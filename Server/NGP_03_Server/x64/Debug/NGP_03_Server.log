@@ -7,7 +7,9 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.3351
   	C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\CBox.cpp(35,21):
   	컴파일되는 함수 템플릿 인스턴스화 'std::unique_ptr<Change_floor,std::default_delete<Change_floor>> std::make_unique<Change_floor,short&,glm::vec3&,0>(short &,glm::vec3 &)'에 대한 참조를 확인하세요.
   
+  CBullet.cpp
   FunctionalPackets.cpp
+  GameMaanger.cpp
   RecvThread.cpp
 C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\RecvThread.cpp(13,6): warning C4101: 'len' :참조되지 않은 지역 변수입니다.
 C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Server\NGP_03_Server\RecvThread.cpp(12,7): warning C4101: 'buf' :참조되지 않은 지역 변수입니다.

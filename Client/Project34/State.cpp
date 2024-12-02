@@ -137,6 +137,20 @@ void Play_State::Draw()
 		}
 	}
 
+	if (bullet[0].View) {
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Tx = glm::mat4(1.0f);
+
+		Tx = glm::mat4(1.0f);
+
+		Tx = glm::translate(Tx, bullet[0].Blocate);
+		TR1 = Tx * bullet[0].TR;
+
+		glUniform3f(modelLocation1, bullet[0].Bcolor[0], bullet[0].Bcolor[1], bullet[0].Bcolor[2]);
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR1)); //--- modelTransform 변수에 변환 값 적용하기
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+	}
+	
 	//for (int i = 0; i < 12; i++) {
 	//	if (item[i].View) {
 	//		glUniform3f(modelLocation1, item[i].Icolor[0], item[i].Icolor[1], item[i].Icolor[2]);

@@ -32,6 +32,11 @@ public:
 		Bounding_box{ glm::vec4(0.0f), glm::vec4(0.0f) }, // 기본 Bounding Box
 		View(false)                // 기본적으로 보이지 않음
 	{
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Scale = glm::mat4(1.0f);
+
+		Scale = glm::scale(Scale, Bscale); //		플레이어
+		TR = Scale * TR1;
 	}
 
 	void InitBullet(byte index, glm::vec3 locate, byte b);

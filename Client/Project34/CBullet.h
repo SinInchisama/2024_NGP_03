@@ -18,7 +18,7 @@ public:
 	bool View;
 
 	Bullet()
-		: Bscale(0.3f, 0.3f, 0.3f),   // 기본 크기 1
+		: Bscale(0.1f, 0.1f, 0.1f),   // 기본 크기 1
 		Blocate(0.0f, 0.0f, 0.0f), // 기본 위치 (0, 0, 0)
 		Bcolor(0.7f, 0.0f, 0.7f),  // 기본 색상 흰색
 		TR(1.0f),                  // 기본 변환 행렬 (단위 행렬)
@@ -28,6 +28,13 @@ public:
 		Bounding_box{ glm::vec4(0.0f), glm::vec4(0.0f) }, // 기본 Bounding Box
 		View(false)                // 기본적으로 보이지 않음
 	{
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Scale = glm::mat4(1.0f);
+		glm::mat4 Rotate = glm::mat4(1.0f);
+
+		Rotate = glm::rotate(Rotate, glm::radians(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		Scale = glm::scale(Scale, Bscale); //		플레이어
+		TR = Rotate * Scale * TR1;
 	}
 
 	void serializeBullet(char* buffer) const;

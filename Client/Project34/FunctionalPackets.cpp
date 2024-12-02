@@ -71,6 +71,7 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
         else if (packet_type == 7) {
             Move_bullet packet;
             packet.deserializePlayer(buffer);
+            bullet[packet.player_index].Blocate = packet.position;
             std::cout << packet.position.x << "   " << packet.position.y << "   " << packet.position.z << "   " << std::endl;
         }
     }

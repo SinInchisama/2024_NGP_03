@@ -2,7 +2,7 @@
 
 void Bullet::InitBullet(byte index, glm::vec3 locate,byte b)
 {
-	glm::vec3 bound_scale = { 0.3f / 2, 0.3f / 2, 0.3f / 2 };
+	glm::vec3 bound_scale = { 0.1f / 2, 0.1f / 2, 0.1f / 2 };
 
 	Move1 = locate;
 
