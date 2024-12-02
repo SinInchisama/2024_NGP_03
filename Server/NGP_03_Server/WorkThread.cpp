@@ -3,6 +3,7 @@
 Box All_Box[20][20];
 Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
+std::vector<Item> items;	// 아이템 리스트
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -139,6 +140,29 @@ void Boxinit(int x, int y, int z)
 	}
 }
 
+void Create_Item(std::vector<Item>& items, int gridSize)
+{
+	// 아이템 타입 (0 ~ 2 랜덤)
+	// int randomType = rand() % 3;
+	int randomType = 1;
+
+	// 아이템 위치 (랜덤 좌표 생성)
+	float x = static_cast<float>((rand() % gridSize) - gridSize / 2);
+	float y = 0.0f; // 고정 Y 좌표
+	float z = static_cast<float>((rand() % gridSize) - gridSize / 2);
+	glm::vec3 randomLocation = glm::vec3(x, y, z);
+
+	// 새로운 아이템 생성
+	Item newItem(randomType, randomLocation);
+
+	// 리스트에 추가
+	items.push_back(newItem);
+
+	// 확인용
+	std::cout << "Item created: Type=" << randomType << ", Location=("
+		<< x << ", " << y << ", " << z << ")" << std::endl;
+}
+
 void Send_Object()
 {
 	char pbuffer[sizeof(Player)];
@@ -152,6 +176,12 @@ void Send_Object()
 			send(client_sock[1], bbuffer, sizeof(bbuffer), 0);
 		}
 	}
+
+	char ibuffer[sizeof(Item)];
+	for (const auto& item : items) {
+		item.serializeItem(ibuffer);
+		send(client_sock[1], ibuffer, sizeof(ibuffer), 0);
+	}
 }
 
 void Timer_Check()
@@ -163,6 +193,7 @@ void Timer_Check()
 	if ((currentTime - timer.getStartTime()) % 5)			// 아이템 생성 이벤트
 	{
 		// 아이템 생성
+		Create_Item(items, 20);
 	}
 
 	if (timer.isFinished())

@@ -1,22 +1,30 @@
 #pragma once
 #include "include/glm/glm.hpp"
 #include "Public.h"
+#include "FunctionalPackets.h"
 
 class Item {
 public:
 	int Item_type;	// 비교 연산, 최초 전달 정보
 
-	glm::vec3 Iscale;
-	glm::vec3 Ilocate;	//최초 전달 정보
-	glm::vec3 Icolor;	// 최초 전달 정보
+	glm::vec3 IScale;
+	glm::vec3 ILocate;	//최초 전달 정보
+	glm::vec3 IColor;	// 최초 전달 정보
 	glm::mat4 TR;		// 최초 전달 정보
 
 	glm::vec4 Bounding_box[2];	// 최초 전달 정보
 
 	bool View;	// boolean check, 덮어쓰기 연산 (437 ~ 445)
 
+	GLfloat Get_R() { return IColor[0]; }
+	GLfloat Get_G() { return IColor[1]; }
+	GLfloat Get_B() { return IColor[2]; }
+
 	// item_collide 함수에서 item을 인자로 받는다. 확인 필요.
 	// item_zero, item_one 함수에서 item을 인자로 받는다. 확인 필요.
+
+	// Create Item을 위한
+	Item(int type, const glm::vec3& location);
 
 	void serializeItem(char* buffer) const;
 	void deserializeItem(const char* buffer);
@@ -29,9 +37,9 @@ public:
 		float xlocate = 5 - (xScale / 2);
 		float zlocate = 5 - (zScale / 2);
 
-		Ilocate[0] = xlocate - xScale * x;
-		Ilocate[1] = 0.0f;
-		Ilocate[2] = zlocate - zScale * z;
+		ILocate[0] = xlocate - xScale * x;
+		ILocate[1] = 0.0f;
+		ILocate[2] = zlocate - zScale * z;
 	}
 };
 
