@@ -264,3 +264,33 @@ struct Update_timer : Parent_Packet {
         memcpy(&timer, buffer + offset, sizeof(short)); offset += sizeof(short);
     }
 };
+
+struct Update_score : Parent_Packet {
+    short P1_score;
+    short P2_score;
+
+    Update_score() : P1_score(0), P2_score(0) {
+        pakcet_type = 6;
+    }
+
+    Update_score(const short P1_S, const short P2_S)
+        : P1_score(P1_S), P2_score(P2_S) {
+        pakcet_type = 6;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &P1_score, sizeof(short)); offset += sizeof(short);
+        memcpy(buffer + offset, &P2_score, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&P1_score, buffer + offset, sizeof(short)); offset += sizeof(short);
+        memcpy(&P2_score, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
