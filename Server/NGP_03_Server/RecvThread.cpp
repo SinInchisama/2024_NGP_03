@@ -32,13 +32,6 @@ DWORD WINAPI RecvThread(LPVOID arg)
 
 
 	while (1) {
-		char cbuffer;
-		EnterCriticalSection(&cs);
-		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0); 
-		if(cbuffer & KEY_RIGHT)
-			std::cout << (int)cbuffer << std::endl;
-		GameManger::Instance->players[0]->Set_Action(cbuffer);
-		LeaveCriticalSection(&cs);
 
 		// 데이터 받기
 		// 클라이언트로부터 PlayerInput 구조체 정보를 받음. 
