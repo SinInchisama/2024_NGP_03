@@ -9,7 +9,7 @@ public:
 
 	glm::vec3 IScale;
 	glm::vec3 ILocate;	//최초 전달 정보
-	glm::vec3 IColor = {0.0f, 1.0f, 0.0f};	// 최초 전달 정보
+	glm::vec3 IColor;	// 최초 전달 정보
 	glm::mat4 TR;		// 최초 전달 정보
 
 	glm::vec4 Bounding_box[2];	// 최초 전달 정보
@@ -22,6 +22,9 @@ public:
 
 	// item_collide 함수에서 item을 인자로 받는다. 확인 필요.
 	// item_zero, item_one 함수에서 item을 인자로 받는다. 확인 필요.
+
+	// Create Item을 위한
+	Item(int type, const glm::vec3& location);
 
 	void serializeItem(char* buffer) const;
 	void deserializeItem(const char* buffer);

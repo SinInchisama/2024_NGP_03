@@ -1,4 +1,32 @@
 #include "CItem.h"
+#include <cstdlib>
+#include <ctime>
+
+// 아이템 생성
+Item::Item(int type, const glm::vec3& location)
+{
+    Item_type = type;
+    ILocate = location;
+
+    // type은 아이템 효과가 여러개라면 사용
+    if (Item_type == 1) {
+        IColor = { 0.0f, 1.0f, 0.0f };
+    }
+
+    // 기본 Transform 설정
+    IScale = { 0.5f, 0.5f, 0.5f };
+    glm::mat4 Scale = glm::scale(glm::mat4(1.0f), IScale);
+    glm::mat4 Translate = glm::translate(glm::mat4(1.0f), ILocate);
+    TR = Translate * Scale;
+
+    // 바운딩 박스 설정
+    glm::vec3 boundScale = IScale * 0.5f;
+    Bounding_box[0] = glm::vec4(ILocate - boundScale, 1.0f);
+    Bounding_box[1] = glm::vec4(ILocate + boundScale, 1.0f);
+
+    // 뷰 상태 초기화
+    View = true;
+}
 
 void Item::serializeItem(char* buffer) const
 {
