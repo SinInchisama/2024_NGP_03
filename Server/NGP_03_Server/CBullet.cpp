@@ -1,5 +1,50 @@
 #include "CBullet.h"
-#include "State.h"
+
+void Bullet::InitBullet(byte index, glm::vec3 locate,byte b)
+{
+	glm::vec3 bound_scale = { 0.1f / 2, 0.1f / 2, 0.1f / 2 };
+
+	Move1 = locate;
+
+	glm::mat4 TR1 = glm::mat4(1.0f);
+	glm::mat4 Tx = glm::mat4(1.0f);
+	glm::mat4 Scale = glm::mat4(1.0f);
+
+	Scale = glm::scale(Scale, glm::vec3(Bscale));
+	Tx = glm::translate(Tx, Move1);
+
+	TR1 = Tx * Scale * TR;
+
+	Bounding_box[0] = { (Blocate - bound_scale), 1.f };
+	Bounding_box[1] = { (Blocate + bound_scale), 1.f };
+
+	Move1 = locate;
+
+	if (b & KEY_UP) {
+		z_dir -= 1;
+	}
+	if (b & KEY_DOWN) {
+		z_dir += 1;
+	}
+	if (b & KEY_LEFT) {
+		x_dir -= 1;
+	}
+	if (b & KEY_RIGHT) {
+		x_dir += 1;
+	}
+	if (!x_dir && !z_dir)
+		z_dir -= 1;
+
+	View = true;
+}
+
+void Bullet::Move()
+{
+	Move1[0] += cos(glm::radians(0.0f)) * speed*x_dir;			// 플레이어 좌우 움직임 할때 쓰는 계산
+	Move1[2] += sin(glm::radians(0.0f)) * speed * x_dir;
+	Move1[0] += sin(glm::radians(0.0f)) * speed * z_dir;			// 플레이어 위 아래 움직임 할때 쓰는 계산
+	Move1[2] += cos(glm::radians(0.0f)) * speed * z_dir;
+}
 
 void Bullet::serializeBullet(char* buffer) const
 {

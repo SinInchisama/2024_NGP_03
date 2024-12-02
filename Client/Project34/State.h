@@ -4,6 +4,7 @@
 #include "Public.h"
 #include "CPlayer.h"
 #include "CBox.h"
+#include "CBullet.h"
 #include "include/GL/glut.h"
 #include "Texture.h"
 #include "FrameWork.h"
@@ -31,6 +32,8 @@ public:
 	Player player = { 0, {0.0f, 0.0f, 0.0f} };
 
 	Box All_Box[20][20];
+
+	Bullet bullet[2];
 public:
 	Play_State();
 

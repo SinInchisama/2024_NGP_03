@@ -1,30 +1,30 @@
-#include "CItem.h"
+О╩©#include "CItem.h"
 #include <cstdlib>
 #include <ctime>
 
-// ╬фюлеш ╩Щ╪╨
+// Л∙└Л²╢М┘° Л┐²Л└╠
 Item::Item(int type, const glm::vec3& location)
 {
     Item_type = type;
     ILocate = location;
 
-    // typeю╨ ╬фюлеш х©╟З╟║ ©╘╥╞╟Ё╤С╦И ╩Г©К
+    // typeО©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ х©О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫
     if (Item_type == 1) {
         IColor = { 0.0f, 1.0f, 0.0f };
     }
 
-    // ╠Б╨╩ Transform ╪Ёа╓
+    // О©╫Б╨╩ Transform О©╫О©╫О©╫О©╫
     IScale = { 0.5f, 0.5f, 0.5f };
     glm::mat4 Scale = glm::scale(glm::mat4(1.0f), IScale);
     glm::mat4 Translate = glm::translate(glm::mat4(1.0f), ILocate);
     TR = Translate * Scale;
 
-    // ╧ы©Н╣Ы ╧з╫╨ ╪Ёа╓
+    // О©╫ы©О©╫О©╫ О©╫з╫О©╫ О©╫О©╫О©╫О©╫
     glm::vec3 boundScale = IScale * 0.5f;
     Bounding_box[0] = glm::vec4(ILocate - boundScale, 1.0f);
     Bounding_box[1] = glm::vec4(ILocate + boundScale, 1.0f);
 
-    // ╨Д ╩Себ цй╠Бх╜
+    // О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫й╠О©╫х╜
     View = true;
 }
 
@@ -85,8 +85,11 @@ void Item::deserializeItem(const char* buffer)
     // Deserialize glm::vec4 Bounding_box (2 vec4s)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
+<<<<<<< HEAD
 
 std::unique_ptr<Parent_Packet> Item::Create_item(short index, glm::vec3 color, glm::vec3 locate)
 {
     // return std::make_unique<Create_item>(index, color, locate);
 }
+=======
+>>>>>>> Л╣°Л═∙К╞╪

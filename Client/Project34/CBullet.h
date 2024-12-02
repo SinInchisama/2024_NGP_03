@@ -3,57 +3,43 @@
 #include "Public.h"
 
 class Bullet {
-private:
+public:
 	glm::vec3 Bscale;
 	glm::vec3 Blocate;
 	glm::vec3 Bcolor;
 	glm::mat4 TR;
 
-	glm::vec3 Color;
-	glm::vec3 Move;
-
-	int x, y, z;
-	int x_dir;
-	int z_dir;
+	byte x_dir;
+	byte z_dir;
 	float speed;
-
-	float lotate;
-
-	int player_number; // 플레이어 고유 숫자
 
 	glm::vec4 Bounding_box[2];
 
 	bool View;
 
-	byte Action = 0;
+	Bullet()
+		: Bscale(0.1f, 0.1f, 0.1f),   // 기본 크기 1
+		Blocate(0.0f, 0.0f, 0.0f), // 기본 위치 (0, 0, 0)
+		Bcolor(0.7f, 0.0f, 0.7f),  // 기본 색상 흰색
+		TR(1.0f),                  // 기본 변환 행렬 (단위 행렬)
+		x_dir(0),                  // 기본 방향 0
+		z_dir(0),                  // 기본 방향 0
+		speed(0.15f),               // 기본 속도 0
+		Bounding_box{ glm::vec4(0.0f), glm::vec4(0.0f) }, // 기본 Bounding Box
+		View(false)                // 기본적으로 보이지 않음
+	{
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Scale = glm::mat4(1.0f);
+		glm::mat4 Rotate = glm::mat4(1.0f);
 
-public:
-	Bullet(int i, glm::vec3 initialLocation) {
-		Bcolor = { 1.0f, 1.0f * i, 0.0f };
-		Color = { 0.5f, 1.0f * i, 0.3f * i };
-		Blocate = initialLocation;
-		Blocate[1] = 0.0f; // Y 좌표 설정
-		Bscale = { 0.2f, 0.2f, 0.2f };
-		lotate = 180.0f * i;
-		speed = 0.05f;
-		player_number = i;
-		Move = { 0.0f, 0.0f, 0.0f };
+		Rotate = glm::rotate(Rotate, glm::radians(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		Scale = glm::scale(Scale, Bscale); //		플레이어
+		TR = Rotate * Scale * TR1;
 	}
 
-	glm::vec3 Get_Pscale() { return Bscale; }
-	glm::vec3 Get_Plocate() { return Blocate; }
-	glm::vec3 Get_Move() { return Move; }
-	glm::vec3 Get_Color() { return Bcolor; }
-	GLfloat Get_R() { return Color[0]; }
-	GLfloat Get_G() { return Color[1]; }
-	GLfloat Get_B() { return Color[2]; }
-	float Get_Lotate() { return lotate; }
-	byte Get_Action() { return Action; }
-
-	void Calculate_Move();
+	void serializeBullet(char* buffer) const;
+	void deserializeBullet(const char* buffer);
 };
-
-void InitBullet(Bullet& bullet);
 
 	//glm::vec3 bound_scale = { 0.3f / 2, (float)10 / BOX_Y, 0.3f / 2 };
 

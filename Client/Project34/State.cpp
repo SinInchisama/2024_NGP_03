@@ -54,11 +54,8 @@ void Play_State::Update()
 	//}
 	
 	char keyinput = player.Get_Action();
-	
 	send(sock, &keyinput, sizeof(char), 0);
-
-
-	std::cout << keyinput << std::endl;
+	
 	//Parent_pakcet packet;
 
 	//패킷개수를고정크기로recv
@@ -69,7 +66,7 @@ void Play_State::Update()
 		{
 			char buffer[128];
 			size_t len = recv(sock, buffer, sizeof(buffer), 0);
-			process_received_data(buffer, len,&player,All_Box);
+			process_received_data(buffer, len,&player,All_Box,bullet);
 			//handlePacket(packet)
 		}
 	
@@ -99,7 +96,7 @@ void Play_State::Draw()
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-	view = glm::lookAt(player.Get_Camerapos(), player.Get_Camerapos() + player.Get_Cameradirection(), cameraUp);
+	view = glm::lookAt(player.Get_Camerapos (), player.Get_Camerapos() + player.Get_Cameradirection(), cameraUp);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
 	glUseProgram(triangleShaderProgramID);
@@ -140,6 +137,20 @@ void Play_State::Draw()
 		}
 	}
 
+	if (bullet[0].View) {
+		glm::mat4 TR1 = glm::mat4(1.0f);
+		glm::mat4 Tx = glm::mat4(1.0f);
+
+		Tx = glm::mat4(1.0f);
+
+		Tx = glm::translate(Tx, bullet[0].Blocate);
+		TR1 = Tx * bullet[0].TR;
+
+		glUniform3f(modelLocation1, bullet[0].Bcolor[0], bullet[0].Bcolor[1], bullet[0].Bcolor[2]);
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR1)); //--- modelTransform 변수에 변환 값 적용하기
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+	}
+	
 	//for (int i = 0; i < 12; i++) {
 	//	if (item[i].View) {
 	//		glUniform3f(modelLocation1, item[i].Icolor[0], item[i].Icolor[1], item[i].Icolor[2]);
@@ -272,7 +283,7 @@ void Play_State::KeyUp(int key)
 {
 	switch (key) {
 	case 'a':
-		break;
+		player.Set_UpAction(KEY_A);
 	}
 }
 
@@ -280,7 +291,7 @@ void Play_State::KeyDown(int key)
 {
 	switch (key) {
 	case 'a':
-		break;
+		player.Set_DownAction(KEY_A);
 	}
 }
 
