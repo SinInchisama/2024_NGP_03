@@ -2,11 +2,7 @@
 #include "include/glm/glm.hpp"
 #include "Public.h"
 #include "FunctionalPackets.h"
-<<<<<<< HEAD
-#include "Public.h"
-=======
-#include <vector>
->>>>>>> ìµœì •ë¯¼
+
 
 class Item {
 public:
@@ -29,43 +25,30 @@ public:
 	// item_zero, item_one ÇÔ¼ö¿¡¼­ itemÀ» ÀÎÀÚ·Î ¹Þ´Â´Ù. È®ÀÎ ÇÊ¿ä.
 
 	// Create ItemÀ» À§ÇÑ
-	Item(int type, const glm::vec3& location);
-	void Create_Item(std::vector<Item>& items, int gridSize);
+	Item() {};
 
 	void serializeItem(char* buffer) const;
 	void deserializeItem(const char* buffer);
 
-	void Change_Locate(int x, int z)	// 0 <= x, z < 20
+	void Item_reset(int type, const glm::vec3& location);
+
+	static std::unique_ptr<Parent_Packet> Create_Item(Item* item)
 	{
-		float xScale = (float)10 / BOX_X;
-		float zScale = (float)10 / BOX_Z;
+		int index = 0;
+		for (; index < 20; ++index) {
+			if (!item[index].View) {
+				int randomType = 1;
+				glm::vec3 randomLocation(static_cast<float>(rand() % 20 - 10), 0.0f, static_cast<float>(rand() % 20 - 10));
+				item[index].Item_reset(randomType, randomLocation);
+				item[index].View = true;
 
-		float xlocate = 5 - (xScale / 2);
-		float zlocate = 5 - (zScale / 2);
+				return std::make_unique<Create_item>(index, item[index].IColor, item[index].ILocate);
+			}
+		}
 
-		ILocate[0] = xlocate - xScale * x;
-		ILocate[1] = 0.0f;
-		ILocate[2] = zlocate - zScale * z;
-	}
-
-<<<<<<< HEAD
-	std::unique_ptr<Parent_Packet> Create_item(short index, glm::vec3 color, glm::vec3 locate);
-=======
-	static std::unique_ptr<Parent_Packet> Create_Item(std::vector<Item>& item)
-	{
-		int size = item.size();
-
-		int randomType = 1;
-		glm::vec3 randomLocation(static_cast<float>(rand() % 100 - 50), 0.0f, static_cast<float>(rand() % 100 - 50));
-
-		Item newItem(randomType, randomLocation);
-
-		item.push_back(newItem);
-
-		return std::make_unique<Create_item>(size, newItem.IColor, newItem.ILocate);
+		return nullptr;
 	};
 	//std::unique_ptr<Parent_Packet> Delete_item(short index);
->>>>>>> ìµœì •ë¯¼
 };
 
 //void InitItem(Item& item)

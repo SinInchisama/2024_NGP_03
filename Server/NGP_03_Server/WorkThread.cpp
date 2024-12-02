@@ -3,7 +3,7 @@
 Box All_Box[20][20];
 Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
-std::vector<Item> items;	// 아이템 리스트
+Item items[20];
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -180,11 +180,7 @@ void Send_Object()
 		}
 	}
 
-	char ibuffer[sizeof(Item)];
-	for (const auto& item : items) {
-		item.serializeItem(ibuffer);
-		send(client_sock[1], ibuffer, sizeof(ibuffer), 0);
-	}
+
 }
 
 void Timer_Check()
@@ -197,7 +193,7 @@ void Timer_Check()
 	{
 		// 아이템 생성
 		std::cout << currentTime - timer.getLastItemTime() << std::endl;
-		EventQueue::currentInstance->addEvent(std::bind(&Item::Create_Item, std::ref(items)));
+		EventQueue::currentInstance->addEvent(std::bind(&Item::Create_Item, items));
 		timer.setLastItemTime(currentTime);       // 마지막 생성 시간 갱신
 	}
 

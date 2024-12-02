@@ -11,7 +11,7 @@ void EventMovePlayer(Player* p, KeyInput& k);
 //void EventCreateBullet(Bullet* bArr);
 //void EventMoveBullet(Bullet* bArr);
 
-void process_received_data(const char* buffer, size_t buffer_size,Player* p,Box All_Box[20][20],Bullet* bullet);
+void process_received_data(const char* buffer, size_t buffer_size,Player* p,Box All_Box[20][20],Bullet* bullet,Item* item);
 
 struct Parent_Packet {
 	byte pakcet_type;
@@ -123,6 +123,40 @@ struct Create_bullet : public Parent_Packet {
         // index 역직렬화
         memcpy(&b, buffer + offset, sizeof(bool));
         offset += sizeof(b);
+    }
+};
+
+struct Create_item : Parent_Packet {
+    short item_index;
+    glm::vec3 color;
+    glm::vec3 locate;
+
+    Create_item() : item_index(0), color(0.0f, 0.0f, 0.0f), locate(0.0f, 0.0f, 0.0f) {
+        pakcet_type = 3;
+    }
+
+    Create_item(char i_idx, const glm::vec3& i_color, const glm::vec3& i_locate)
+        : color(i_color), locate(i_locate) {
+        pakcet_type = 3;
+        item_index = i_idx;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &item_index, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &color, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
+        memcpy(buffer + offset, &locate, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
+    }
+
+    void deserializePlayer(const char* buffer)
+    {
+        int offset = 0;
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&item_index, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&color, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
+        memcpy(&locate, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     }
 };
 

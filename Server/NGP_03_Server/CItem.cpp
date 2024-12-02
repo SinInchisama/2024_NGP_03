@@ -2,55 +2,6 @@
 #include <cstdlib>
 #include <ctime>
 
-// Л∙└Л²╢М┘° Л┐²Л└╠
-Item::Item(int type, const glm::vec3& location)
-{
-    Item_type = type;
-    ILocate = location;
-
-    // typeО©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ х©О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫
-    if (Item_type == 1) {
-        IColor = { 0.0f, 1.0f, 0.0f };
-    }
-
-    // О©╫Б╨╩ Transform О©╫О©╫О©╫О©╫
-    IScale = { 0.5f, 0.5f, 0.5f };
-    glm::mat4 Scale = glm::scale(glm::mat4(1.0f), IScale);
-    glm::mat4 Translate = glm::translate(glm::mat4(1.0f), ILocate);
-    TR = Translate * Scale;
-
-    // О©╫ы©О©╫О©╫ О©╫з╫О©╫ О©╫О©╫О©╫О©╫
-    glm::vec3 boundScale = IScale * 0.5f;
-    Bounding_box[0] = glm::vec4(ILocate - boundScale, 1.0f);
-    Bounding_box[1] = glm::vec4(ILocate + boundScale, 1.0f);
-
-    // О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫й╠О©╫х╜
-    View = true;
-}
-
-void Create_Item(std::vector<Item>& items, int gridSize)
-{
-    // ╬фюлеш е╦ют (0 ~ 2 ╥ё╢Щ)
-    // int randomType = rand() % 3;
-    int randomType = 1;
-
-    // ╬фюлеш ю╖д║ (╥ё╢Щ абг╔ ╩Щ╪╨)
-    float x = static_cast<float>((rand() % gridSize) - gridSize / 2);
-    float y = 0.0f; // ╟Ма╓ Y абг╔
-    float z = static_cast<float>((rand() % gridSize) - gridSize / 2);
-    glm::vec3 randomLocation = glm::vec3(x, y, z);
-
-    // ╩У╥н©Н ╬фюлеш ╩Щ╪╨
-    Item newItem(randomType, randomLocation);
-
-    // ╦╝╫╨ф╝©║ цъ╟║
-    items.push_back(newItem);
-
-    // х╝юн©К
-    std::cout << "Item created: Type=" << randomType << ", Location=("
-        << x << ", " << y << ", " << z << ")" << std::endl;
-}
-
 void Item::serializeItem(char* buffer) const
 {
     // Serialize glm::vec3 IColor (3 floats)
@@ -85,11 +36,28 @@ void Item::deserializeItem(const char* buffer)
     // Deserialize glm::vec4 Bounding_box (2 vec4s)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
-<<<<<<< HEAD
 
-std::unique_ptr<Parent_Packet> Item::Create_item(short index, glm::vec3 color, glm::vec3 locate)
+void Item::Item_reset(int type, const glm::vec3& location)
 {
-    // return std::make_unique<Create_item>(index, color, locate);
+    Item_type = type;
+    ILocate = location;
+
+    // typeО©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ х©О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫
+    if (Item_type == 1) {
+        IColor = { 0.0f, 1.0f, 0.0f };
+    }
+
+    // О©╫Б╨╩ Transform О©╫О©╫О©╫О©╫
+    IScale = { 0.5f, 0.5f, 0.5f };
+    glm::mat4 Scale = glm::scale(glm::mat4(1.0f), IScale);
+    glm::mat4 Translate = glm::translate(glm::mat4(1.0f), ILocate);
+    TR = Translate * Scale;
+
+    // О©╫ы©О©╫О©╫ О©╫з╫О©╫ О©╫О©╫О©╫О©╫
+    glm::vec3 boundScale = IScale * 0.5f;
+    Bounding_box[0] = glm::vec4(ILocate - boundScale, 1.0f);
+    Bounding_box[1] = glm::vec4(ILocate + boundScale, 1.0f);
+
+    // О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫й╠О©╫х╜
+    View = true;
 }
-=======
->>>>>>> Л╣°Л═∙К╞╪

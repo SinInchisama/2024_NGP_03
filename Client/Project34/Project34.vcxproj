@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="CBox.cpp" />
     <ClCompile Include="CBullet.cpp" />
+    <ClCompile Include="CItem.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="FrameWork.cpp" />
