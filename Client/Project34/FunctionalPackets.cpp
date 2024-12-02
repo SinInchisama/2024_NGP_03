@@ -44,7 +44,7 @@
 //	// 2. 맵을 벗어난 총알을 삭제하기. (여기서 할 것인가? 아니면 다른 곳(다른 이벤트, 충돌처리 등)에서 검사할 것인가? 
 //}
 
-void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20],Bullet* bullet) {
+void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20],Bullet* bullet,Item* item) {
     {
         // 패킷 타입 읽기
         char packet_type = buffer[0];
@@ -61,6 +61,13 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             Create_bullet packet;
             packet.deserializePlayer(buffer);
             bullet[packet.player_index].View = packet.b;
+        }
+        else if (packet_type == 3) {
+            Create_item packet;
+            packet.deserializePlayer(buffer);
+            item[packet.item_index].Icolor = packet.color;
+            item[packet.item_index].ILocate = packet.locate;
+            item[packet.item_index].View = true;
         }
         else if (packet_type == 6) {
             Change_floor packet;

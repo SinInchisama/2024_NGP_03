@@ -2,32 +2,6 @@
 #include <cstdlib>
 #include <ctime>
 
-// 아이템 생성
-Item::Item(int type, const glm::vec3& location)
-{
-    Item_type = type;
-    ILocate = location;
-
-    // type�� ������ ȿ���� ��������� ���
-    if (Item_type == 1) {
-        IColor = { 0.0f, 1.0f, 0.0f };
-    }
-
-    // �⺻ Transform ����
-    IScale = { 0.5f, 0.5f, 0.5f };
-    glm::mat4 Scale = glm::scale(glm::mat4(1.0f), IScale);
-    glm::mat4 Translate = glm::translate(glm::mat4(1.0f), ILocate);
-    TR = Translate * Scale;
-
-    // �ٿ�� �ڽ� ����
-    glm::vec3 boundScale = IScale * 0.5f;
-    Bounding_box[0] = glm::vec4(ILocate - boundScale, 1.0f);
-    Bounding_box[1] = glm::vec4(ILocate + boundScale, 1.0f);
-
-    // �� ���� �ʱ�ȭ
-    View = true;
-}
-
 void Item::serializeItem(char* buffer) const
 {
     // Serialize glm::vec3 IColor (3 floats)
@@ -61,4 +35,29 @@ void Item::deserializeItem(const char* buffer)
 
     // Deserialize glm::vec4 Bounding_box (2 vec4s)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
+}
+
+void Item::Item_reset(int type, const glm::vec3& location)
+{
+    Item_type = type;
+    ILocate = location;
+
+    // type�� ������ ȿ���� ��������� ���
+    if (Item_type == 1) {
+        IColor = { 0.0f, 1.0f, 0.0f };
+    }
+
+    // �⺻ Transform ����
+    IScale = { 0.5f, 0.5f, 0.5f };
+    glm::mat4 Scale = glm::scale(glm::mat4(1.0f), IScale);
+    glm::mat4 Translate = glm::translate(glm::mat4(1.0f), ILocate);
+    TR = Translate * Scale;
+
+    // �ٿ�� �ڽ� ����
+    glm::vec3 boundScale = IScale * 0.5f;
+    Bounding_box[0] = glm::vec4(ILocate - boundScale, 1.0f);
+    Bounding_box[1] = glm::vec4(ILocate + boundScale, 1.0f);
+
+    // �� ���� �ʱ�ȭ
+    View = true;
 }
