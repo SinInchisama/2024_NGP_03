@@ -19,4 +19,6 @@ public:
 
 	void setDeltaTime(float f) { deltaTime = f; }
 	void setPreviousTime(time_t t) { previousTime = t; }
+
+	std::unique_ptr<Parent_Packet> Update_timer(short index);
 };

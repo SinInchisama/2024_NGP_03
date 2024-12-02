@@ -1,6 +1,7 @@
 #pragma once
 #include "include/glm/glm.hpp"
 #include "Public.h"
+#include "FunctionalPackets.h"
 
 class Item {
 public:
@@ -8,12 +9,16 @@ public:
 
 	glm::vec3 Iscale;
 	glm::vec3 Ilocate;	//최초 전달 정보
-	glm::vec3 Icolor;	// 최초 전달 정보
+	glm::vec3 IColor = {0.0f, 1.0f, 0.0f};	// 최초 전달 정보
 	glm::mat4 TR;		// 최초 전달 정보
 
 	glm::vec4 Bounding_box[2];	// 최초 전달 정보
 
 	bool View;	// boolean check, 덮어쓰기 연산 (437 ~ 445)
+
+	GLfloat Get_R() { return IColor[0]; }
+	GLfloat Get_G() { return IColor[1]; }
+	GLfloat Get_B() { return IColor[2]; }
 
 	// item_collide 함수에서 item을 인자로 받는다. 확인 필요.
 	// item_zero, item_one 함수에서 item을 인자로 받는다. 확인 필요.
@@ -33,6 +38,9 @@ public:
 		Ilocate[1] = 0.0f;
 		Ilocate[2] = zlocate - zScale * z;
 	}
+
+	std::unique_ptr<Parent_Packet> Create_item(short index, glm::vec3 Item_color, glm::vec3 Item_locate);
+	std::unique_ptr<Parent_Packet> Delete_item(short index);
 };
 
 //void InitItem(Item& item)
