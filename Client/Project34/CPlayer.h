@@ -61,6 +61,7 @@ public:
 	GLfloat Get_B() { return Color[2]; }
 	float Get_Lotate() {return lotate;}
 	byte Get_Action() { return Action; }
+	int Get_Box() { return Occupy_box; }
 
 	glm::mat4 Get_TR() { return TR; }
 
