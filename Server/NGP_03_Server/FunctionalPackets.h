@@ -138,10 +138,9 @@ struct Delete_item : Parent_Packet {
         pakcet_type = 4;
     }
 
-    Delete_item(const short i_idx, const glm::vec3& i_color)
+    Delete_item(const short i_idx)
         : item_index(item_index) {
         pakcet_type = 4;
-        item_index = i_idx;
     }
 
     void serialize(char* buffer)const override {

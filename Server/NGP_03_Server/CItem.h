@@ -60,7 +60,7 @@ public:
 		item[i].View = false;
 
 		// Delete_item 패킷 생성 및 반환
-		return std::make_unique<Delete_item>(i);
+		return std::make_unique<Delete_item>(static_cast<short>(i));
 	}
 };
 
