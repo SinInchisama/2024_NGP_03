@@ -44,6 +44,14 @@ public:
 
 	void serializeBullet(char* buffer) const;
 	void deserializeBullet(const char* buffer);
+
+	static std::unique_ptr<Parent_Packet> Delete_Bullet(byte index, bool b)
+	{
+		// 플레이어 index와 bool을 받아서 총알은 삭제
+		// 플레이어 index를 통해서 스탑?작동
+
+		return std::make_unique<Delete_item>(false);
+	}
 };
 
 //void InitBullet(Bullet& bullet)
