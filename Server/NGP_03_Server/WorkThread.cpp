@@ -48,10 +48,6 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	}
 		
 
-		//char pbuffer[sizeof(Player)];
-		//players[0].serializePlayer(pbuffer);
-		//int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
-
 		// 충돌 체크
 		glm::mat4 TR1 = glm::mat4(1.0f);
 		glm::mat4 Tx = glm::mat4(1.0f);
@@ -70,15 +66,16 @@ DWORD WINAPI WorkThread(LPVOID arg)
 					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
 					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
 					(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
-					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], GameManger::Instance->players[0]->Get_Color(),i*20 + j));
+					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], GameManger::Instance->players[0]->Get_Color(),i*20 + j,0));
 				}
 			}
 		}
 
-		// 전송할 패킷리스트 개수 전송(고정크기)
+		// 매번 보내야되는 패킷
+		packetQueue.push(std::make_unique<Update_score>(GameManger::Instance->players[0]->Get_Box(), GameManger::Instance->players[1]->Get_Box()));
+		packetQueue.push(std::make_unique<Move_Packet>(1, GameManger::Instance->players[0]->Get_Move()));
 
 		// 클라이언트로 큐의 크기 전송
-		packetQueue.push(std::make_unique<Move_Packet>(1, GameManger::Instance->players[0]->Get_Move()));
 
 		char size_buffer[sizeof(int)];
 		int queue_size = packetQueue.size();

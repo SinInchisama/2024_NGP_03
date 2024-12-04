@@ -5,6 +5,7 @@
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "Public.h"
 #include <bitset>
+#include "FunctionalPackets.h"
 
 class Player
 {
@@ -71,6 +72,7 @@ public:
 	float Get_Lotate() {return lotate;}
 	glm::mat4 Get_TR() { return TR; }
 	byte Get_Action() { return Action; }
+	short Get_Box() { return Occupy_box; }
 
 	void Set_UpAction(KeyInput key) {
 		Action &= ~key;  }
@@ -90,4 +92,5 @@ public:
 
 	void serializePlayer(char* buffer) const;
 	void deserializePlayer(const char* buffer);
+
 };
