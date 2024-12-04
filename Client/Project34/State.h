@@ -37,6 +37,10 @@ public:
 	Bullet bullet[2];
 
 	Item item[20];
+
+	Texture Time_Count[2];
+
+	GLuint Num[11];
 public:
 	Play_State();
 
@@ -52,6 +56,7 @@ public:
 	void KeyUp(int key);
 	void KeyDown(int key);
 
+	void Draw_Score();
 };
 
 class Stay_State :public State

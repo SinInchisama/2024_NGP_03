@@ -107,14 +107,9 @@ struct Create_item : Parent_Packet {
     }
 
     Create_item(char i_idx, const glm::vec3& i_color, const glm::vec3& i_locate)
-<<<<<<< HEAD
-        : item_index(i_idx), color(i_color), locate(i_locate) {
-        pakcet_type = 4;
-=======
         : color(i_color), locate(i_locate) {
         pakcet_type = 3;
         item_index = i_idx;
->>>>>>> ìµœì •ë¯¼
     }
 
     void serialize(char* buffer)const override {
@@ -163,19 +158,6 @@ struct Delete_item : Parent_Packet {
     }
 };
 
-<<<<<<< HEAD
-struct Update_score : Parent_Packet {
-    short P1_score;
-    short P2_score;
-
-    Update_score() : P1_score(0), P2_score(0) {
-        pakcet_type = 6;
-    }
-
-    Update_score(const short P1_S, const short P2_S)
-        : P1_score(P1_S), P2_score(P2_S) {
-        pakcet_type = 6;
-=======
 struct Change_floor : Parent_Packet {
     short box_index;
     glm::vec3 color;
@@ -184,21 +166,16 @@ struct Change_floor : Parent_Packet {
         pakcet_type = 6; // Move_PacketÀÇ Å¸ÀÔ ¼³Á¤
     }
 
-    Change_floor(char b_idx, const glm::vec3& b_color)
+    Change_floor(short b_idx, const glm::vec3& b_color)
         : box_index(b_idx), color(b_color) {
         pakcet_type = 6; // Move_Packet Å¸ÀÔ ¼³Á¤
->>>>>>> ìµœì •ë¯¼
     }
 
     void serialize(char* buffer)const override {
         int offset = 0;
 
         memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
-<<<<<<< HEAD
-        memcpy(buffer + offset, &P1_score, sizeof(short)); offset += sizeof(short);
-        memcpy(buffer + offset, &P2_score, sizeof(short)); offset += sizeof(short);
-=======
-        memcpy(buffer + offset, &box_index, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &box_index, sizeof(short)); offset += sizeof(short);
         memcpy(buffer + offset, &color, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     }
 
@@ -206,7 +183,7 @@ struct Change_floor : Parent_Packet {
     {
         int offset = 0;
         memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
-        memcpy(&box_index, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&box_index, buffer + offset, sizeof(short)); offset += sizeof(short);
         memcpy(&color, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     }
 };
@@ -278,21 +255,12 @@ struct Update_timer : Parent_Packet {
 
         memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
         memcpy(buffer + offset, &timer, sizeof(short)); offset += sizeof(short);
->>>>>>> ìµœì •ë¯¼
     }
 
     void deserializePlayer(const char* buffer) {
         int offset = 0;
 
         memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
-<<<<<<< HEAD
-        memcpy(&P1_score, buffer + offset, sizeof(short)); offset += sizeof(short);
-        memcpy(&P2_score, buffer + offset, sizeof(short)); offset += sizeof(short);
-    }
-};
-
-=======
         memcpy(&timer, buffer + offset, sizeof(short)); offset += sizeof(short);
     }
 };
->>>>>>> ìµœì •ë¯¼
