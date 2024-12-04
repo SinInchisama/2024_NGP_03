@@ -45,6 +45,7 @@ Play_State::Play_State()
 	Num[10] = CreateTexture("comg_bg.png");
 }
 
+// recv Thread 이거 맞는지 확인 가능할까요?
 void Play_State::enter() {
 	/*while (true) {
 		if (key_change) {

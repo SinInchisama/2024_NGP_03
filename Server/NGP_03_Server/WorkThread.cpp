@@ -82,15 +82,6 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			}
 		}
 
-		// bullet
-		if ((player_bounding_box[0][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player_bounding_box[0][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player_bounding_box[0][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player_bounding_box[0][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) ||
-			(player_bounding_box[0][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player_bounding_box[0][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player_bounding_box[1][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player_bounding_box[1][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) ||
-			(player_bounding_box[1][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player_bounding_box[1][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player_bounding_box[1][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player_bounding_box[1][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) ||
-			(player_bounding_box[1][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player_bounding_box[1][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player_bounding_box[0][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player_bounding_box[0][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) &&
-			(player_bounding_box[0][1] <= GameManger::Instance->bullets[0]->Bounding_box[1][1] && player_bounding_box[1][1] >= GameManger::Instance->bullets[0]->Bounding_box[0][1])) {
-			EventQueue::currentInstance->addEvent(std::bind(&Bullet::Delete_Bullet, index, false));	// index = player index, false = View
-		}
-
 		// 매번 보내야되는 패킷
 		packetQueue.push(std::make_unique<Update_score>(GameManger::Instance->players[0]->Get_Box(), GameManger::Instance->players[1]->Get_Box()));
 		packetQueue.push(std::make_unique<Move_Packet>(1, GameManger::Instance->players[0]->Get_Move()));
