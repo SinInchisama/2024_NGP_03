@@ -54,7 +54,7 @@ struct Change_floor : Parent_Packet {
         pakcet_type = 2; // Move_Packet의 타입 설정
     }
 
-    Change_floor(char b_idx, const glm::vec3& b_color)
+    Change_floor(short b_idx, const glm::vec3& b_color)
         : box_index(b_idx), color(b_color) {
         pakcet_type = 2; // Move_Packet 타입 설정
     }
@@ -63,7 +63,7 @@ struct Change_floor : Parent_Packet {
         int offset = 0;
 
         memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
-        memcpy(buffer + offset, &box_index, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &box_index, sizeof(short)); offset += sizeof(short);
         memcpy(buffer + offset, &color, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     }
 
@@ -71,7 +71,7 @@ struct Change_floor : Parent_Packet {
     {
         int offset = 0;
         memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
-        memcpy(&box_index, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&box_index, buffer + offset, sizeof(short)); offset += sizeof(short);
         memcpy(&color, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
     }
 };
