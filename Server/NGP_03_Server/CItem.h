@@ -48,7 +48,20 @@ public:
 
 		return nullptr;
 	};
-	//std::unique_ptr<Parent_Packet> Delete_item(short index);
+
+	static std::unique_ptr<Parent_Packet> Delete_Item(Item* item, int i)
+	{
+		// 인덱스 유효성 검사
+		if (i < 0 || i >= 20) {
+			return nullptr;	// 잘못된 인덱스는 무시
+		}
+
+		// 아이템 비활성화
+		item[i].View = false;
+
+		// Delete_item 패킷 생성 및 반환
+		return std::make_unique<Delete_item>(i);
+	}
 };
 
 //void InitItem(Item& item)
