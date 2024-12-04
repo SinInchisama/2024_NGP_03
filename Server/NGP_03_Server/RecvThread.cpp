@@ -12,7 +12,6 @@ DWORD WINAPI RecvThread(LPVOID arg)
 	char buf[BUFSIZE + 1];
 	int len; // 고정 길이 데이터
 	float total_received = 0;
-	++index;
 
 	// 클라이언트 정보 얻기
 	addrlen = sizeof(clientaddr[i]);
