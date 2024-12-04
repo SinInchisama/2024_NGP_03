@@ -40,7 +40,11 @@ public:
 
 	Texture Time_Count[2];
 
+	Texture Score[3];
+
 	GLuint Num[11];
+	
+	short Time = 0;
 public:
 	Play_State();
 
@@ -56,7 +60,7 @@ public:
 	void KeyUp(int key);
 	void KeyDown(int key);
 
-	void Draw_Score();
+	void Draw_Score(Player& player);
 };
 
 class Stay_State :public State

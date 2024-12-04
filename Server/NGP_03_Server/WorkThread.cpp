@@ -163,13 +163,16 @@ void Timer_Check()
 	timer.setDeltaTime(static_cast<float>(currentTime - timer.getPreviousTime())); // 프레임 계산
 	timer.setPreviousTime(currentTime);
 
-	if ((currentTime - timer.getLastItemTime()) >= 10)			// 아이템 생성 이벤트
+	if ((currentTime - timer.getLastItemTime()) >= 5)			// 아이템 생성 이벤트
 	{
 		// 아이템 생성
 		std::cout << currentTime - timer.getLastItemTime() << std::endl;
 		EventQueue::currentInstance->addEvent(std::bind(&Item::Create_Item, items));
 		timer.setLastItemTime(currentTime);       // 마지막 생성 시간 갱신
 	}
+
+	EventQueue::currentInstance->addEvent(std::bind(&Timer::Update_Timer,
+		currentTime- timer.getStartTime()));
 
 	if (timer.isFinished())
 	{

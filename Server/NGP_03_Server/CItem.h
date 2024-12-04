@@ -38,7 +38,7 @@ public:
 		for (; index < 20; ++index) {
 			if (!item[index].View) {
 				int randomType = 1;
-				glm::vec3 randomLocation(static_cast<float>(rand() % 20 - 10), 0.0f, static_cast<float>(rand() % 20 - 10));
+				glm::vec3 randomLocation(static_cast<float>(rand() % 8 - 4), 0.0f, static_cast<float>(rand() % 8 - 4));
 				item[index].Item_reset(randomType, randomLocation);
 				item[index].View = true;
 

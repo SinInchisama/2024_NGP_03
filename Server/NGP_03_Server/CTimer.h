@@ -1,5 +1,6 @@
 #pragma once
 #include <time.h>
+#include "FunctionalPackets.h"
 
 class Timer {
 private:
@@ -24,5 +25,8 @@ public:
 	void setDeltaTime(float f) { deltaTime = f; }
 	void setPreviousTime(time_t t) { previousTime = t; }
 
+	static std::unique_ptr<Parent_Packet> Update_Timer(short time) {
+		return std::make_unique<Update_timer>(time);
+	};
 	//std::unique_ptr<Parent_Packet> Update_timer(short index);
 };

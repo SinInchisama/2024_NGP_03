@@ -11,7 +11,7 @@ void EventMovePlayer(Player* p, KeyInput& k);
 //void EventCreateBullet(Bullet* bArr);
 //void EventMoveBullet(Bullet* bArr);
 
-void process_received_data(const char* buffer, size_t buffer_size,Player* p,Box All_Box[20][20],Bullet* bullet,Item* item);
+void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20], Bullet* bullet, Item* item, short& time);
 
 struct Parent_Packet {
 	byte pakcet_type;
@@ -51,12 +51,12 @@ struct Change_floor : Parent_Packet {
     glm::vec3 color;
 
     Change_floor() : box_index(0), color(0.0f, 0.0f, 0.0f) {
-        pakcet_type = 2; // Move_Packet의 타입 설정
+        pakcet_type = 6; // Move_Packet의 타입 설정
     }
 
     Change_floor(short b_idx, const glm::vec3& b_color)
         : box_index(b_idx), color(b_color) {
-        pakcet_type = 2; // Move_Packet 타입 설정
+        pakcet_type = 6; // Move_Packet 타입 설정
     }
 
     void serialize(char* buffer)const override {
@@ -207,5 +207,32 @@ struct Move_bullet : public Parent_Packet {
         // position (glm::vec3) 역직렬화
         memcpy(&position, buffer + offset, sizeof(glm::vec3));
         offset += sizeof(glm::vec3);
+    }
+};
+
+struct Update_timer : Parent_Packet {
+    short timer;
+
+    Update_timer() : timer(0) {
+        pakcet_type = 8;
+    }
+
+    Update_timer(const short G_timer)
+        : timer(G_timer) {
+        pakcet_type = 8;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &timer, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&timer, buffer + offset, sizeof(short)); offset += sizeof(short);
     }
 };
