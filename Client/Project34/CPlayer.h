@@ -60,6 +60,7 @@ public:
 	GLfloat Get_B() { return Color[2]; }
 	float Get_Lotate() {return lotate;}
 	byte Get_Action() { return Action; }
+	int Get_Box() { return Occupy_box; }
 
 	void Set_UpAction(KeyInput key) {
 		Action &= ~key;  }

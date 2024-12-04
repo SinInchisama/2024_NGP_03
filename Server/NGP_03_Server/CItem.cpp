@@ -48,7 +48,7 @@ void Item::Item_reset(int type, const glm::vec3& location)
     }
 
     // �⺻ Transform ����
-    IScale = { 0.5f, 0.5f, 0.5f };
+    IScale = { 0.2f, 0.2f, 0.2f };
     glm::mat4 Scale = glm::scale(glm::mat4(1.0f), IScale);
     glm::mat4 Translate = glm::translate(glm::mat4(1.0f), ILocate);
     TR = Translate * Scale;
