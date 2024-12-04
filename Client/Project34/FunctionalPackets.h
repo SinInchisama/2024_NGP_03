@@ -160,6 +160,33 @@ struct Create_item : Parent_Packet {
     }
 };
 
+struct Delete_item : Parent_Packet {
+    short item_index;
+
+    Delete_item() : item_index(0) {
+        pakcet_type = 4;
+    }
+
+    Delete_item(const short i_idx)
+        : item_index(item_index) {
+        pakcet_type = 4;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &item_index, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&item_index, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
+
 struct Move_bullet : public Parent_Packet {
     byte player_index;  // 플레이어 인덱스
     glm::vec3 position; // 총알 위치 정보

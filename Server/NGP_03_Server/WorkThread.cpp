@@ -72,7 +72,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		}
 
 		// item
-		for (int i = 0; i < 20; ++i) {
+		for (int i = 0; i < 12; ++i) {
 			if ((player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||

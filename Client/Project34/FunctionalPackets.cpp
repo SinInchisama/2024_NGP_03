@@ -26,6 +26,11 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             item[packet.item_index].ILocate = packet.locate;
             item[packet.item_index].View = true;
         }
+        else if (packet_type == PACKET_DELETE_ITEM) {
+            Delete_item packet;
+            packet.deserializePlayer(buffer);
+            item[packet.item_index].View = false;
+        }
         else if (packet_type == PACKET_CHANGE_FLOOR) {
             Change_floor packet;
             packet.deserializePlayer(buffer);
