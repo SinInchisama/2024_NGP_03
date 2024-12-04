@@ -43,5 +43,10 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             packet.deserializePlayer(buffer);
             time = packet.timer;
         }
+        else if (packet_type == PACKET_UPDATE_SCORE) {
+            Update_Score packet;
+            packet.deserializePlayer(buffer);
+            p->Set_Box(packet.My_score);
+        }
     }
 }

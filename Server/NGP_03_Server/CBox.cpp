@@ -1,4 +1,5 @@
 #include "CBox.h"
+#include "GameMaanger.h"
 
 void Box::serializeBox(char* buffer) const
 {
@@ -28,10 +29,11 @@ void Box::deserializeBox(const char* buffer)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
 
-std::unique_ptr<Parent_Packet> Box::Chage_Color(glm::vec3 v, short index)
+std::unique_ptr<Parent_Packet> Box::Chage_Color(glm::vec3 v, short index,int i)
 {
     if (Color != v) {
         Color = v;
+        GameManger::Instance->players[0]->Add_Occupy(1);
         return std::make_unique<Change_floor>(index, Color);
     }
     return nullptr;  // Color가 다르지 않으면 nullptr을 반환

@@ -273,3 +273,33 @@ struct Update_timer : Parent_Packet {
         memcpy(&timer, buffer + offset, sizeof(short)); offset += sizeof(short);
     }
 };
+
+struct Update_score : public Parent_Packet {
+    short My_score;
+    short Enermy_score;
+
+    Update_score() : My_score(0),Enermy_score(0) {
+        pakcet_type = 9;
+    }
+
+    Update_score(short my_score,short enermy_score)
+        : My_score(my_score),Enermy_score(enermy_score) {
+        pakcet_type = 9;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &My_score, sizeof(short)); offset += sizeof(short);
+        memcpy(buffer + offset, &Enermy_score, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&My_score, buffer + offset, sizeof(short)); offset += sizeof(short);
+        memcpy(&Enermy_score, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
