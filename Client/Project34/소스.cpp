@@ -350,30 +350,6 @@ void Crash(int num, int inspection)
 	//player[num].gravity = 0;
 }
 
-// 타임을 그려주는 함수
-void Draw_time() {
-	//glUseProgram(triangleShaderProgramID);
-	//glBindVertexArray(triangleVertexArrayObject);
-
-	//glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
-
-	//glm::mat4 projection = glm::mat4(1.0f);
-	//unsigned int projectionLocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform"); //--- 투영 변환 값 설정
-	//glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
-
-	//glm::mat4 view = glm::mat4(1.0f);
-	//unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
-	//glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-
-	//unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform"); //--- 버텍스 세이더에서 모델링 변환 위치 가져오기
-	//glActiveTexture(GL_TEXTURE0);						// 뒷자리 숫자
-	//glBindTexture(GL_TEXTURE_2D, texureId[int(Now_time) % 10]);
-	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Timecount[0].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
-	//glBindTexture(GL_TEXTURE_2D, texureId[int(Now_time) / 10]);			// 앞자리 숫자
-	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Timecount[1].Ttr)); //--- modelTransform 변수에 변환 값 적용하기
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
-}
 
 void Draw_num(int num) {
 	//glUseProgram(triangleShaderProgramID);
