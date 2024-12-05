@@ -56,7 +56,10 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Pl
         else if (packet_type == PACKET_UPDATE_SCORE) {
             Update_Score packet;
             packet.deserializePlayer(buffer);
-            p->Set_Box(packet.My_score);
+            if (p_index == 0)
+                p->Set_Box(packet.My_score);
+            else
+                p->Set_Box(packet.Enermy_score);
         }
     }
 }

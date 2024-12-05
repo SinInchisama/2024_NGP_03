@@ -71,7 +71,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 						(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
 						(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
 						(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
-						EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], GameManger::Instance->players[p_index]->Get_Color(), i * 20 + j, 0));
+						EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], GameManger::Instance->players[p_index]->Get_Color(), i * 20 + j, p_index));
 					}
 				}
 			}
@@ -118,6 +118,8 @@ DWORD WINAPI WorkThread(LPVOID arg)
 void Reset_Object()
 {
 	Boxinit(20, 20, 20);
+
+
 	GameManger::Instance->players[0]->Set_Plocate(glm::vec3(0,0,0));
 	All_Box[0][0].Color= GameManger::Instance->players[0]->Get_Color();
 	GameManger::Instance->players[1]->Set_Plocate(glm::vec3(0, 0, 0));
