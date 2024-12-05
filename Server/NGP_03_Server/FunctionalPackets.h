@@ -150,6 +150,7 @@ struct Delete_item : Parent_Packet {
     Delete_item(const short i_idx)
         : item_index(item_index) {
         pakcet_type = 4;
+        item_index = i_idx;
     }
 
     void serialize(char* buffer)const override {

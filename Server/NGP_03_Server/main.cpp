@@ -44,16 +44,16 @@ int main(int argc, char* argv[])
 	if (retval == SOCKET_ERROR) err_quit("listen()");
 
 	// 데이터 통신에 사용할 변수
-	SOCKET sock;
+	SOCKET client_sock;
 	struct sockaddr_in clientaddr;
 	int addrlen;
 	HANDLE hThread;
 
-	for (int i = 0; i < 2; ++i) {
+	while (1) {
 		// accept()
 		addrlen = sizeof(clientaddr);
-		sock = accept(listen_sock, (struct sockaddr*)&clientaddr, &addrlen);
-		if (sock == INVALID_SOCKET) {
+		client_sock = accept(listen_sock, (struct sockaddr*)&clientaddr, &addrlen);
+		if (client_sock == INVALID_SOCKET) {
 			err_display("accept()");
 			break;
 		}
@@ -64,26 +64,21 @@ int main(int argc, char* argv[])
 		printf("\n\n[TCP 서버] 클라이언트 접속: IP 주소=%s, 포트 번호=%d\n",
 			addr, ntohs(clientaddr.sin_port));
 
-		client_sock[index++] = sock;
-	}
+		// 스레드 생성
+		hThread = CreateThread(NULL, 0, RecvThread,
+			(LPVOID)client_sock, 0, NULL);
+		if (hThread == NULL) { closesocket(client_sock); }
+		else { CloseHandle(hThread); }
+		++index;
+		if(index == 2)
+			hThread = CreateThread(NULL, 0, WorkThread,
+				(LPVOID)client_sock, 0, NULL);
 
+	}
+	DeleteCriticalSection(&cs);
 	// 소켓 닫기
 	closesocket(listen_sock);
-
-
-	hThread = CreateThread(NULL, 0, WorkThread,
-		(LPVOID)(nullptr), 0, NULL);
-	if (hThread == NULL) { 
-		std::cerr << "ERROR: hThread is NULL\n"; 
-		DeleteCriticalSection(&cs);
-		WSACleanup();
-		exit(1); 
-	}
-
-	WaitForSingleObject(hThread, INFINITE);
-
-	DeleteCriticalSection(&cs);
+	// 윈속 종료
 	WSACleanup();
-
 	return 0;
 }

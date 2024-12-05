@@ -1,6 +1,6 @@
 #include "FunctionalPackets.h"
 
-void process_received_data(const char* buffer, size_t buffer_size, Player* p, Player* e, Box All_Box[20][20],Bullet* bullet,Item* item,short& time) {
+void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20],Bullet* bullet,Item* item,short& time) {
     {
         // 패킷 타입 읽기
         char packet_type = buffer[0];
@@ -10,12 +10,7 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Pl
         if (packet_type == PACKET_MOVE_PLAYER) {
             Move_Packet packet;
             packet.deserializePlayer(buffer);
-            if (packet.player_index == p_index) {
-                p->Set_Move(packet.move);
-            }
-            else {
-                e->Set_Move(packet.move);
-            }
+            p[packet.player_index].Set_Move(packet.move);
            std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
                 << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
         }
@@ -56,10 +51,8 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Pl
         else if (packet_type == PACKET_UPDATE_SCORE) {
             Update_Score packet;
             packet.deserializePlayer(buffer);
-            if (p_index == 0)
-                p->Set_Box(packet.My_score);
-            else
-                p->Set_Box(packet.Enermy_score);
+            p[0].Set_Box(packet.My_score);
+            p[1].Set_Box(packet.Enermy_score);
         }
     }
 }

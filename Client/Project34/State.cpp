@@ -47,25 +47,19 @@ Play_State::Play_State()
 
 // recv Thread 이거 맞는지 확인 가능할까요?
 void Play_State::enter() {
-	std::cout << "PlayState ENTER...";
 	// 데이터 수신
-	{
-		char buffer;
-		int result;
-		result = recv(sock, &buffer, sizeof(char), 0);
-		p_index = buffer;
-	}
+	char cbuffer;
+	recv(sock, &cbuffer, sizeof(cbuffer), 0);
+	My_index = cbuffer;
 
 	char buffer[sizeof(Player)];
 	int result = recv(sock, buffer, sizeof(buffer), 0);
 	if (result > 0) {
-			player.deserializePlayer(buffer);
+			player[0].deserializePlayer(buffer);
+			player[1].deserializePlayer(buffer);
 	}
 	result = recv(sock, buffer, sizeof(buffer), 0);
-	if (result > 0) {
-		enemy.deserializePlayer(buffer);
-	}
-
+	player[1].deserializePlayer(buffer);
 	char bbuffer[sizeof(Box)];
 	for (int i = 0; i < 20; ++i) {
 		for (int k = 0; k < 20; ++k) {
@@ -73,23 +67,13 @@ void Play_State::enter() {
 			All_Box[i][k].deserializeBox(bbuffer);
 		}
 	}
-	std::cout << "SUCCESS\n";
 }
 
 
 void Play_State::Update()
 {
-	//time_t u = time(NULL); 
-	
 
-
-	//player.Calculate_Move();
-	//if (key_change) {
-	//	send(playerInput, sizeof(playerInput));
-	//	key_change = false;
-	//}
-	
-	char keyinput = player.Get_Action();
+	char keyinput = player[My_index].Get_Action();
 	send(sock, &keyinput, sizeof(char), 0);
 	
 	//Parent_pakcet packet;
@@ -102,16 +86,12 @@ void Play_State::Update()
 		{
 			char buffer[128];
 			size_t len = recv(sock, buffer, sizeof(buffer), 0);
-			process_received_data(buffer, len,&player,&enemy,All_Box,bullet,item,Time);
+			process_received_data(buffer, len,player, All_Box, bullet, item, Time);
 			//handlePacket(packet)
 		}
-	
-	//char buffer[sizeof(Player)];
-	//recv(sock, buffer, sizeof(buffer), 0);
-	//player.deserializePlayer(buffer);
 
 	//카메라업데이트
-	player.Calculate_Camera();
+	player[My_index].Calculate_Camera();
 
 	//	오브젝트렌더
 }
@@ -130,7 +110,7 @@ void Play_State::Draw()
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.01f, 100.0f);
 	projection = glm::rotate(projection, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	projection = glm::translate(projection, glm::vec3(0.0f, 0.0f, -3.0f));
-	glm::mat4 view = glm::lookAt(player.Get_Camerapos(), player.Get_Camerapos() + player.Get_Cameradirection(), cameraUp);
+	glm::mat4 view = glm::lookAt(player[My_index].Get_Camerapos(), player[My_index].Get_Camerapos() + player[My_index].Get_Cameradirection(), cameraUp);
 
 	// 유니폼 값 전송
 	glUseProgram(s_program);
@@ -172,8 +152,13 @@ void Play_State::Draw()
 	}
 
 	// 플레이어 렌더링
-	glm::mat4 playerModel = glm::translate(glm::mat4(1.0f), player.Get_Plocate() + player.Get_Move()) * player.Get_TR();
-	glUniform3f(modelLocation1, player.Get_R(), player.Get_G(), player.Get_B());
+	glm::mat4 playerModel = glm::translate(glm::mat4(1.0f), player[0].Get_Plocate() + player[0].Get_Move()) * player[0].Get_TR();
+	glUniform3f(modelLocation1, player[0].Get_R(), player[0].Get_G(), player[0].Get_B());
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(playerModel));
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+
+	playerModel = glm::translate(glm::mat4(1.0f), player[1].Get_Plocate() + player[1].Get_Move()) * player[1].Get_TR();
+	glUniform3f(modelLocation1, player[1].Get_R(), player[1].Get_G(), player[1].Get_B());
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(playerModel));
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
 	
@@ -211,10 +196,10 @@ void Play_State::Draw()
 	{
 		glDisable(GL_DEPTH_TEST);
 		glViewport(100, 550, 150, 150);
-		Draw_Score(player);
+		Draw_Score(player[0]);
 
 		glViewport(1000, 550, 150, 150);
-		Draw_Score(player);
+		Draw_Score(player[1]);
 	}
 
 	//glDisable(GL_DEPTH_TEST);
@@ -239,16 +224,16 @@ void Play_State::Draw()
 void Play_State::SKeyDown(int key) {
 	switch (key) {
 	case GLUT_KEY_UP:
-		player.Set_DownAction(KEY_UP);
+		player[My_index].Set_DownAction(KEY_UP);
 		break;
 	case GLUT_KEY_DOWN:
-		player.Set_DownAction(KEY_DOWN);
+		player[My_index].Set_DownAction(KEY_DOWN);
 		break;
 	case GLUT_KEY_LEFT:
-		player.Set_DownAction(KEY_LEFT);
+		player[My_index].Set_DownAction(KEY_LEFT);
 		break;
 	case GLUT_KEY_RIGHT:
-		player.Set_DownAction(KEY_RIGHT);
+		player[My_index].Set_DownAction(KEY_RIGHT);
 		break;
 
 	}
@@ -258,16 +243,16 @@ void Play_State::SKeyDown(int key) {
 void Play_State::SKeyUp(int key) {
 	switch (key) {
 	case GLUT_KEY_UP:
-		player.Set_UpAction(KEY_UP);
+		player[My_index].Set_UpAction(KEY_UP);
 		break;
 	case GLUT_KEY_DOWN:
-		player.Set_UpAction(KEY_DOWN);
+		player[My_index].Set_UpAction(KEY_DOWN);
 		break;
 	case GLUT_KEY_LEFT:
-		player.Set_UpAction(KEY_LEFT);
+		player[My_index].Set_UpAction(KEY_LEFT);
 		break;
 	case GLUT_KEY_RIGHT:
-		player.Set_UpAction(KEY_RIGHT);
+		player[My_index].Set_UpAction(KEY_RIGHT);
 		break;
 	}
 }
@@ -276,7 +261,7 @@ void Play_State::KeyUp(int key)
 {
 	switch (key) {
 	case 'a':
-		player.Set_UpAction(KEY_A);
+		player[My_index].Set_UpAction(KEY_A);
 	}
 }
 
@@ -284,7 +269,7 @@ void Play_State::KeyDown(int key)
 {
 	switch (key) {
 	case 'a':
-		player.Set_DownAction(KEY_A);
+		player[My_index].Set_DownAction(KEY_A);
 	}
 }
 
@@ -327,6 +312,13 @@ Stay_State::Stay_State()
 	
 	Logo_texture.Ttr = Tscale * glm::mat4(1.0f);
 	Logo_texture.text = CreateTexture("Logo_state.png");
+}
+
+void Stay_State::Update()
+{
+	char size_buffer[sizeof(int)];
+	recv(sock, size_buffer, sizeof(int), 0);
+	FrameWork::currentInstance->Exit_State();
 }
 
 void Stay_State::Draw()
