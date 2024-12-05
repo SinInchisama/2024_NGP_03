@@ -14,7 +14,7 @@ GameManger::GameManger()
 	bullets = new Bullet * [2];
 	for (int i = 0; i < 2; ++i)
 	{
-		players[i] = new Player{ 0, {0.0f, 0.0f, 0.0f} };
+		players[i] = new Player{ i, {0.0f, 0.0f, 0.0f} };
 		bullets[i] = new Bullet;
 	}
 }

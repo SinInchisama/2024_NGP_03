@@ -29,11 +29,13 @@ void Box::deserializeBox(const char* buffer)
     memcpy(&Bounding_box, buffer, sizeof(Bounding_box));
 }
 
-std::unique_ptr<Parent_Packet> Box::Chage_Color(glm::vec3 v, short index,int i)
+std::unique_ptr<Parent_Packet> Box::Chage_Color(glm::vec3 v, short index,int i,int a)
 {
     if (Color != v) {
+        if(Color != glm::vec3(0.0f, 0.0f, 0.0f))
+        GameManger::Instance->players[a]->Add_Occupy(-1);
         Color = v;
-        GameManger::Instance->players[0]->Add_Occupy(1);
+        GameManger::Instance->players[i]->Add_Occupy(1);
         return std::make_unique<Change_floor>(index, Color);
     }
     return nullptr;  // Color가 다르지 않으면 nullptr을 반환

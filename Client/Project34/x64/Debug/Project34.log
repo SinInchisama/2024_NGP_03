@@ -1,4 +1,8 @@
-﻿  FrameWork.cpp
+﻿  CBullet.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'CBullet.cpp'을(를) 컴파일하는 중)
+  
+  FrameWork.cpp
 C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
   (소스 파일 'FrameWork.cpp'을(를) 컴파일하는 중)
   

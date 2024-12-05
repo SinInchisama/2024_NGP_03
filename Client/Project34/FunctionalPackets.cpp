@@ -10,7 +10,7 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
         if (packet_type == PACKET_MOVE_PLAYER) {
             Move_Packet packet;
             packet.deserializePlayer(buffer);
-            p->Set_Move(packet.move);
+            p[packet.player_index].Set_Move(packet.move);
            std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
                 << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
         }
@@ -51,7 +51,8 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
         else if (packet_type == PACKET_UPDATE_SCORE) {
             Update_Score packet;
             packet.deserializePlayer(buffer);
-            p->Set_Box(packet.My_score);
+            p[0].Set_Box(packet.My_score);
+            p[1].Set_Box(packet.Enermy_score);
         }
     }
 }

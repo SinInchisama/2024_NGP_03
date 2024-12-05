@@ -22,7 +22,7 @@ public:
 	void deserializeBox(const char* buffer);
 
 	// 플레이어와 충돌시 해당 플레이어의 색깔 얻어오기
-	std::unique_ptr<Parent_Packet> Chage_Color(glm::vec3 v,short index, int i);
+	std::unique_ptr<Parent_Packet> Chage_Color(glm::vec3 v,short index, int i,int a);
 
 	// 이 부분은 충돌체크 부분에서 해결해야하는가?
 	//bool Crash_Player()
