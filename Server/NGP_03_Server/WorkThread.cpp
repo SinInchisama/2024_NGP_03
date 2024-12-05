@@ -5,6 +5,8 @@ Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
 Item items[20];
 
+void Item_Effect(int index, int num);
+
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
 {
@@ -113,12 +115,37 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		}
 
 		// item
+		bool isCollisionDetected = false;
+		int I_x = 0, I_z = 0;
+
 		for (int i = 0; i < 12; ++i) {
-			if ((player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
+			if ((items[i].View &&	/* 활성화된 아이템만 */
+				player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) &&
 				(player_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player_bounding_box[1][1] >= items[i].Bounding_box[0][1])) {
+				
+				items[i].View = false;
+
+				Item_Effect(i, 0);
+
+				EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
+			}
+		}
+
+		for (int i = 0; i < 12; ++i) {
+			if ((items[i].View &&	/* 활성화된 아이템만 */
+				player2_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
+				(player2_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
+				(player2_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
+				(player2_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[0][2] <= items[i].Bounding_box[1][2]) &&
+				(player2_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player2_bounding_box[1][1] >= items[i].Bounding_box[0][1])) {
+
+				items[i].View = false;
+
+				Item_Effect(i, 1);
+
 				EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
 			}
 		}
@@ -242,5 +269,60 @@ void Timer_Check()
 	if (timer.isFinished())
 	{
 		// 게임 끝내는 이벤트 생성
+	}
+}
+
+void Item_Effect(int index, int num)
+{
+	int idx = index;
+	int p_n = num;
+
+	if (idx == 1) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[3][15], GameManger::Instance->players[0]->Get_Color(), 3 * 20 + 15, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[3][15], GameManger::Instance->players[1]->Get_Color(), 3 * 20 + 15, 1, 0));
+	}
+	else if (idx == 2) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[7][2], GameManger::Instance->players[0]->Get_Color(), 7 * 20 + 2, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[7][2], GameManger::Instance->players[1]->Get_Color(), 7 * 20 + 2, 1, 0));
+	}
+	else if (idx == 3) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[11][18], GameManger::Instance->players[0]->Get_Color(), 11 * 20 + 18, 0, 1));
+		else if (p_n == 1)EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[11][18], GameManger::Instance->players[1]->Get_Color(), 11 * 20 + 18, 1, 0));
+	}
+	else if (idx == 4) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[0][9], GameManger::Instance->players[0]->Get_Color(), 0 * 20 + 9, 0, 1));
+		else if (p_n == 1)EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[0][9], GameManger::Instance->players[1]->Get_Color(), 0 * 20 + 9, 1, 0));
+	}
+	else if (idx == 5) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[14][6], GameManger::Instance->players[0]->Get_Color(), 14 * 20 + 6, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[14][6], GameManger::Instance->players[1]->Get_Color(), 14 * 20 + 6, 1, 0));
+	}
+	else if (idx == 6) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[8][19], GameManger::Instance->players[0]->Get_Color(), 8 * 20 + 19, 0, 1));
+		else if (p_n == 1)EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[8][19], GameManger::Instance->players[1]->Get_Color(), 8 * 20 + 19, 1, 0));
+	}
+	else if (idx == 7) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[16][5], GameManger::Instance->players[0]->Get_Color(), 16 * 20 + 5, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[16][5], GameManger::Instance->players[1]->Get_Color(), 16 * 20 + 5, 1, 0));
+	}
+	else if (idx == 8) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[1][13], GameManger::Instance->players[0]->Get_Color(), 1 * 20 + 13, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[1][13], GameManger::Instance->players[1]->Get_Color(), 1 * 20 + 13, 1, 0));
+	}
+	else if (idx == 9) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[19][7], GameManger::Instance->players[0]->Get_Color(), 19 * 20 + 7, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[19][7], GameManger::Instance->players[1]->Get_Color(), 19 * 20 + 7, 1, 0));
+	}
+	else if (idx == 10) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[4][10], GameManger::Instance->players[0]->Get_Color(), 4 * 20 + 10, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[4][10], GameManger::Instance->players[1]->Get_Color(), 4 * 20 + 10, 1, 0));
+	}
+	else if (idx == 11) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[17][0], GameManger::Instance->players[0]->Get_Color(), 17 * 20 + 0, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[17][0], GameManger::Instance->players[1]->Get_Color(), 17 * 20 + 0, 1, 0));
+	}
+	else if (idx == 12) {
+		if (p_n == 0) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[12][3], GameManger::Instance->players[0]->Get_Color(), 12 * 20 + 3, 0, 1));
+		else if (p_n == 1) EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[12][3], GameManger::Instance->players[1]->Get_Color(), 12 * 20 + 3, 1, 0));
 	}
 }
