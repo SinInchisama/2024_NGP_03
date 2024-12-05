@@ -68,7 +68,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	}
 	if (GameManger::Instance->bullets[1]->View) {
 		GameManger::Instance->bullets[1]->Move();
-		packetQueue.push(std::make_unique<Move_bullet>(1, GameManger::Instance->bullets[0]->Move1));
+		packetQueue.push(std::make_unique<Move_bullet>(1, GameManger::Instance->bullets[1]->Move1));
 	}
 		
 

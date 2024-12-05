@@ -2,7 +2,6 @@
 #include "CPlayer.h"
 #include "CBullet.h"
 #include "Public.h"
-#include <vector>
 
 void EventMovePlayer(Player* p, KeyInput& k);
 //void EventCreateItem(Item* itemArr);
@@ -10,6 +9,15 @@ void EventMovePlayer(Player* p, KeyInput& k);
 //void EventMoveBullet(Bullet* bArr);
 
 struct Parent_Packet {
+<<<<<<< HEAD
+	byte pakcet_type;
+};
+
+struct Move_Packet : Parent_Packet {
+	byte player_index;
+	glm::vec3 move;
+};
+=======
     byte pakcet_type;
 
     virtual void serialize(char* buffer)const {}
@@ -29,6 +37,7 @@ struct Move_Packet : Parent_Packet {
         : player_index(player_idx), move(player_move) {
         pakcet_type = 1; // Move_Packet Å¸ÀÔ ¼³Á¤
     }
+>>>>>>> ê¹€ì„ ë¹ˆ
 
     void serialize(char* buffer)const override {
         int offset = 0;
@@ -156,6 +165,31 @@ struct Delete_item : Parent_Packet {
 
         memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
         memcpy(&item_index, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
+
+struct Delete_bullet : Parent_Packet {
+    byte bullet_index;
+
+    Delete_bullet() :bullet_index(0) {
+        pakcet_type = 5;
+    }
+    Delete_bullet(byte b) :bullet_index(b) {
+        pakcet_type = 5;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &bullet_index, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer)
+    {
+        int offset = 0;
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&bullet_index, buffer + offset, sizeof(short)); offset += sizeof(short);
     }
 };
 

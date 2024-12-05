@@ -11,7 +11,7 @@ void EventMovePlayer(Player* p, KeyInput& k);
 //void EventCreateBullet(Bullet* bArr);
 //void EventMoveBullet(Bullet* bArr);
 
-void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20], Bullet* bullet, Item* item, short& time);
+void process_received_data(const char* buffer, size_t buffer_size, Player* p, Player* e, Box All_Box[20][20], Bullet* bullet, Item* item, short& time);
 
 struct Parent_Packet {
 	byte pakcet_type;
