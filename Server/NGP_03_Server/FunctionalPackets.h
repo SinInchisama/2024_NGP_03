@@ -159,6 +159,31 @@ struct Delete_item : Parent_Packet {
     }
 };
 
+struct Delete_bullet : Parent_Packet {
+    byte bullet_index;
+
+    Delete_bullet() :bullet_index(0) {
+        pakcet_type = 5;
+    }
+    Delete_bullet(byte b) :bullet_index(b) {
+        pakcet_type = 5;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &bullet_index, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer)
+    {
+        int offset = 0;
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&bullet_index, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
+
 struct Change_floor : Parent_Packet {
     short box_index;
     glm::vec3 color;

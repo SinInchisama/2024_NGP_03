@@ -133,13 +133,6 @@ void Play_State::Draw()
 		}
 	}
 
-	// √—æÀ ∑ª¥ı∏µ
-	if (bullet[0].View) {
-		glm::mat4 TR1 = glm::translate(glm::mat4(1.0f), bullet[0].Blocate) * bullet[0].TR;
-		glUniform3f(modelLocation1, bullet[0].Bcolor[0], bullet[0].Bcolor[1], bullet[0].Bcolor[2]);
-		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR1));
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
-	}
 
 	// æ∆¿Ã≈€ ∑ª¥ı∏µ
 	for (int i = 0; i < 12; i++) {
@@ -152,15 +145,20 @@ void Play_State::Draw()
 	}
 
 	// «√∑π¿ÃæÓ ∑ª¥ı∏µ
-	glm::mat4 playerModel = glm::translate(glm::mat4(1.0f), player[0].Get_Plocate() + player[0].Get_Move()) * player[0].Get_TR();
-	glUniform3f(modelLocation1, player[0].Get_R(), player[0].Get_G(), player[0].Get_B());
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(playerModel));
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+	for (int i = 0; i < 2; ++i) {
+		glm::mat4 playerModel = glm::translate(glm::mat4(1.0f), player[i].Get_Plocate() + player[i].Get_Move()) * player[i].Get_TR();
+		glUniform3f(modelLocation1, player[i].Get_R(), player[i].Get_G(), player[i].Get_B());
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(playerModel));
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
 
-	playerModel = glm::translate(glm::mat4(1.0f), player[1].Get_Plocate() + player[1].Get_Move()) * player[1].Get_TR();
-	glUniform3f(modelLocation1, player[1].Get_R(), player[1].Get_G(), player[1].Get_B());
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(playerModel));
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+		// √—æÀ ∑ª¥ı∏µ
+		if (bullet[i].View) {
+			glm::mat4 TR1 = glm::translate(glm::mat4(1.0f), bullet[i].Blocate) * bullet[i].TR;
+			glUniform3f(modelLocation1, bullet[i].Bcolor[0], bullet[i].Bcolor[1], bullet[i].Bcolor[2]);
+			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR1));
+			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLuint) * 0));
+		}
+	}
 	
 	{
 		// ±Ì¿Ã ≈◊Ω∫∆Æ ∫Ò»∞º∫»≠
