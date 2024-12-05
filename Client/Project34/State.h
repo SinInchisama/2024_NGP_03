@@ -31,6 +31,7 @@ class Play_State :public State
 {
 public:
 	Player player = { 0, {0.0f, 0.0f, 0.0f} };
+	Player enemy = { 0, {0.0f, 0.0f, 0.0f} };
 
 	Box All_Box[20][20];
 

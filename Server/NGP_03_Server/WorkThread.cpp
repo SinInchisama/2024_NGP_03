@@ -18,8 +18,10 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 	while (true) {
 		char cbuffer;
-		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
+		recv(client_sock[0], &cbuffer, sizeof(cbuffer), 0);
 		GameManger::Instance->players[0]->Set_Action(cbuffer);
+		recv(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
+		GameManger::Instance->players[1]->Set_Action(cbuffer);
 
 		Timer_Check();
 		
@@ -29,57 +31,74 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		
 
 		// 행렬 변환(플레이어, 총알 움직임)
-		GameManger::Instance->players[0]->Calculate_Move();
+		for (byte p_index = 0; p_index < 2; ++p_index) {
+			GameManger::Instance->players[p_index]->Calculate_Move();
 
-		if (GameManger::Instance->players[0]->Get_Action() & KEY_A) {
-			if (!GameManger::Instance->bullets[0]->View) {
-				GameManger::Instance->bullets[0]->View = true;
-				GameManger::Instance->players[0]->Set_UpAction(KEY_A);
+			if (GameManger::Instance->players[p_index]->Get_Action() & KEY_A) {
+				if (!GameManger::Instance->bullets[p_index]->View) {
+					GameManger::Instance->bullets[p_index]->View = true;
+					GameManger::Instance->players[p_index]->Set_UpAction(KEY_A);
 
-				GameManger::Instance->bullets[0]->InitBullet(0,
-					(GameManger::Instance->players[0]->Get_Plocate() + GameManger::Instance->players[0]->Get_Move()), GameManger::Instance->players[0]->Get_Action());
-				packetQueue.push(std::make_unique<Create_bullet>(0, true));
+					GameManger::Instance->bullets[p_index]->InitBullet(p_index,
+						(GameManger::Instance->players[p_index]->Get_Plocate() + GameManger::Instance->players[p_index]->Get_Move()), GameManger::Instance->players[p_index]->Get_Action());
+					packetQueue.push(std::make_unique<Create_bullet>(p_index, true));
+				}
+			}
+
+			if (GameManger::Instance->bullets[p_index]->View) {
+				GameManger::Instance->bullets[p_index]->Move();
+				packetQueue.push(std::make_unique<Move_bullet>(p_index, GameManger::Instance->bullets[p_index]->Move1));
 			}
 		}
 		
-	if (GameManger::Instance->bullets[0]->View){
-		GameManger::Instance->bullets[0]->Move();
-		packetQueue.push(std::make_unique<Move_bullet>(0, GameManger::Instance->bullets[0]->Move1));
-	}
-		
 
 		// 충돌 체크
-		glm::mat4 TR1 = glm::mat4(1.0f);
-		glm::mat4 Tx = glm::mat4(1.0f);
-		Tx = glm::translate(Tx, GameManger::Instance->players[0]->Get_Plocate() + GameManger::Instance->players[0]->Get_Move());
-		TR1 = Tx * GameManger::Instance->players[0]->Get_TR();
+		for (byte p_index = 0; p_index < 2; ++p_index) {
+			glm::mat4 TR1 = glm::mat4(1.0f);
+			glm::mat4 Tx = glm::mat4(1.0f);
+			Tx = glm::translate(Tx, GameManger::Instance->players[p_index]->Get_Plocate() + GameManger::Instance->players[p_index]->Get_Move());
+			TR1 = Tx * GameManger::Instance->players[p_index]->Get_TR();
 
-		glm::vec4 a1 = TR1 * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);
-		glm::vec4 a2 = TR1* glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
+			glm::vec4 a1 = TR1 * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);
+			glm::vec4 a2 = TR1 * glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
 
-		glm::vec4 player_bounding_box[2] = { a1, a2 };
+			glm::vec4 player_bounding_box[2] = { a1, a2 };
 
-		for (int i = 0; i < 20; ++i) {
-			for (int j = 0; j < 20; ++j) {
-				if ((player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) ||
-					(player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
-					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
-					(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
-					(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
-					EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], GameManger::Instance->players[0]->Get_Color(),i*20 + j,0));
+			for (int i = 0; i < 20; ++i) {
+				for (int j = 0; j < 20; ++j) {
+					if ((player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+						(player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+						(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[1][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[1][2] <= All_Box[i][j].Bounding_box[1][2]) ||
+						(player_bounding_box[1][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[1][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) &&
+						(player_bounding_box[0][1] <= All_Box[i][j].Bounding_box[1][1] && player_bounding_box[1][1] >= All_Box[i][j].Bounding_box[0][1])) {
+						EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[i][j], GameManger::Instance->players[p_index]->Get_Color(), i * 20 + j, 0));
+					}
+				}
+			}
+
+			// item
+			for (int i = 0; i < 12; ++i) {
+				if ((player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
+					(player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
+					(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
+					(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) &&
+					(player_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player_bounding_box[1][1] >= items[i].Bounding_box[0][1])) {
+					EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
 				}
 			}
 		}
 
 		// 매번 보내야되는 패킷
 		packetQueue.push(std::make_unique<Update_score>(GameManger::Instance->players[0]->Get_Box(), GameManger::Instance->players[1]->Get_Box()));
-		packetQueue.push(std::make_unique<Move_Packet>(1, GameManger::Instance->players[0]->Get_Move()));
+		packetQueue.push(std::make_unique<Move_Packet>(0, GameManger::Instance->players[0]->Get_Move()));
+		packetQueue.push(std::make_unique<Move_Packet>(1, GameManger::Instance->players[1]->Get_Move()));
 
 		// 클라이언트로 큐의 크기 전송
 
 		char size_buffer[sizeof(int)];
 		int queue_size = packetQueue.size();
 		std::memcpy(size_buffer, &queue_size, sizeof(int));
+		send(client_sock[0], size_buffer, sizeof(size_buffer), 0);
 		send(client_sock[1], size_buffer, sizeof(size_buffer), 0);
 
 		// packetQueue가 빌 때까지 소켓데이터를 보냄.
@@ -89,6 +108,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			packetQueue.pop();
 			// 패킷 직렬화
 			packet->serialize(buffer);
+			send(client_sock[0], buffer, sizeof(buffer), 0);
 			send(client_sock[1], buffer, sizeof(buffer), 0);
 		}
 	}
@@ -100,6 +120,8 @@ void Reset_Object()
 	Boxinit(20, 20, 20);
 	GameManger::Instance->players[0]->Set_Plocate(glm::vec3(0,0,0));
 	All_Box[0][0].Color= GameManger::Instance->players[0]->Get_Color();
+	GameManger::Instance->players[1]->Set_Plocate(glm::vec3(0, 0, 0));
+	All_Box[0][0].Color = GameManger::Instance->players[1]->Get_Color();
 }
 
 void Boxinit(int x, int y, int z)
@@ -137,7 +159,6 @@ void Boxinit(int x, int y, int z)
 	}
 }
 
-<<<<<<< HEAD
 //void Create_Item(std::vector<Item>& items, int gridSize)
 //{
 //	// 아이템 타입 (0 ~ 2 랜덤)
@@ -161,18 +182,26 @@ void Boxinit(int x, int y, int z)
 //		<< x << ", " << y << ", " << z << ")" << std::endl;
 //}
 
-=======
->>>>>>> 理쒖젙誘�
 void Send_Object()
 {
-	char pbuffer[sizeof(Player)];
-	GameManger::Instance->players[0]->serializePlayer(pbuffer);
-	int result = send(client_sock[1], pbuffer, sizeof(pbuffer), 0);
+	char p_index[2] = { 0, 1 };
+	int result = send(client_sock[0], &p_index[0], sizeof(char), 0);
+	result = send(client_sock[1], &p_index[1], sizeof(char), 0);
+
+	char pbuffer[2][sizeof(Player)];
+	GameManger::Instance->players[0]->serializePlayer(pbuffer[0]);
+	GameManger::Instance->players[1]->serializePlayer(pbuffer[1]);
+	result = send(client_sock[0], pbuffer[0], sizeof(pbuffer[0]), 0);
+	result = send(client_sock[0], pbuffer[1], sizeof(pbuffer[1]), 0);
+
+	result = send(client_sock[1], pbuffer[1], sizeof(pbuffer[1]), 0);
+	result = send(client_sock[1], pbuffer[0], sizeof(pbuffer[0]), 0);
 
 	char bbuffer[sizeof(Box)];
 	for (int i = 0; i < 20; ++i) {
 		for (int k = 0; k < 20; k++) {
 			All_Box[i][k].serializeBox(bbuffer);
+			send(client_sock[0], bbuffer, sizeof(bbuffer), 0);
 			send(client_sock[1], bbuffer, sizeof(bbuffer), 0);
 		}
 	}

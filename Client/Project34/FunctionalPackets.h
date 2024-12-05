@@ -11,7 +11,7 @@ void EventMovePlayer(Player* p, KeyInput& k);
 //void EventCreateBullet(Bullet* bArr);
 //void EventMoveBullet(Bullet* bArr);
 
-void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20], Bullet* bullet, Item* item, short& time);
+void process_received_data(const char* buffer, size_t buffer_size, Player* p, Player* e, Box All_Box[20][20], Bullet* bullet, Item* item, short& time);
 
 struct Parent_Packet {
 	byte pakcet_type;
@@ -157,6 +157,33 @@ struct Create_item : Parent_Packet {
         memcpy(&item_index, buffer + offset, sizeof(byte)); offset += sizeof(byte);
         memcpy(&color, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
         memcpy(&locate, buffer + offset, sizeof(glm::vec3)); offset += sizeof(glm::vec3);
+    }
+};
+
+struct Delete_item : Parent_Packet {
+    short item_index;
+
+    Delete_item() : item_index(0) {
+        pakcet_type = 4;
+    }
+
+    Delete_item(const short i_idx)
+        : item_index(item_index) {
+        pakcet_type = 4;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &item_index, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&item_index, buffer + offset, sizeof(short)); offset += sizeof(short);
     }
 };
 

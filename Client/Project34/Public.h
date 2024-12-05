@@ -28,6 +28,7 @@ extern GLuint triangleVertexArrayObject;
 extern glm::vec3 cameraUp; //--- 카메라 위쪽 방향
 
 extern SOCKET sock;
+extern byte p_index;
 
 typedef enum : byte {
 	KEY_UP =	0b0000'0001, // UP 키		0000 0001		

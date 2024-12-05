@@ -1,6 +1,6 @@
 #include "FunctionalPackets.h"
 
-void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20],Bullet* bullet,Item* item,short& time) {
+void process_received_data(const char* buffer, size_t buffer_size, Player* p, Player* e, Box All_Box[20][20],Bullet* bullet,Item* item,short& time) {
     {
         // 패킷 타입 읽기
         char packet_type = buffer[0];
@@ -10,7 +10,12 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
         if (packet_type == PACKET_MOVE_PLAYER) {
             Move_Packet packet;
             packet.deserializePlayer(buffer);
-            p->Set_Move(packet.move);
+            if (packet.player_index == p_index) {
+                p->Set_Move(packet.move);
+            }
+            else {
+                e->Set_Move(packet.move);
+            }
            std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
                 << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
         }
@@ -25,6 +30,11 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             item[packet.item_index].Icolor = packet.color;
             item[packet.item_index].ILocate = packet.locate;
             item[packet.item_index].View = true;
+        }
+        else if (packet_type == PACKET_DELETE_ITEM) {
+            Delete_item packet;
+            packet.deserializePlayer(buffer);
+            item[packet.item_index].View = false;
         }
         else if (packet_type == PACKET_CHANGE_FLOOR) {
             Change_floor packet;
