@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 		if (hThread == NULL) { closesocket(client_sock); }
 		else { CloseHandle(hThread); }
 		++index;
-		if(index == 1)
+		if(index == 2)
 			hThread = CreateThread(NULL, 0, WorkThread,
 				(LPVOID)client_sock, 0, NULL);
 

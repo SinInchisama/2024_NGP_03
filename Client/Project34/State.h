@@ -30,7 +30,7 @@ public:
 class Play_State :public State
 {
 public:
-	Player player = { 0, {0.0f, 0.0f, 0.0f} };
+	Player player[2] = { {0, {0.0f, 0.0f, 0.0f}},{0, {0.0f, 0.0f, 0.0f}} };
 
 	Box All_Box[20][20];
 
@@ -45,6 +45,8 @@ public:
 	GLuint Num[11];
 	
 	short Time = 0;
+
+	char My_index;
 public:
 	Play_State();
 
@@ -73,7 +75,7 @@ public:
 	void enter()override {};
 	void exit()override {};
 
-	void Update() override {};
+	void Update() override ;
 	void Draw()override;
 
 	void SKeyUp(int key) override {};
