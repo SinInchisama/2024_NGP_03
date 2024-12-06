@@ -1,4 +1,5 @@
 #include "FunctionalPackets.h"
+#include "FrameWork.h"
 
 void process_received_data(const char* buffer, size_t buffer_size, Player* p, Box All_Box[20][20],Bullet* bullet,Item* item,short& time) {
     {
@@ -31,6 +32,12 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             packet.deserializePlayer(buffer);
             item[packet.item_index].View = false;
         }
+        else if (packet_type == PACKET_DELETE_BULLET) {
+            Delete_bullet packet;
+            packet.deserializePlayer(buffer);
+            bullet[packet.bullet_index].View = false;
+            // std::cout << "INDEX " << (int)packet.bullet_index << "'s Bullet has deleted.\n";
+        }
         else if (packet_type == PACKET_CHANGE_FLOOR) {
             Change_floor packet;
             packet.deserializePlayer(buffer);
@@ -53,6 +60,9 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             packet.deserializePlayer(buffer);
             p[0].Set_Box(packet.My_score);
             p[1].Set_Box(packet.Enermy_score);
+        }
+        else if (packet_type == 10) {
+            FrameWork::currentInstance->Exit_State();
         }
     }
 }

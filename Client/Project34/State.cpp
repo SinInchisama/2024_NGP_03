@@ -105,17 +105,31 @@ void Play_State::Draw()
 	// 셰이더 유니폼 위치 가져오기
 	unsigned int projectionLocation = glGetUniformLocation(s_program, "projectionTransform");
 	unsigned int viewLocation = glGetUniformLocation(s_program, "viewTransform");
+	unsigned int Texture_viewlocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	unsigned int Teture_projectionlocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform");
 
 	// 투영 행렬 및 뷰 행렬 설정
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.01f, 100.0f);
+	/*glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.01f, 100.0f);
 	projection = glm::rotate(projection, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	projection = glm::translate(projection, glm::vec3(0.0f, 0.0f, -3.0f));
-	glm::mat4 view = glm::lookAt(player[My_index].Get_Camerapos(), player[My_index].Get_Camerapos() + player[My_index].Get_Cameradirection(), cameraUp);
+	glm::mat4 view = glm::lookAt(player[My_index].Get_Camerapos(), player[My_index].Get_Camerapos() + player[My_index].Get_Cameradirection(), cameraUp);*/
+
+	glm::mat4 view = glm::lookAt(Camerapos, Camerapos + Cameradirection, Cameraup);
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+
+	glm::mat4 projection = glm::mat4(1.0f);
+	projection = glm::perspective(glm::radians(60.0f), 1.0f, 0.01f, 100.0f);
+	projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)); //--- z축에 대하여 회전 행렬
+	projection = glm::translate(projection, glm::vec3(0.0, -3.0, 15.0)); //--- 공간을 약간 뒤로 미뤄줌
+	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
 	// 유니폼 값 전송
 	glUseProgram(s_program);
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
+
+	glUniformMatrix4fv(Texture_viewlocation, 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(Teture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
+	/*glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));*/
 
 	// 유니폼 위치 가져오기
 	unsigned int modelLocation = glGetUniformLocation(s_program, "modelTransform");
@@ -163,7 +177,7 @@ void Play_State::Draw()
 	{
 		// 깊이 테스트 비활성화
 		glDisable(GL_DEPTH_TEST);
-		glViewport(540, 500, 200, 200);
+		glViewport(540, 580, 200, 200);
 
 		// 셰이더 프로그램 활성화
 		glBindVertexArray(triangleVertexArrayObject);
@@ -193,10 +207,10 @@ void Play_State::Draw()
 
 	{
 		glDisable(GL_DEPTH_TEST);
-		glViewport(100, 550, 150, 150);
+		glViewport(100, 600, 150, 150);
 		Draw_Score(player[0]);
 
-		glViewport(1000, 550, 150, 150);
+		glViewport(1000, 600, 150, 150);
 		Draw_Score(player[1]);
 	}
 
@@ -362,4 +376,55 @@ void Stay_State::KeyDown(int key)
 {
 	if (key == 'a')
 		FrameWork::currentInstance->Exit_State();
+}
+
+End_State::End_State()
+{
+	glm::mat4 Tscale = glm::mat4(1.0f);
+	Tscale = glm::scale(Tscale, glm::vec3(2.0f, 2.0f, 2.0f));
+
+	Win_texture[0].Ttr = Tscale * glm::mat4(1.0f);
+	Win_texture[1].Ttr = Tscale * glm::mat4(1.0f);
+
+	Win_texture[0].text = CreateTexture("1p_win.png");
+	Win_texture[1].text = CreateTexture("2p_win.png");
+}
+
+void End_State::Draw()
+{
+	glEnable(GL_DEPTH_TEST);
+	unsigned int Texture_viewlocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	unsigned int Texture_projectionlocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform");
+
+	glm::mat4 projection = glm::mat4(1.0f);
+	projection = glm::translate(projection, glm::vec3(0.0, 0.0, 0.0)); // 공간을 뒤로 미룸
+
+	// 셰이더 프로그램 사용
+	glUseProgram(triangleShaderProgramID);
+
+	// 텍스처 유닛 설정
+	glUniform1i(glGetUniformLocation(triangleShaderProgramID, "tex"), 0);
+	glUniformMatrix4fv(Texture_projectionlocation, 1, GL_FALSE, &projection[0][0]);
+
+	// 뷰 행렬 설정
+	glm::mat4 view = glm::mat4(1.0f);
+	unsigned int viewLocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+
+	// 모델 변환 행렬 설정
+	unsigned int modelLocation = glGetUniformLocation(triangleShaderProgramID, "modelTransform");
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Win_texture[0].Ttr)); // 모델 변환 적용
+
+	// 텍스처 바인딩
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, Win_texture[0].text);
+
+	// 버텍스 배열 바인딩
+	glBindVertexArray(triangleVertexArrayObject);
+
+	// 그리기 호출
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	// 뷰포트 설정
+	glViewport(0, 0, 1260, 700);
 }

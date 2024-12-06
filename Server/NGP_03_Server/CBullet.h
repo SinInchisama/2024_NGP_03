@@ -16,6 +16,7 @@ public:
 	int x_dir;
 	int z_dir;
 	float speed;
+	float dist;
 
 	glm::vec4 Bounding_box[2];
 
@@ -30,7 +31,8 @@ public:
 		z_dir(0),                  // 기본 방향 0
 		speed(0.15f),               // 기본 속도 0
 		Bounding_box{ glm::vec4(0.0f), glm::vec4(0.0f) }, // 기본 Bounding Box
-		View(false)                // 기본적으로 보이지 않음
+		View(false),                // 기본적으로 보이지 않음
+		dist(4.0f)
 	{
 		glm::mat4 TR1 = glm::mat4(1.0f);
 		glm::mat4 Scale = glm::mat4(1.0f);
