@@ -9,7 +9,7 @@ Timer::Timer(int seconds) {
 void Timer::resetTimer()
 {
 	startTime = time(NULL);
-	endTime = startTime + 60;
+	endTime = startTime + 10;
 	previousTime = time(NULL);
 }
 
@@ -20,5 +20,10 @@ int Timer::getRemainingTiem() {
 }
 
 bool Timer::isFinished() {
-	return time(NULL) >= endTime;
+	return previousTime >= endTime;
+}
+
+std::unique_ptr<Parent_Packet> Timer::End_Game()
+{
+	return std::make_unique<End_game>();
 }

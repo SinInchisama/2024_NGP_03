@@ -95,6 +95,7 @@ FrameWork::FrameWork()
 
 	states.push_back(new Stay_State);  // 벡터에 동적으로 할당된 객체를 추가
 	states.push_back(new Play_State);  // 벡터에 동적으로 할당된 객체를 추가
+	states.push_back(new End_State);
 
 	currentStateIndex = 0;  // 처음 상태는 Stay_State
 

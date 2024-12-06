@@ -320,3 +320,23 @@ struct Update_score : public Parent_Packet {
         memcpy(&Enermy_score, buffer + offset, sizeof(short)); offset += sizeof(short);
     }
 };
+
+struct End_game : public Parent_Packet {
+
+    End_game() {
+        pakcet_type = 10;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+    }
+};

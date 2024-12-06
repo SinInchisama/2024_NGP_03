@@ -301,7 +301,7 @@ void Timer_Check()
 
 	if (timer.isFinished())
 	{
-		// 게임 끝내는 이벤트 생성
+		EventQueue::currentInstance->addEvent(std::bind(&Timer::End_Game,&timer));
 	}
 }
 

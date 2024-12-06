@@ -88,3 +88,23 @@ public:
 	void KeyUp(int key) {};
 	void KeyDown(int key) ;
 };
+
+class End_State :public State
+{
+private:
+	Texture Win_texture[2];
+public:
+	End_State();
+
+	void enter()override {};
+	void exit()override {};
+
+	void Update() override {};
+	void Draw()override;
+
+	void SKeyUp(int key) override {};
+	void SKeyDown(int key)override {};
+
+	void KeyUp(int key) {};
+	void KeyDown(int key) {};
+};
