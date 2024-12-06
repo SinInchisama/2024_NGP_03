@@ -47,6 +47,10 @@ public:
 	short Time = 0;
 
 	char My_index;
+
+	glm::vec3 Camerapos{ 0.0,8.0,15.0 };
+	glm::vec3 Cameradirection{0.0,0.0,-1.0};
+	glm::vec3 Cameraup{0.0,1.0,0.0};
 public:
 	Play_State();
 

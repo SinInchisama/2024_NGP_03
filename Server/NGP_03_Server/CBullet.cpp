@@ -47,10 +47,10 @@ void Bullet::Move(int i)
 	float dx = Move1[0];
 	float dz = Move1[2];
 
-	Move1[0] += cos(glm::radians(180.0f * i)) * speed * x_dir;			// 플레이어 좌우 움직임 할때 쓰는 계산
-	Move1[2] += sin(glm::radians(180.0f * i)) * speed * x_dir;
-	Move1[0] += sin(glm::radians(180.0f * i)) * speed * z_dir;			// 플레이어 위 아래 움직임 할때 쓰는 계산
-	Move1[2] += cos(glm::radians(180.0f * i)) * speed * z_dir;
+	Move1[0] += cos(glm::radians(180.0f * 0)) * speed * x_dir;			// 플레이어 좌우 움직임 할때 쓰는 계산
+	Move1[2] += sin(glm::radians(180.0f * 0)) * speed * x_dir;
+	Move1[0] += sin(glm::radians(180.0f * 0)) * speed * z_dir;			// 플레이어 위 아래 움직임 할때 쓰는 계산
+	Move1[2] += cos(glm::radians(180.0f * 0)) * speed * z_dir;
 
 	dist -= abs(Move1[0] - dx) + abs(Move1[2] - dz);
 }
