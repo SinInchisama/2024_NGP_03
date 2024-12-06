@@ -29,6 +29,10 @@ GLuint triangleVertexArrayObject = 0;
 
 glm::vec3 cameraUp; //--- 카메라 위쪽 방향\
 
+std::random_device rd;
+std::mt19937 mt(rd());
+std::uniform_int_distribution<int> dist(0, 400);
+
 char* filetobuf(const char* file)
 {
 	FILE* fptr;

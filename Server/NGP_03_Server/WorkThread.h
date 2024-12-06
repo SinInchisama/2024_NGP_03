@@ -26,3 +26,4 @@ void Send_Object();
 void Timer_Check();
 
 void Boxinit(int x, int y, int z);
+void Item_Effect(int index, int num, int b);
