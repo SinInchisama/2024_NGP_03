@@ -5,6 +5,15 @@ Timer timer(60);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
 Item items[20];
 
+Timer P2_timer(6);
+
+// 플레이어 움직임 멈춤 혹은 안 멈춤
+bool player1_stop = false;
+bool player2_stop = false;
+
+int player1_SST = 0;
+int player2_SST = 0;
+
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
 {
@@ -12,7 +21,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	send(client_sock[0], &cbuffer, sizeof(cbuffer), 0);
 	send(client_sock[1], &cbuffer, sizeof(cbuffer), 0);
 
-	Sleep(200);
+	Sleep(500);
 
 	Reset_Object();
 	
@@ -30,15 +39,16 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		GameManger::Instance->players[1]->Set_Action(cbuffer);
 
 		Timer_Check();
-		
 
 		EventQueue::currentInstance->executeAll(packetQueue);
-
 		
-
 		// 행렬 변환(플레이어, 총알 움직임)
-		GameManger::Instance->players[0]->Calculate_Move();
-		GameManger::Instance->players[1]->Calculate_Move();
+		if (!player1_stop) {
+			GameManger::Instance->players[0]->Calculate_Move();
+		}
+		if (!player2_stop) {
+			GameManger::Instance->players[1]->Calculate_Move();
+		}
 
 		if (GameManger::Instance->players[0]->Get_Action() & KEY_A) {
 			if (!GameManger::Instance->bullets[0]->View) {
@@ -122,9 +132,14 @@ DWORD WINAPI WorkThread(LPVOID arg)
 				(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) &&
 				(player_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player_bounding_box[1][1] >= items[i].Bounding_box[0][1]))) {
 				
-
 				items[i].View = false;
-				Item_Effect(i, 0, 1);
+				
+				int R = rand() % 2;
+				if (R == 0)	Item_Effect(i, 0, 1);
+				else if (R == 1) {
+					player2_stop = true;
+					player2_SST = timer.getRemainingTiem();
+				}
 
 				EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
 			}
@@ -139,7 +154,14 @@ DWORD WINAPI WorkThread(LPVOID arg)
 				(player2_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player2_bounding_box[1][1] >= items[i].Bounding_box[0][1]))) {
 
 				items[i].View = false;
-				Item_Effect(i, 1, 0);
+				
+				int R = rand() % 2;
+
+				if (R == 0) Item_Effect(i, 1, 0);
+				else if (R == 1) {
+					player1_stop = true;
+					player1_SST = timer.getRemainingTiem();
+				}
 
 				EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
 			}
@@ -256,6 +278,14 @@ void Timer_Check()
 		std::cout << currentTime - timer.getLastItemTime() << std::endl;
 		EventQueue::currentInstance->addEvent(std::bind(&Item::Create_Item, items));
 		timer.setLastItemTime(currentTime);       // 마지막 생성 시간 갱신
+	}
+	if (player1_stop && (player1_SST - timer.getRemainingTiem()) >= 2)
+	{
+		player1_stop = false;
+	}
+	if (player2_stop && (player2_SST - timer.getRemainingTiem()) >= 2)
+	{
+		player2_stop = false;
 	}
 
 	EventQueue::currentInstance->addEvent(std::bind(&Timer::Update_Timer,

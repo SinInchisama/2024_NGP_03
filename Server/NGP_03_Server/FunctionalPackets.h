@@ -134,12 +134,12 @@ struct Create_item : Parent_Packet {
 struct Delete_item : Parent_Packet {
     short item_index;
 
-    Delete_item() : item_index(0) {
+    Delete_item() : item_index(0){
         pakcet_type = 4;
     }
 
     Delete_item(const short i_idx)
-        : item_index(item_index) {
+        : item_index(item_index){
         pakcet_type = 4;
         item_index = i_idx;
     }
