@@ -1,5 +1,51 @@
-﻿  State.cpp
+﻿  CBox.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'CBox.cpp'을(를) 컴파일하는 중)
+  
+  CBullet.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'CBullet.cpp'을(를) 컴파일하는 중)
+  
+  CItem.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'CItem.cpp'을(를) 컴파일하는 중)
+  
+  CPlayer.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'CPlayer.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(39,49): warning C4244: '=': 'double'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(39,49): warning C4244:         with
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(39,49): warning C4244:         [
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(39,49): warning C4244:             T=float
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(39,49): warning C4244:         ]
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(40,49): warning C4244: '=': 'double'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(40,49): warning C4244:         with
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(40,49): warning C4244:         [
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(40,49): warning C4244:             T=float
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\CPlayer.cpp(40,49): warning C4244:         ]
+  CTimer.cpp
+  FrameWork.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'FrameWork.cpp'을(를) 컴파일하는 중)
+  
+  FunctionalPackets.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'FunctionalPackets.cpp'을(를) 컴파일하는 중)
+  
+  Public.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 'Public.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.cpp(34,9): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  State.cpp
 C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
   (소스 파일 'State.cpp'을(를) 컴파일하는 중)
   
+  Texture.cpp
+  소스.cpp
+C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\Project34\Public.h(76,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Update_score' 왼쪽은 무시됩니다.
+  (소스 파일 '소스.cpp'을(를) 컴파일하는 중)
+  
+  코드를 생성하고 있습니다...
   Project34.vcxproj -> C:\Users\sinichisama\Desktop\2024_NGP_03\2024_NGP_03\Client\x64\Debug\Project34.exe

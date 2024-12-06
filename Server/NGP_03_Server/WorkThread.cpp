@@ -63,11 +63,11 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		}
 		
 	if (GameManger::Instance->bullets[0]->View){
-		GameManger::Instance->bullets[0]->Move();
+		GameManger::Instance->bullets[0]->Move(0);
 		packetQueue.push(std::make_unique<Move_bullet>(0, GameManger::Instance->bullets[0]->Move1));
 	}
 	if (GameManger::Instance->bullets[1]->View) {
-		GameManger::Instance->bullets[1]->Move();
+		GameManger::Instance->bullets[1]->Move(1);
 		packetQueue.push(std::make_unique<Move_bullet>(1, GameManger::Instance->bullets[1]->Move1));
 	}
 		
@@ -113,12 +113,34 @@ DWORD WINAPI WorkThread(LPVOID arg)
 		}
 
 		// item
+
 		for (int i = 0; i < 12; ++i) {
-			if ((player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
+			if (items[i].View && ((	/* 활성화된 아이템만 */
+				player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
 				(player_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player_bounding_box[0][2] <= items[i].Bounding_box[1][2]) &&
-				(player_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player_bounding_box[1][1] >= items[i].Bounding_box[0][1])) {
+				(player_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player_bounding_box[1][1] >= items[i].Bounding_box[0][1]))) {
+				
+
+				items[i].View = false;
+				Item_Effect(i, 0, 1);
+
+				EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
+			}
+		}
+
+		for (int i = 0; i < 12; ++i) {
+			if (items[i].View && ((	/* 활성화된 아이템만 */
+				player2_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[0][2] <= items[i].Bounding_box[1][2]) ||
+				(player2_bounding_box[0][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[0][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
+				(player2_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[1][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[1][2] <= items[i].Bounding_box[1][2]) ||
+				(player2_bounding_box[1][0] <= items[i].Bounding_box[1][0] && player2_bounding_box[1][0] >= items[i].Bounding_box[0][0] && player2_bounding_box[0][2] >= items[i].Bounding_box[0][2] && player2_bounding_box[0][2] <= items[i].Bounding_box[1][2]) &&
+				(player2_bounding_box[0][1] <= items[i].Bounding_box[1][1] && player2_bounding_box[1][1] >= items[i].Bounding_box[0][1]))) {
+
+				items[i].View = false;
+				Item_Effect(i, 1, 0);
+
 				EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
 			}
 		}
@@ -153,8 +175,8 @@ DWORD WINAPI WorkThread(LPVOID arg)
 void Reset_Object()
 {
 	Boxinit(20, 20, 20);
-	GameManger::Instance->players[0]->Set_Plocate(All_Box[0][0].TR[3]);
-	GameManger::Instance->players[1]->Set_Plocate(All_Box[19][19].TR[3]);
+	GameManger::Instance->players[0]->Set_Plocate(glm::vec3(All_Box[0][0].TR[3][0],0.0f, All_Box[0][0].TR[3][2]));
+	GameManger::Instance->players[1]->Set_Plocate(glm::vec3(All_Box[19][19].TR[3][0], 0.0f, All_Box[19][19].TR[3][2]));
 	All_Box[0][0].Color= GameManger::Instance->players[0]->Get_Color();
 	All_Box[19][19].Color = GameManger::Instance->players[1]->Get_Color();
 }
@@ -243,4 +265,14 @@ void Timer_Check()
 	{
 		// 게임 끝내는 이벤트 생성
 	}
+}
+
+void Item_Effect(int index, int num,int b)
+{
+	int idx = index;
+	int p_n = num;
+	short b_index = dist(mt);
+
+	EventQueue::currentInstance->addEvent(std::bind(&Box::Chage_Color, &All_Box[b_index / 20][b_index % 20], GameManger::Instance->players[num]->Get_Color(), b_index, num, b));
+
 }

@@ -1,6 +1,7 @@
 ﻿#include "CItem.h"
 #include <cstdlib>
 #include <ctime>
+#include "CBox.h"
 
 void Item::serializeItem(char* buffer) const
 {

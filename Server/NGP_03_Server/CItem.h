@@ -3,6 +3,7 @@
 #include "Public.h"
 #include "FunctionalPackets.h"
 
+class Box;
 
 class Item {
 public:
