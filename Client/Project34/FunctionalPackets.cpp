@@ -31,6 +31,12 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             packet.deserializePlayer(buffer);
             item[packet.item_index].View = false;
         }
+        else if (packet_type == PACKET_DELETE_BULLET) {
+            Delete_bullet packet;
+            packet.deserializePlayer(buffer);
+            bullet[packet.bullet_index].View = false;
+            // std::cout << "INDEX " << (int)packet.bullet_index << "'s Bullet has deleted.\n";
+        }
         else if (packet_type == PACKET_CHANGE_FLOOR) {
             Change_floor packet;
             packet.deserializePlayer(buffer);
