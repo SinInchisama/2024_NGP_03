@@ -47,6 +47,10 @@ public:
 	short Time = 0;
 
 	char My_index;
+
+	glm::vec3 Camerapos{ 0.0,8.0,15.0 };
+	glm::vec3 Cameradirection{0.0,0.0,-1.0};
+	glm::vec3 Cameraup{0.0,1.0,0.0};
 public:
 	Play_State();
 
@@ -83,4 +87,24 @@ public:
 
 	void KeyUp(int key) {};
 	void KeyDown(int key) ;
+};
+
+class End_State :public State
+{
+private:
+	Texture Win_texture[2];
+public:
+	End_State();
+
+	void enter()override {};
+	void exit()override {};
+
+	void Update() override {};
+	void Draw()override;
+
+	void SKeyUp(int key) override {};
+	void SKeyDown(int key)override {};
+
+	void KeyUp(int key) {};
+	void KeyDown(int key) {};
 };

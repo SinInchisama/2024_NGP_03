@@ -187,6 +187,31 @@ struct Delete_item : Parent_Packet {
     }
 };
 
+struct Delete_bullet : Parent_Packet {
+    byte bullet_index;
+
+    Delete_bullet() :bullet_index(0) {
+        pakcet_type = 5;
+    }
+    Delete_bullet(byte b) :bullet_index(b) {
+        pakcet_type = 5;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &bullet_index, sizeof(short)); offset += sizeof(short);
+    }
+
+    void deserializePlayer(const char* buffer)
+    {
+        int offset = 0;
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&bullet_index, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
+
 struct Move_bullet : public Parent_Packet {
     byte player_index;  // 플레이어 인덱스
     glm::vec3 position; // 총알 위치 정보
@@ -291,5 +316,25 @@ struct Update_Score : public Parent_Packet {
         memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
         memcpy(&My_score, buffer + offset, sizeof(short)); offset += sizeof(short);
         memcpy(&Enermy_score, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
+
+struct End_game : public Parent_Packet {
+
+    End_game() {
+        pakcet_type = 10;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
     }
 };

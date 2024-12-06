@@ -28,5 +28,7 @@ public:
 	static std::unique_ptr<Parent_Packet> Update_Timer(short time) {
 		return std::make_unique<Update_timer>(time);
 	};
+
+	std::unique_ptr<Parent_Packet> End_Game();
 	//std::unique_ptr<Parent_Packet> Update_timer(short index);
 };

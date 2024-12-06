@@ -143,12 +143,12 @@ struct Create_item : Parent_Packet {
 struct Delete_item : Parent_Packet {
     short item_index;
 
-    Delete_item() : item_index(0) {
+    Delete_item() : item_index(0){
         pakcet_type = 4;
     }
 
     Delete_item(const short i_idx)
-        : item_index(item_index) {
+        : item_index(item_index){
         pakcet_type = 4;
         item_index = i_idx;
     }
@@ -327,5 +327,25 @@ struct Update_score : public Parent_Packet {
         memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
         memcpy(&My_score, buffer + offset, sizeof(short)); offset += sizeof(short);
         memcpy(&Enermy_score, buffer + offset, sizeof(short)); offset += sizeof(short);
+    }
+};
+
+struct End_game : public Parent_Packet {
+
+    End_game() {
+        pakcet_type = 10;
+    }
+
+    void serialize(char* buffer)const override {
+        int offset = 0;
+
+        memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+
+    }
+
+    void deserializePlayer(const char* buffer) {
+        int offset = 0;
+
+        memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
     }
 };

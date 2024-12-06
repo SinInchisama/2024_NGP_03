@@ -51,6 +51,8 @@ unsigned int index[] = {
 };
 
 char* SERVERIP = (char*)"127.0.0.1";
+// char* SERVERIP = (char*)"192.168.161.76";
+
 #define SERVERPORT 9000
 #define BUFSIZE    1024
 
@@ -93,6 +95,7 @@ FrameWork::FrameWork()
 
 	states.push_back(new Stay_State);  // 벡터에 동적으로 할당된 객체를 추가
 	states.push_back(new Play_State);  // 벡터에 동적으로 할당된 객체를 추가
+	states.push_back(new End_State);
 
 	currentStateIndex = 0;  // 처음 상태는 Stay_State
 

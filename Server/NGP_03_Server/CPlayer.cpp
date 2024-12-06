@@ -15,10 +15,10 @@ void Player::Calculate_Move()
 	if (Action & KEY_RIGHT) {
 		x += 1;
 	}
-	Move[0] += cos(glm::radians(lotate)) * speed * x;			// 플레이어 좌우 움직임 할때 쓰는 계산
-	Move[2] += sin(glm::radians(lotate)) * speed * x;
-	Move[0] += sin(glm::radians(lotate)) * speed * z;			// 플레이어 위 아래 움직임 할때 쓰는 계산
-	Move[2] += cos(glm::radians(lotate)) * speed * z;
+	Move[0] += cos(glm::radians(0.0f)) * speed * x;			// 플레이어 좌우 움직임 할때 쓰는 계산
+	Move[2] += sin(glm::radians(0.0f)) * speed * x;
+	Move[0] += sin(glm::radians(0.0f)) * speed * z;			// 플레이어 위 아래 움직임 할때 쓰는 계산
+	Move[2] += cos(glm::radians(0.0f)) * speed * z;
 
 }
 
