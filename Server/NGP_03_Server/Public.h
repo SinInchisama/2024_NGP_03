@@ -8,6 +8,7 @@
 #include "Common.h"
 #include <Windows.h>
 #include "GameMaanger.h"
+#include <random>
 
 #define _CRT_SECURE_NO_WARNINGS // 구형 C 함수 사용 시 경고 끄기
 
@@ -44,6 +45,10 @@ extern glm::vec3 cameraUp; //--- 카메라 위쪽 방향
 
 extern SOCKET client_sock[2];
 
+extern std::random_device rd;
+extern std::mt19937 mt;
+extern std::uniform_int_distribution<int> dist;
+
 
 typedef enum : byte {
 	KEY_UP = 0b0000'0001, // UP 키			0000 0001		
@@ -75,14 +80,4 @@ typedef struct playerInput {
 
 char* filetobuf(const char* file);
 
-//typedef struct Box {
-//	glm::vec3 Bscale;
-//	glm::vec3 Blocate;
-//	glm::vec3 Bcolor;
-//	glm::mat4 TR;
-//
-//	int offset;
-//
-//	glm::vec4 Bounding_box[2];
-//}Box;
 #endif // COMMON_H

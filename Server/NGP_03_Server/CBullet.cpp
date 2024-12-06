@@ -38,12 +38,12 @@ void Bullet::InitBullet(byte index, glm::vec3 locate,byte b)
 	View = true;
 }
 
-void Bullet::Move()
+void Bullet::Move(int i)
 {
-	Move1[0] += cos(glm::radians(0.0f)) * speed*x_dir;			// 플레이어 좌우 움직임 할때 쓰는 계산
-	Move1[2] += sin(glm::radians(0.0f)) * speed * x_dir;
-	Move1[0] += sin(glm::radians(0.0f)) * speed * z_dir;			// 플레이어 위 아래 움직임 할때 쓰는 계산
-	Move1[2] += cos(glm::radians(0.0f)) * speed * z_dir;
+	Move1[0] += cos(glm::radians(180.0f * i)) * speed*x_dir;			// 플레이어 좌우 움직임 할때 쓰는 계산
+	Move1[2] += sin(glm::radians(180.0f * i)) * speed * x_dir;
+	Move1[0] += sin(glm::radians(180.0f * i)) * speed * z_dir;			// 플레이어 위 아래 움직임 할때 쓰는 계산
+	Move1[2] += cos(glm::radians(180.0f * i)) * speed * z_dir;
 }
 
 void Bullet::serializeBullet(char* buffer) const
