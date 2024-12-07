@@ -111,6 +111,30 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 		glm::vec4 player2_bounding_box[2] = { a3, a4 };
 
+		// 총알 바운딩 박스
+		if (GameManger::Instance->bullets[0]->View) {
+			glm::mat4 TRB = glm::mat4(1.0f);
+			glm::mat4 Tx_B = glm::mat4(1.0f);
+			Tx_B = glm::translate(Tx_B, GameManger::Instance->bullets[0]->Get_Blocate() + GameManger::Instance->bullets[0]->Move1);
+			TRB = Tx_B * GameManger::Instance->bullets[0]->Get_TR();
+			glm::vec4 a5 = TRB * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);
+			glm::vec4 a6 = TRB * glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
+			GameManger::Instance->bullets[0]->Bounding_box[0] = a5;
+			GameManger::Instance->bullets[0]->Bounding_box[1] = a6;
+			// glm::vec4 P1_bullet_BB[2] = { a5, a6 };
+		}
+		if (GameManger::Instance->bullets[1]->View) {
+			glm::mat4 TRB = glm::mat4(1.0f);
+			glm::mat4 Tx_B = glm::mat4(1.0f);
+			Tx_B = glm::translate(Tx_B, GameManger::Instance->bullets[1]->Get_Blocate() + GameManger::Instance->bullets[1]->Move1);
+			TRB = Tx_B * GameManger::Instance->bullets[1]->Get_TR();
+			glm::vec4 a5 = TRB * glm::vec4(-0.5f, 0.0f, -0.5f, 1.0f);
+			glm::vec4 a6 = TRB * glm::vec4(0.5f, 1.0f, 0.5f, 1.0f);
+			GameManger::Instance->bullets[1]->Bounding_box[0] = a5;
+			GameManger::Instance->bullets[1]->Bounding_box[1] = a6;
+			// glm::vec4 P1_bullet_BB[2] = { a5, a6 };
+		}
+
 		for (int i = 0; i < 20; ++i) {
 			for (int j = 0; j < 20; ++j) {
 				if ((player_bounding_box[0][0] <= All_Box[i][j].Bounding_box[1][0] && player_bounding_box[0][0] >= All_Box[i][j].Bounding_box[0][0] && player_bounding_box[0][2] >= All_Box[i][j].Bounding_box[0][2] && player_bounding_box[0][2] <= All_Box[i][j].Bounding_box[1][2]) ||
@@ -173,6 +197,36 @@ DWORD WINAPI WorkThread(LPVOID arg)
 
 				EventQueue::currentInstance->addEvent(std::bind(&Item::Delete_Item, items, i));
 			}
+		}
+
+		// 총알과 충돌
+		if (GameManger::Instance->bullets[0]->View && ((	/* 활성화된 아이템만 */
+			player2_bounding_box[0][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player2_bounding_box[0][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player2_bounding_box[0][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player2_bounding_box[0][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) ||
+			(player2_bounding_box[0][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player2_bounding_box[0][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player2_bounding_box[1][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player2_bounding_box[1][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) ||
+			(player2_bounding_box[1][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player2_bounding_box[1][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player2_bounding_box[1][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player2_bounding_box[1][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) ||
+			(player2_bounding_box[1][0] <= GameManger::Instance->bullets[0]->Bounding_box[1][0] && player2_bounding_box[1][0] >= GameManger::Instance->bullets[0]->Bounding_box[0][0] && player2_bounding_box[0][2] >= GameManger::Instance->bullets[0]->Bounding_box[0][2] && player2_bounding_box[0][2] <= GameManger::Instance->bullets[0]->Bounding_box[1][2]) &&
+			(player2_bounding_box[0][1] <= GameManger::Instance->bullets[0]->Bounding_box[1][1] && player2_bounding_box[1][1] >= GameManger::Instance->bullets[0]->Bounding_box[0][1])))
+		{
+			GameManger::Instance->bullets[0]->View = false;
+
+			player2_stop = true;
+			player2_SST = timer.getRemainingTiem();
+
+			// 삭제 이벤트 큐 추가 필요
+		}
+		if (GameManger::Instance->bullets[0]->View && ((	/* 활성화된 아이템만 */
+			player2_bounding_box[0][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[0][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[0][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[0][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
+			(player2_bounding_box[0][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[0][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[1][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[1][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
+			(player2_bounding_box[1][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[1][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[1][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[1][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
+			(player2_bounding_box[1][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[1][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[0][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[0][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) &&
+			(player2_bounding_box[0][1] <= GameManger::Instance->bullets[1]->Bounding_box[1][1] && player2_bounding_box[1][1] >= GameManger::Instance->bullets[1]->Bounding_box[0][1])))
+		{
+			GameManger::Instance->bullets[1]->View = false;
+
+			player1_stop = true;
+			player1_SST = timer.getRemainingTiem();
+
+			// 삭제 이벤트 큐 필요
 		}
 
 		// 매번 보내야되는 패킷

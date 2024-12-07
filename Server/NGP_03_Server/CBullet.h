@@ -41,6 +41,9 @@ public:
 		TR = Scale * TR1;
 	}
 
+	glm::vec3 Get_Blocate() { return Blocate; }
+	glm::mat4 Get_TR() { return TR; }
+
 	void InitBullet(byte index, glm::vec3 locate, byte b);
 	void Move(int i);
 
