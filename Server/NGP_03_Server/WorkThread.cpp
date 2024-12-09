@@ -213,6 +213,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			player2_SST = timer.getRemainingTiem();
 
 			// 삭제 이벤트 큐 추가 필요
+			packetQueue.push(std::make_unique<Delete_bullet>(0));
 		}
 		if (GameManger::Instance->bullets[0]->View && ((	/* 활성화된 아이템만 */
 			player2_bounding_box[0][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[0][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[0][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[0][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
@@ -227,6 +228,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			player1_SST = timer.getRemainingTiem();
 
 			// 삭제 이벤트 큐 필요
+			packetQueue.push(std::make_unique<Delete_bullet>(1));
 		}
 
 		// 매번 보내야되는 패킷
