@@ -1,15 +1,17 @@
 #include "CTimer.h"
 
-Timer::Timer(int seconds) {
+Timer::Timer(int seconds) : gameDuration (seconds) {
 	startTime = time(NULL);
 	endTime = startTime + seconds; 
+	// 여기랑 아래 resetTimer이랑 중복 아님? 5번 줄이랑 13번 줄 중 하나만 살리는 게 좋을 듯 - 안현우
 	deltaTime = 0;
 }
 
 void Timer::resetTimer()
 {
 	startTime = time(NULL);
-	endTime = startTime + 10;
+	endTime = startTime + gameDuration;
+	// 생성자 호출 시에 인자로 넣어준 값을 멤버 변수에 저장해 resetTimer() 함수 호출 시에 다시 사용하도록 변경했음 - 안현우
 	previousTime = time(NULL);
 }
 

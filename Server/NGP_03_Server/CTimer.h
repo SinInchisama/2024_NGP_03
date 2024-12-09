@@ -9,6 +9,8 @@ private:
 	time_t previousTime;
 	time_t lastItemTime; // 마지막 아이템 생성 시간
 
+	int gameDuration;
+
 	float deltaTime;
 public:
 	Timer(int seconds);	// 생성자
