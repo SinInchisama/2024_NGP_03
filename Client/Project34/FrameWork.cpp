@@ -51,6 +51,7 @@ unsigned int index[] = {
 };
 
 char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"192.168.25.49";
 // char* SERVERIP = (char*)"192.168.161.76";
 
 #define SERVERPORT 9000

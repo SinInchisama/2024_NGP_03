@@ -25,7 +25,8 @@ bool Timer::isFinished() {
 	return previousTime >= endTime;
 }
 
-std::unique_ptr<Parent_Packet> Timer::End_Game()
+std::unique_ptr<Parent_Packet> Timer::End_Game(byte b)
 {
-	return std::make_unique<End_game>();
+	return std::make_unique<End_game>(b);
 }
+

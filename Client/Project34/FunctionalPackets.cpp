@@ -12,8 +12,6 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             Move_Packet packet;
             packet.deserializePlayer(buffer);
             p[packet.player_index].Set_Move(packet.move);
-           std::cout << "Move_Packet - Player Index: " << static_cast<int>(packet.player_index)
-                << ", Move: (" << packet.move.x << ", " << packet.move.y << ", " << packet.move.z << ")\n";
         }
         else if (packet_type == PACKET_CREATE_BULLET) {
             Create_bullet packet;
@@ -48,7 +46,6 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
             Move_bullet packet;
             packet.deserializePlayer(buffer);
             bullet[packet.player_index].Blocate = packet.position;
-            std::cout << packet.position.x << "   " << packet.position.y << "   " << packet.position.z << "   " << std::endl;
         }
         else if (packet_type == PACKET_UPDATE_TIMER) {
             Update_timer packet;
@@ -63,6 +60,9 @@ void process_received_data(const char* buffer, size_t buffer_size, Player* p, Bo
         }
         else if (packet_type == 10) {
             FrameWork::currentInstance->Exit_State();
+            End_game packet;
+            packet.deserializePlayer(buffer);
+            Win = packet.player_index;
         }
     }
 }

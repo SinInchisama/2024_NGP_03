@@ -29,6 +29,8 @@ extern glm::vec3 cameraUp; //--- 카메라 위쪽 방향
 
 extern SOCKET sock;
 
+extern byte Win;
+
 typedef enum : byte {
 	KEY_UP =	0b0000'0001, // UP 키		0000 0001		
 	KEY_DOWN =	0b0000'0010, // DOWN 키		0000 0010

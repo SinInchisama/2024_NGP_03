@@ -73,6 +73,7 @@ public:
 	glm::mat4 Get_TR() { return TR; }
 	byte Get_Action() { return Action; }
 	short Get_Box() { return Occupy_box; }
+	
 
 	void Set_UpAction(KeyInput key) {
 		Action &= ~key;  }
@@ -93,4 +94,5 @@ public:
 	void serializePlayer(char* buffer) const;
 	void deserializePlayer(const char* buffer);
 
+	byte whoWin(Player& p) { return Occupy_box < p.Get_Box(); };
 };

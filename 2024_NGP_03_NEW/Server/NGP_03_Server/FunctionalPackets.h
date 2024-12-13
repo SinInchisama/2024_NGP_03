@@ -322,8 +322,14 @@ struct Update_score : public Parent_Packet {
 };
 
 struct End_game : public Parent_Packet {
+    byte player_index;
+
 
     End_game() {
+        pakcet_type = 10;
+    }
+
+    End_game(byte b) :player_index(b) {
         pakcet_type = 10;
     }
 
@@ -331,6 +337,7 @@ struct End_game : public Parent_Packet {
         int offset = 0;
 
         memcpy(buffer + offset, &pakcet_type, sizeof(byte)); offset += sizeof(byte);
+        memcpy(buffer + offset, &player_index, sizeof(byte)); offset += sizeof(byte);
 
         return offset;
     }
@@ -339,6 +346,7 @@ struct End_game : public Parent_Packet {
         int offset = 0;
 
         memcpy(&pakcet_type, buffer + offset, sizeof(byte)); offset += sizeof(byte);
+        memcpy(&player_index, buffer + offset, sizeof(byte)); offset += sizeof(byte);
 
         return offset;
     }

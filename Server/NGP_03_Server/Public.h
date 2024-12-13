@@ -49,6 +49,8 @@ extern std::random_device rd;
 extern std::mt19937 mt;
 extern std::uniform_int_distribution<int> dist;
 
+extern bool gameEnd;
+
 
 typedef enum : byte {
 	KEY_UP = 0b0000'0001, // UP Ű			0000 0001		

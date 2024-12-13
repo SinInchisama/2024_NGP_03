@@ -108,12 +108,6 @@ void Play_State::Draw()
 	unsigned int Texture_viewlocation = glGetUniformLocation(triangleShaderProgramID, "viewTransform");
 	unsigned int Teture_projectionlocation = glGetUniformLocation(triangleShaderProgramID, "projectionTransform");
 
-	// 투영 행렬 및 뷰 행렬 설정
-	/*glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.01f, 100.0f);
-	projection = glm::rotate(projection, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	projection = glm::translate(projection, glm::vec3(0.0f, 0.0f, -3.0f));
-	glm::mat4 view = glm::lookAt(player[My_index].Get_Camerapos(), player[My_index].Get_Camerapos() + player[My_index].Get_Cameradirection(), cameraUp);*/
-
 	glm::mat4 view = glm::lookAt(Camerapos, Camerapos + Cameradirection, Cameraup);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
@@ -214,23 +208,6 @@ void Play_State::Draw()
 		Draw_Score(player[1]);
 	}
 
-	//glDisable(GL_DEPTH_TEST);
-	//glViewport(830, 500, 200, 200);
-	//Draw_filed(false);
-
-	//glViewport(530, 500, 200, 200);
-	//Draw_time();
-
-	//glViewport(100, 550, 150, 150);
-	////Draw_num(player[0].Occupy_box);
-
-	//glViewport(1000, 550, 150, 150);
-	////Draw_num(player[1].Occupy_box);
-
-	//if (Game_over) {
-	//	glViewport(530, 300, 200, 200);
-	//	Whos_win();
-	//}
 }
 
 void Play_State::SKeyDown(int key) {
@@ -417,7 +394,7 @@ void End_State::Draw()
 
 	// 텍스처 바인딩
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Win_texture[0].text);
+	glBindTexture(GL_TEXTURE_2D, Win_texture[Win].text);
 
 	// 버텍스 배열 바인딩
 	glBindVertexArray(triangleVertexArrayObject);

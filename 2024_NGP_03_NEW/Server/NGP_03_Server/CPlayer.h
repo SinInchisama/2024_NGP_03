@@ -93,4 +93,5 @@ public:
 	void serializePlayer(char* buffer) const;
 	void deserializePlayer(const char* buffer);
 
+	byte whoWin(Player& p) { return Occupy_box < p.Get_Box(); };
 };

@@ -20,7 +20,7 @@ DWORD WINAPI RecvThread(LPVOID arg)
 	inet_ntop(AF_INET, &clientaddr[i].sin_addr, addr, sizeof(addr));
 
 
-	while (1) {
+	while (gameEnd) {
 		
 	}
 	// ╪рдо ╢щ╠Б

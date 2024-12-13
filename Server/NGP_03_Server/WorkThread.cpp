@@ -1,7 +1,7 @@
 #include "WorkThread.h"
 
 Box All_Box[20][20];
-Timer timer(60);
+Timer timer(5);
 std::queue<std::unique_ptr<Parent_Packet>> packetQueue;			// packQueue를 유니크 포인트로 만듬.
 Item items[20];
 
@@ -13,6 +13,8 @@ bool player2_stop = false;
 
 int player1_SST = 0;
 int player2_SST = 0;
+
+bool GG = true;
 
 // 클라이언트와 데이터 통신
 DWORD WINAPI WorkThread(LPVOID arg)
@@ -31,7 +33,7 @@ DWORD WINAPI WorkThread(LPVOID arg)
 	//previousTime = std::chrono::high_resolution_clock::now();
 	timer.resetTimer();
 
-	while (true) {
+	while (GG) {
 		char cbuffer;
 		recv(client_sock[0], &cbuffer, sizeof(cbuffer), 0);
 		GameManger::Instance->players[0]->Set_Action(cbuffer);
@@ -215,12 +217,12 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			// 삭제 이벤트 큐 추가 필요
 			packetQueue.push(std::make_unique<Delete_bullet>(0));
 		}
-		if (GameManger::Instance->bullets[0]->View && ((	/* 활성화된 아이템만 */
-			player2_bounding_box[0][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[0][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[0][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[0][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
-			(player2_bounding_box[0][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[0][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[1][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[1][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
-			(player2_bounding_box[1][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[1][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[1][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[1][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
-			(player2_bounding_box[1][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player2_bounding_box[1][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player2_bounding_box[0][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player2_bounding_box[0][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) &&
-			(player2_bounding_box[0][1] <= GameManger::Instance->bullets[1]->Bounding_box[1][1] && player2_bounding_box[1][1] >= GameManger::Instance->bullets[1]->Bounding_box[0][1])))
+		if (GameManger::Instance->bullets[1]->View && ((	/* 활성화된 아이템만 */
+			player_bounding_box[0][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player_bounding_box[0][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player_bounding_box[0][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player_bounding_box[0][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
+			(player_bounding_box[0][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player_bounding_box[0][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player_bounding_box[1][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player_bounding_box[1][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
+			(player_bounding_box[1][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player_bounding_box[1][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player_bounding_box[1][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player_bounding_box[1][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) ||
+			(player_bounding_box[1][0] <= GameManger::Instance->bullets[1]->Bounding_box[1][0] && player_bounding_box[1][0] >= GameManger::Instance->bullets[1]->Bounding_box[0][0] && player_bounding_box[0][2] >= GameManger::Instance->bullets[1]->Bounding_box[0][2] && player_bounding_box[0][2] <= GameManger::Instance->bullets[1]->Bounding_box[1][2]) &&
+			(player_bounding_box[0][1] <= GameManger::Instance->bullets[1]->Bounding_box[1][1] && player_bounding_box[1][1] >= GameManger::Instance->bullets[1]->Bounding_box[0][1])))
 		{
 			GameManger::Instance->bullets[1]->View = false;
 
@@ -254,7 +256,12 @@ DWORD WINAPI WorkThread(LPVOID arg)
 			send(client_sock[0], buffer, sizeof(buffer), 0);
 			send(client_sock[1], buffer, sizeof(buffer), 0);
 		}
+
+		Sleep(33);
 	}
+
+	gameEnd = false;
+
 	return 0;
 }
 
@@ -357,7 +364,8 @@ void Timer_Check()
 
 	if (timer.isFinished())
 	{
-		EventQueue::currentInstance->addEvent(std::bind(&Timer::End_Game,&timer));
+		EventQueue::currentInstance->addEvent(std::bind(&Timer::End_Game,&timer, GameManger::Instance->players[0]->whoWin(*GameManger::Instance->players[1])));
+		GG = false;
 	}
 }
 
